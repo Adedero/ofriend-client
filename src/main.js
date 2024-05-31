@@ -2,6 +2,7 @@ import '@fontsource-variable/inter';
 import './assets/main.css';
 import 'primevue/resources/themes/aura-light-noir/theme.css';
 import 'primeicons/primeicons.css';
+import 'aos/dist/aos.css'
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';

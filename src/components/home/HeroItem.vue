@@ -26,7 +26,8 @@ import Button from 'primevue/button';
         </p>
       </div>
 
-      <div class="mt-5 flex items-center justify-center gap-5 md:justify-normal">
+      <div data-aos="fade-up" data-aos-duration="800"
+        class="mt-5 flex items-center justify-center gap-5 md:justify-normal">
         <button class="btn flex items-center justify-center gap-3 md:h-auto md:w-44">
           <img src="../../assets/images/apple.svg" alt="apple-store" class="w-6">
           <div class="text-left flex flex-col">
@@ -46,7 +47,8 @@ import Button from 'primevue/button';
     </div>
 
     <div class="hidden md:block">
-      <img src="../../assets/images/landing-img.png" alt="ofriend landing image">
+      <img data-aos="fade-left" data-aos-duration="800" src="../../assets/images/landing-img.png"
+        alt="ofriend landing image">
     </div>
   </section>
 </template>

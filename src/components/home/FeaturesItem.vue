@@ -13,7 +13,8 @@ const features = [
 
     <div class="mt-12 lg:grid lg:grid-cols-2 lg:gap-5">
       <div class="hidden lg:block">
-        <img src="../../assets/images/features-img.png" alt="we love to learn">
+        <img data-aos="fade-right" data-aos-duration="800" src="../../assets/images/features-img.png"
+          alt="we love to learn">
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
