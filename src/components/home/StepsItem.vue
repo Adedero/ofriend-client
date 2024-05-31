@@ -10,7 +10,7 @@ const steps = [
 </script>
 
 <template>
-  <section class="bg-primary p-5 md:p-10 text-white">
+  <section class="bg-primary p-5 pb-10aead md:p-10 text-white">
     <h1 class="font-bold text-2xl text-center">Simplified for you.</h1>
 
     <div class="mt-8 grid gap-10 items-center md:gap-5 md:grid-cols-2">
