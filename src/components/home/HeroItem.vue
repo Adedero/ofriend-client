@@ -15,7 +15,7 @@ import Button from 'primevue/button';
       <Button @click="$router.push('/onboarding')" label="Get Started" class="btn mt-3" />
 
       <div class="mt-10">
-        <p>Trusted
+        <p>Trusted By: 
           <span class="text-accent">
             <a href="#">Utiva,</a>
             <a href="#"> Ofriend,</a>
