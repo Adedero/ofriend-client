@@ -45,7 +45,7 @@ const visible = ref(false);
     </div>
   </header>
 
-  <Sidebar v-model:visible="visible" position="right" class="w-[80dvw] md:w-80">
+  <Sidebar v-model:visible="visible" position="right" class="w-[min(80dvw,20rem)] md:w-72">
     <template #header>
       <img src="../../assets/images/logo-dark.svg" alt="ofriend logo" class="w-28">
     </template>
