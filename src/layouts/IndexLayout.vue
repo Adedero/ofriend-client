@@ -5,7 +5,7 @@ import IndexFooter from '@/components/footers/IndexFooter.vue';
 </script>
 
 <template>
-  <main class="relative">
+  <main class="relative overflow-x-hidden">
     <IndexHeader />
 
     <RouterView />
@@ -13,9 +13,4 @@ import IndexFooter from '@/components/footers/IndexFooter.vue';
     <IndexFooter />
   </main>
 </template>
-
-
-<style>
-
-</style>
 

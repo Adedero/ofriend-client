@@ -23,8 +23,8 @@ const features = [
           <p class="mt-2">{{ feature.description }}</p>
         </div>
 
-        <div class="mt-3 grid place-content-center md:col-span-2  lg:col-span-1">
-          <button class="btn">Create an account</button>
+        <div class="mt-3 grid place-content-center md:col-span-2 lg:col-span-1">
+          <button @click="$router.push('/onboarding/signup')" class="btn">Create an account</button>
         </div>
       </div>
     </div>
