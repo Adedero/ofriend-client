@@ -1,9 +1,10 @@
 <script setup>
-import DarkModeToggler from '@/components/ui/DarkModeToggler.vue';
+import { RouterView } from 'vue-router';
+import  AppHeader from '@/components/headers/AppHeader.vue';
 </script>
 <template>
-  <div>
-    <DarkModeToggler />
-App layout
-  </div>
+  <main class="p-5 lg:px-10">
+    <AppHeader />
+    <RouterView />
+  </main>
 </template>

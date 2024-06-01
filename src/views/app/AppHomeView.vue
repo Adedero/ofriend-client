@@ -1,13 +1,16 @@
 <template>
-  <div>
+  <main class="h-[calc(100dvh-6rem)] py-5">
+    <nav>
+      Sidebar
+    </nav>
 
-  </div>
+    <section>
+      Content reel
+    </section>
+
+    <nav>
+      Sidebar
+    </nav>
+
+  </main>
 </template>
-
-<script setup>
-
-</script>
-
-<style lang="scss" scoped>
-
-</style>
