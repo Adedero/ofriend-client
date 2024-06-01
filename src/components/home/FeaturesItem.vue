@@ -8,7 +8,7 @@ const features = [
 </script>
 
 <template>
-  <section class="bg-soft-blue p-5 md:p-10">
+  <section class="bg-soft-blue px-5 py-10 md:px-10">
     <h1 class="font-bold text-2xl text-center">We make learning seamless.</h1>
 
     <div class="mt-12 lg:grid lg:grid-cols-2 lg:gap-5">

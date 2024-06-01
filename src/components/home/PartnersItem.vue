@@ -30,7 +30,7 @@ const products = [
 </script>
 
 <template>
-  <section class=" p-5 md:p-10 ">
+  <section class="px-5 py-10 md:px-10 ">
     <h1 class="font-bold text-2xl text-center">Our Learning Partners.</h1>
 
     <div class="mt-10">
