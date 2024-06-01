@@ -14,7 +14,7 @@
       <div class="flex justify-center">
         <label for="email" class="hidden"></label>
         <input type="email" id="email"
-          class="bg-transparent border rounded-l px-2 py-1 outline-none">
+          class="bg-transparent border rounded-l px-2 py-2 outline-none">
 
         <button type="button"
           class="flex items-center justify-center gap-2 rounded-r border border-white bg-white text-primary font-semibold px-5 py-1">
