@@ -1,6 +1,6 @@
 
 <template>
-  <div class="bg-white py-10 px-8 rounded md:max-w-[30rem] lg:shadow-lg lg:shadow-primary">
+  <div class="bg-white py-8 px-5 rounded md:py-10 md:px-8 md:max-w-[30rem] lg:shadow-lg lg:shadow-primary">
     <div>
       <h3 class="font-bold">Get in touch with us.</h3>
       <p class="font-light">We value your opinion</p>
