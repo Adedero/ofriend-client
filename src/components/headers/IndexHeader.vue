@@ -29,7 +29,9 @@ import Button from 'primevue/button';
       </RouterLink>
     </div>
 
-    <Button icon="pi pi-bars" text class="color-primary lg:hidden" />
+    <button type="button" class="grid place-content-center p-2.5 transition rounded hover:bg-soft-gray-2 lg:hidden">
+      <span class="pi pi-bars text-primary" style="font-size: 1.2rem"></span>
+    </button>
   </header>
 </template>
 
