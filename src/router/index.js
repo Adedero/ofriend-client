@@ -47,17 +47,22 @@ const router = createRouter({
     {
       path: '/onboarding',
       component: OnboardingLayout,
-      redirect: { name: 'login' },
+      redirect: { name: 'signin' },
       children: [
         {
-          path: 'login',
-          name: 'login',
-          component: () => import('@/views/onboarding/LoginView.vue')
+          path: 'signin',
+          name: 'signin',
+          component: () => import('@/views/onboarding/SigninView.vue')
         },
         {
           path: 'signup',
           name:'signup',
           component: () => import('@/views/onboarding/SignupView.vue')
+        },
+        {
+          path: 'signup-business-or-organization',
+          name: 'signup-org',
+          component: () => import('@/views/onboarding/SignupOrgView.vue')
         }
       ]
     },

@@ -1,6 +1,6 @@
 <template>
   <div>
-Login
+Business or organization
   </div>
 </template>
 

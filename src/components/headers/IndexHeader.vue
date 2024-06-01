@@ -24,7 +24,7 @@ const visible = ref(false);
     </div>
 
     <div class="hidden actions lg:flex items-center gap-2">
-      <RouterLink to="/onboarding/login">
+      <RouterLink to="/onboarding">
         <Button label="Sign In" text class="text-primary" />
       </RouterLink>
 
