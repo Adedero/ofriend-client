@@ -41,7 +41,7 @@ import Button from 'primevue/button';
         </small>
       </div>
 
-      <Button label="Sign in" icon="pi pi-sign-in" class="btn" />
+      <Button label="Sign up" icon="pi pi-arrow-right" icon-pos="right" class="btn" />
 
     </div>
 

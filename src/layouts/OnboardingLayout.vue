@@ -11,7 +11,7 @@ import { RouterLink, RouterView } from 'vue-router';
 
     <section class="grid px-5 py-10 place-content-center lg:py-0 lg:max-h-full lg:overflow-y-auto lg:col-span-3">
       <RouterLink to="/" class="mb-5">
-        <img src="../assets/images/logo-dark.svg" alt="ofriend logo">
+        <img src="../assets/images/logo-dark.svg" alt="ofriend logo" class="w-32">
       </RouterLink>
 
       <RouterView />

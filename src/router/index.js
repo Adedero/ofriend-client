@@ -63,6 +63,11 @@ const router = createRouter({
           path: 'signup-business-or-organization',
           name: 'signup-org',
           component: () => import('@/views/onboarding/SignupOrgView.vue')
+        },
+        {
+          path: 'otp-verification',
+          name: 'otp',
+          component: () => import('@/views/onboarding/OtpView.vue')
         }
       ]
     },
