@@ -3,7 +3,7 @@ import Button from 'primevue/button';
 </script>
 
 <template>
-  <section class="pb-20 md:grid md:grid-cols-2">
+  <section class="pt-12 pb-20 md:grid md:grid-cols-2">
     <div class="px-5 text-center md:text-left lg:px-20">
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold">Discover a social way of learning</h1>
 

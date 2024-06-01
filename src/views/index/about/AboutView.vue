@@ -1,13 +1,16 @@
-<template>
-  <div>
-Main About
-  </div>
-</template>
-
 <script setup>
-
+import AboutItem from '@/components/about/AboutItem.vue';
+import NewsletterForm from '@/components/about/NewsletterForm.vue';
+import OurTeam from '@/components/about/OurTeam.vue';
 </script>
 
-<style lang="scss" scoped>
+<template>
+  <main>
+    <AboutItem />
 
-</style>
+    <NewsletterForm />
+
+    <OurTeam />
+  </main>
+</template>
+

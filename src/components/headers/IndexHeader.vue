@@ -15,17 +15,17 @@ const visible = ref(false);
       </RouterLink>
     </div>
 
-    <div class="hidden links lg:flex items-center gap-10">
+    <div class="hidden links lg:flex items-center lg:gap-8 xl:gap-10">
       <RouterLink to="/" class="nav">Home</RouterLink>
 
-      <RouterLink to="/about" class="nav">About</RouterLink>
+      <RouterLink to="/about" class="nav">About Ofriend</RouterLink>
 
-      <RouterLink to="/contact" class="nav">Contact</RouterLink>
+      <RouterLink to="/contact" class="nav">Contact Us</RouterLink>
     </div>
 
     <div class="hidden actions lg:flex items-center gap-2">
       <RouterLink to="/onboarding/login">
-        <Button label="Sign in" text class="text-primary" />
+        <Button label="Sign In" text class="text-primary" />
       </RouterLink>
 
       <RouterLink to="/onboarding/signup">
@@ -35,7 +35,7 @@ const visible = ref(false);
 
     <div class="flex items-center gap-3 lg:hidden">
       <RouterLink to="/onboarding">
-        <Button label="Log in" class="btn" />
+        <Button label="Sign In" class="btn" />
       </RouterLink>
 
       <button @click="visible = true" type="button"
@@ -50,7 +50,7 @@ const visible = ref(false);
       <img src="../../assets/images/logo-dark.svg" alt="ofriend logo" class="w-28">
     </template>
 
-    <div class="links grid justify-start gap-10 lg:hidden">
+    <div class="links grid justify-start gap-8 lg:hidden">
       <RouterLink @click="visible = false" to="/" class="nav flex items-center gap-3">
         <span class="pi pi-home -translate-y-0.5"></span>
         <span>Home</span>
@@ -64,6 +64,20 @@ const visible = ref(false);
       <RouterLink @click="visible = false" to="/contact" class="nav flex items-center gap-3">
         <span class="pi pi-address-book -translate-y-0.5"></span>
         <span>Contact</span>
+      </RouterLink>
+    </div>
+
+    <hr class="my-8">
+
+    <div class="links grid justify-start gap-8 lg:hidden">
+      <RouterLink @click="visible = false" to="/onboarding/signup" class="nav flex items-center gap-3">
+        <span class="pi pi-user-plus -translate-y-0.5"></span>
+        <span>Sign Up</span>
+      </RouterLink>
+
+      <RouterLink @click="visible = false" to="/onboarding" class="nav flex items-center gap-3">
+        <span class="pi pi-sign-in -translate-y-0.5"></span>
+        <span>Sign In</span>
       </RouterLink>
     </div>
   </Sidebar>
