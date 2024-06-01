@@ -6,6 +6,7 @@ const steps = [
   { id: 2, detail: 'Wait for a reply within 24 hours.' },
   { id: 3, detail: 'If you haven’t gotten a reply, contact us directly through our social media platforms.' }
 ]
+
 </script>
 
 <template>

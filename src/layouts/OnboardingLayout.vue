@@ -1,14 +1,15 @@
-<template>
-  <div>
-    onboarding
-    <RouterView />
-  </div>
-</template>
-
 <script setup>
 import { RouterView } from 'vue-router';
 </script>
 
-<style lang="scss" scoped>
+<template>
+  <main class="lg:grid lg:grid-cols-2 xl:grid-cols-3">
+    <section>
 
-</style>
+    </section>
+
+    <section>
+      <RouterView />
+    </section>
+  </main>
+</template>
