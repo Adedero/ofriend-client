@@ -9,8 +9,9 @@ import { RouterLink, RouterView } from 'vue-router';
       <h1 class="text-white font-bold text-3xl ml-10 mt-20">Discover New <br> Learning Interests.</h1>
     </section>
 
-    <section class="grid px-5 py-10 place-content-center lg:py-0 lg:max-h-full lg:overflow-y-auto lg:col-span-3">
-      <RouterLink to="/" class="mb-5">
+    <section
+      class="grid place-content-center gap-4 px-5 py-10 lg:max-h-full lg:overflow-y-auto lg:col-span-3">
+      <RouterLink to="/">
         <img src="../assets/images/logo-dark.svg" alt="ofriend logo" class="w-32">
       </RouterLink>
 

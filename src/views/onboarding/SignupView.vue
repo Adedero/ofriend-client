@@ -49,7 +49,7 @@ import Button from 'primevue/button';
 
     <p>Click
       <RouterLink :to="{ name: 'signup-org' }" class="text-accent font-semibold hover:underline">here</RouterLink>
-      to create an account for a business or
+      to create an Ofriend account for a business or
       organization.
     </p>
   </section>
