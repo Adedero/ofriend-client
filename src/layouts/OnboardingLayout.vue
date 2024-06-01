@@ -5,7 +5,7 @@ import { RouterView } from 'vue-router';
 <template>
   <main class="lg:grid lg:grid-cols-2 xl:grid-cols-3">
     <section>
-
+      <img src="../assets/images/" alt="">
     </section>
 
     <section>
