@@ -21,7 +21,7 @@ const steps = [
 
         <div class="flex items-center justify-center gap-3 flex-wrap mt-3 lg:justify-normal">
           <a v-for="social in socials" :key="social.name" :href="social.link">
-            <span :class="[social.icon, 'p-2 rounded hover:bg-soft-blue']"></span>
+            <span :class="[social.icon, 'p-2 rounded hover:bg-soft-blue']" style="font-size: 1.3rem"></span>
           </a>
         </div>
       </div>
