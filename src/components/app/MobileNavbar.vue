@@ -26,10 +26,10 @@ const links = [
 
 
 <template>
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between pt-1 bg-white">
     <RouterLink v-for="link in links" :key="link.name" :to="link.path" class="mobile-nav text-sm flex flex-col items-center justify-center">
-      <span :class="link.icon" style="font-weight: 400; font-size: 1.2rem"></span>
-      <p class="font-semibold">{{ link.name }}</p>
+      <span :class="link.icon" style="font-weight: 400"></span>
+      <p class="font-semibold text-sm -mt-0.5">{{ link.name }}</p>
     </RouterLink>
   </div>
 </template>
@@ -38,13 +38,13 @@ const links = [
 
 a.mobile-nav {
   span {
-
+    @apply px-4 py-2
   }
 }
 
 a.mobile-nav.router-link-exact-active {
   span {
-    @apply bg-primary text-white px-4 py-2 rounded-full
+    @apply bg-primary text-white  rounded-full
   }
 }
 </style>

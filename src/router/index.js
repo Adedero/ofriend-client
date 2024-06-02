@@ -3,6 +3,7 @@ import IndexLayout from '@/layouts/IndexLayout.vue';
 import OnboardingLayout from '@/layouts/OnboardingLayout.vue';
 import LegalLayout from '@/layouts/LegalLayout.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import ChatLayout from '@/layouts/ChatLayout.vue';
 
 import HomeView from '@/views/index/HomeView.vue';
 
@@ -10,6 +11,7 @@ import indexRoutes from '@/data/routes/index.routes';
 import onboardingRoutes from '@/data/routes/onboarding.routes';
 import legalRoutes from '@/data/routes/legal.routes';
 import appRoutes from '@/data/routes/app.routes';
+import chatRoutes from '@/data/routes/chat.routes';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +44,14 @@ const router = createRouter({
       component: AppLayout,
       redirect: { name: 'app-home'},
       children: appRoutes,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/chat',
+      component: ChatLayout,
+      childred: chatRoutes,
       meta: {
         requiresAuth: true
       }
