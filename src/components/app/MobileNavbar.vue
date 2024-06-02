@@ -8,17 +8,17 @@ const links = [
   },
   {
     name: 'Messages',
-    path: '/',
+    path: '/chat',
     icon: 'pi pi-comments',
   },
   {
     name: 'Profile',
-    path: '/',
+    path: '/app/profile',
     icon: 'pi pi-user',
   },
   {
     name: 'Notifications',
-    path: '/',
+    path: '/app/notifications',
     icon: 'pi pi-bell',
   }
 ]
