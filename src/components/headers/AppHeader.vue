@@ -16,7 +16,7 @@ import Avatar from 'primevue/avatar';
 
     <div class="flex items-center gap-3">
 
-      <div class="hidden icons lg:flex items-center gap-1">
+      <div class="hidden icons cs:flex items-center gap-1">
         <RouterLink to="/" class="p-2 rounded hover:bg-soft-gray-2 grid place-content-center">
           <span class="pi pi-user"></span>
         </RouterLink>
@@ -30,7 +30,7 @@ import Avatar from 'primevue/avatar';
 
       <Avatar label="P" shape="circle" class="bg-soft-gray-2 w-10 h-10 text-xl font-medium cursor-context-menu" />
 
-      <MenuPopup class="lg:hidden" />
+      <MenuPopup class="cs:hidden" />
     </div>
   </header>
 

@@ -1,21 +1,107 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-const links = [
+import { ref } from "vue";
+import { RouterLink } from "vue-router";
+
+const routes = [
   {
     name: 'Home',
     path: '/app/home',
-    icon: 'pi pi-home',
+    params: '12345',
+    icon: 'pi pi-home'
+  },
+  {
+    name: 'Messages',
+    path: '/',
+    params: '12345',
+    icon: 'pi pi-envelope'
+  },
+  {
+    name: 'My Products',
+    path: '/',
+    params: '12345',
+    icon: 'pi pi-briefcase'
+  },
+  {
+    name: 'My Profile',
+    path: '/',
+    params: '12345',
+    icon: 'pi pi-user'
+  },
+  {
+    name: 'Notifications',
+    path: '/',
+    params: '12345',
+    icon: 'pi pi-bell'
   }
 ]
+const menu = ref();
+const items = ref([
+  {
+    label: 'Options',
+    items: [
+      {
+        label: 'Adedero Cosmos',
+        icon: 'pi pi-user'
+      },
+      {
+        label: 'Joined 14 April, 2024',
+        icon: 'pi pi-calendar-clock'
+      },
+      {
+        label: 'UI/UX designer | Brand Promoter',
+        icon: 'pi pi-info-circle'
+      }
+    ]
+  }
+]);
+
+const toggle = (event) => {
+  menu.value.toggle(event);
+};
+
 </script>
 
-
 <template>
-  <div class="w-full flex items-center justify-between">
-    <RouterLink v-for="link in links" :key="link.name" :to="link.path">
-      <span :class="link.icon"></span>
-      <span>{{ link.name }}</span>
-    </RouterLink>
+  <div class="flex flex-col items-center h-full">
+    <div class="text-center flex flex-col items-center flex-shrink-0">
+      <img src="../../assets/images/default-profile-img.png" alt="default profile image0"
+        class="block w-16 lg:w-20 aspect-square object-cover">
+
+      <div class="hidden mt-4 lg:flex flex-col items-center">
+        <h3 class="font-semibold">John Smith</h3>
+        <p class="text-text-light">Joined 14 April, 2024</p>
+
+        <p class="mt-2 text-sm font-medium">UI/UX designer | Brand Promoter</p>
+      </div>
+
+      <div class="mt-4 lg:hidden">
+        <Button type="button" icon="pi pi-user" @click="toggle" rounded />
+        <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+      </div>
+    </div>
+
+    <Divider />
+
+    <nav class="grid gap-2 flex-shrink-0 lg:gap-3 lg:w-full">
+      <RouterLink v-for="route in routes" :key="route.name" :to="route.path" class="app-nav">
+        <span :class="[route.icon]"></span>
+        <span class="hidden lg:inline">{{ route.name }}</span>
+      </RouterLink>
+    </nav>
+
+    <div class="mt-auto lg:w-full flex-shrink-0">
+      <Button icon="pi pi-sign-out" icon-pos="right" size="large" class="btn lg:hidden w-12" />
+      <Button label="Sign out" icon="pi pi-sign-out" icon-pos="right" class="w-full btn hidden lg:flex" />
+    </div>
   </div>
 </template>
 
+<style scoped>
+a.app-nav {
+  @apply flex items-center gap-4 p-5 rounded-lg transition-colors hover:bg-accent/10 lg:p-3 lg:pl-5 lg:rounded-md
+}
+
+a.app-nav.router-link-exact-active {
+  @apply bg-accent/10 font-semibold text-primary relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent
+}
+</style>

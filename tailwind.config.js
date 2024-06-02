@@ -18,6 +18,9 @@ export default {
         'text-light': '#908D8D',
         'soft-gray': '#D9D9D9',
         'soft-gray-2': '#EDF0F4'
+      },
+      screens: {
+        'cs': '600px'
       }
     },
   },

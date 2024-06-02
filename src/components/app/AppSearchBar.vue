@@ -5,11 +5,11 @@ import InputText from 'primevue/inputtext';
 </script>
 
 <template>
-  <button type="button" class="p-3 rounded-full bg-soft-gray-2 grid place-content-center lg:hidden">
+  <button type="button" class="p-3 rounded-full bg-soft-gray-2 grid place-content-center md:hidden">
     <span class="pi pi-search" style="font-size: 1.1rem;"></span>
   </button>
 
-  <div class="hidden lg:block">
+  <div class="hidden md:block">
     <IconField iconPosition="left">
       <InputIcon class="pi pi-search"> </InputIcon>
       <InputText placeholder="Search" class="border-transparent bg-soft-gray-2 focus:bg-transparent" />
