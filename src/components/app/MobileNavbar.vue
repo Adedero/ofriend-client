@@ -26,7 +26,7 @@ const links = [
 
 
 <template>
-  <div class="flex items-center justify-between pt-1 bg-white">
+  <div class="translate-y-2 flex items-center justify-between pt-2 bg-white">
     <RouterLink v-for="link in links" :key="link.name" :to="link.path" class="mobile-nav text-sm flex flex-col items-center justify-center">
       <span :class="link.icon" style="font-weight: 400"></span>
       <p class="font-semibold text-sm -mt-0.5">{{ link.name }}</p>

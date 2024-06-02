@@ -10,26 +10,31 @@ const routes = [
     icon: 'pi pi-home'
   },
   {
-    name: 'Messages',
-    path: '/',
+    name: 'Chats',
+    path: '/chat',
     params: '12345',
     icon: 'pi pi-envelope'
   },
   {
+    name: 'Saved Posts',
+    path: '/app/saved-posts',
+    icon: 'pi pi-bookmark'
+  },
+  {
     name: 'My Products',
-    path: '/',
+    path: '/app/products-and-services',
     params: '12345',
     icon: 'pi pi-briefcase'
   },
   {
     name: 'My Profile',
-    path: '/',
+    path: '/app/profile',
     params: '12345',
     icon: 'pi pi-user'
   },
   {
     name: 'Notifications',
-    path: '/',
+    path: '/app/notifications',
     params: '12345',
     icon: 'pi pi-bell'
   }
@@ -67,14 +72,14 @@ const toggle = (event) => {
       <img src="../../assets/images/default-profile-img.png" alt="default profile image0"
         class="block w-16 lg:w-20 aspect-square object-cover">
 
-      <div class="hidden mt-4 lg:flex flex-col items-center">
+      <div class="hidden mt-2 lg:flex flex-col items-center">
         <h3 class="font-semibold">John Smith</h3>
         <p class="text-text-light">Joined 14 April, 2024</p>
 
         <p class="mt-2 text-sm font-medium">UI/UX designer | Brand Promoter</p>
       </div>
 
-      <div class="mt-4 lg:hidden">
+      <div class="mt-2 lg:hidden">
         <Button type="button" icon="pi pi-user" @click="toggle" rounded />
         <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
       </div>
@@ -82,7 +87,7 @@ const toggle = (event) => {
 
     <Divider />
 
-    <nav class="grid gap-2 flex-shrink-0 lg:gap-3 lg:w-full">
+    <nav class="grid gap-1 flex-shrink-0 lg:w-full">
       <RouterLink v-for="route in routes" :key="route.name" :to="route.path" class="app-nav">
         <span :class="[route.icon]"></span>
         <span class="hidden lg:inline">{{ route.name }}</span>
