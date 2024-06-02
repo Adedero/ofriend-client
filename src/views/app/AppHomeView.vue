@@ -1,5 +1,6 @@
 <script setup>
-import PostItem from '@/components/app/PostItem.vue';
+import PostItem from '@/components/app/post/PostItem.vue';
+import NewPostItem from '@/components/app/post/NewPostItem.vue';
 </script>
 
 <template>
