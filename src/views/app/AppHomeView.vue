@@ -1,5 +1,9 @@
+<script setup>
+import MobileNavbar from '@/components/app/MobileNavbar.vue';
+</script>
+
 <template>
-  <main class="h-[calc(100dvh-6rem)] py-5">
+  <main class="relative h-[calc(100dvh-6rem)] pt-5">
     <nav>
       Sidebar
     </nav>
@@ -12,5 +16,8 @@
       Sidebar
     </nav>
 
+    <div class="absolute w-full bottom-0 lg:hidden">
+      <MobileNavbar />
+    </div>
   </main>
 </template>
