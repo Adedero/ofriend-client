@@ -8,7 +8,7 @@ const post = ref('');
   <div class="p-3 border rounded-md">
     <div class="flex flex-col gap-2 md:flex-row">
       <div class="flex items-center justify-between md:block">
-        <img src="../../assets/images/default-profile-img.png" alt="default profile image"
+        <img src="../../../assets/images/default-profile-img.png" alt="default profile image"
           class="w-10 aspect-square rounded-full object-cover">
 
         <div class="md:hidden">
