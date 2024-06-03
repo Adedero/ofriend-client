@@ -10,6 +10,7 @@ const links = [
     name: 'Messages',
     path: '/m/chat',
     icon: 'pi pi-comments',
+    isCurrent: true
   },
   {
     name: 'Profile',
@@ -26,15 +27,15 @@ const links = [
 
 
 <template>
-  <div class="translate-y-2 flex items-center justify-between pt-2 bg-white">
-    <RouterLink v-for="link in links" :key="link.name" :to="link.path" class="mobile-nav text-sm flex flex-col items-center justify-center">
+  <div class="flex items-center justify-between bg-white">
+    <RouterLink v-for="link in links" :key="link.name" :to="link.path" class="mobile-nav text-sm flex flex-col items-center justify-center" :class="{ 'link-active': link.isCurrent }">
       <span :class="link.icon" style="font-weight: 400"></span>
       <p class="font-semibold text-sm -mt-0.5">{{ link.name }}</p>
     </RouterLink>
   </div>
 </template>
 
-<style>
+<style scoped>
 
 a.mobile-nav {
   span {
@@ -42,7 +43,7 @@ a.mobile-nav {
   }
 }
 
-a.mobile-nav.router-link-exact-active {
+a.mobile-nav.link-active {
   span {
     @apply bg-primary text-white  rounded-full
   }

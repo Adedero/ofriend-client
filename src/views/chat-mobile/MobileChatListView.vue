@@ -1,5 +1,5 @@
 <template>
-  <section class="mt-2 h-[calc(100dvh-5rem)]">
+  <section class="mt-2 h-[calc(100dvh-8rem)]">
     <div class="h-full">
       <header class=" border-b border-primary flex items-center justify-between">
         <h1 class="font-bold text-lg">Messages</h1>

@@ -45,7 +45,7 @@ const toggle = (event) => {
         <hr class="border-primary/50 w-1/2">
       </header>
 
-      <div id="chat-body" class="grid gap-1">
+      <div id="chat-body" class="grid gap-2 cs-2:gap-1">
         <ChatBlob user="sender" />
         <ChatBlob user="receiver" />
 

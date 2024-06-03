@@ -1,6 +1,6 @@
 <template>
   <div :class="[
-      ' p-2 text-sm rounded-lg w-fit max-w-[50%]',
+      ' p-2 text-[0.9rem] cs-2:text-sm rounded-lg w-fit max-w-[80%] cs-2:max-w-[50%]',
       user === 'sender' ? 'bg-primary justify-self-end rounded-br-none text-white' : '',
       user === 'receiver' ? 'bg-accent/20 rounded-bl-none text-primary' : ''
     ]">
