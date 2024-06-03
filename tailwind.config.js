@@ -20,7 +20,8 @@ export default {
         'soft-gray-2': '#EDF0F4'
       },
       screens: {
-        'cs': '600px'
+        'cs': '600px',
+        'cs-2': '800px'
       }
     },
   },

@@ -14,12 +14,19 @@
     "@fontsource-variable/inter": "^5.0.18",
     "@vueuse/core": "^10.9.0",
     "aos": "^2.3.4",
+    "dompurify": "^3.1.5",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
     "primevue": "^3.52.0",
     "quill": "^2.0.2",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-3-sanitize": "^0.1.4",
+    "vue-audio-recorder": "^3.0.1",
+    "vue-dompurify-html": "^5.0.1",
+    "vue-router": "^4.3.0",
+    "vue-sanitize": "^0.2.3",
+    "vue-voice-recording": "^1.0.4",
+    "vue3-emoji-picker": "^1.1.8"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

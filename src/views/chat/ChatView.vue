@@ -6,23 +6,25 @@
       <div class="h-full p-3 border-r border-primary w-[30%] xl:w-[25%]">
         <header class="pb-3 border-b border-primary flex items-center justify-between">
           <h1 class="font-bold text-lg">Messages</h1>
-          <Button @click="$router.push('/app')" severity="secondary" text icon="pi pi-angle-left" label="Home" size="small" class="p-2" />
+          <Button @click="$router.push('/app')" severity="secondary" text icon="pi pi-angle-left" label="Home"
+            size="small" class="p-2" />
         </header>
 
         <ChatList />
       </div>
 
-      <div class="flex-grow">
+      <div ref="convoBox" class="flex-grow overflow-y-scroll">
         <ChatBox />
+        <NewChat />
       </div>
     </section>
   </main>
 </template>
 
 <script setup>
-
+import { onMounted, ref } from "vue";
+const convoBox = ref()
+onMounted(() => {
+  convoBox.value.scrollTop = convoBox.value.scrollHeight;
+})
 </script>
-
-<style lang="scss" scoped>
-
-</style>

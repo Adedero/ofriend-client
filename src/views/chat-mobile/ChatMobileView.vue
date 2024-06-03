@@ -1,13 +1,11 @@
-<template>
-  <div>
-Mobile Chat view
-  </div>
-</template>
-
 <script setup>
-
+import { RouterView } from 'vue-router';
 </script>
 
-<style lang="scss" scoped>
+<template>
+  <main class="p-3">
+    <AppHeader />
 
-</style>
+    <RouterView />
+  </main>
+</template>

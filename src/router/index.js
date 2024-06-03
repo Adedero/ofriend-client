@@ -11,6 +11,7 @@ import indexRoutes from '@/data/routes/index.routes';
 import onboardingRoutes from '@/data/routes/onboarding.routes';
 import legalRoutes from '@/data/routes/legal.routes';
 import appRoutes from '@/data/routes/app.routes';
+import mobileChatRoutes from '@/data/routes/mobile-chat.routes';
 /* import chatRoutes from '@/data/routes/chat.routes'; */
 
 const router = createRouter({
@@ -65,6 +66,7 @@ const router = createRouter({
       path: '/m/chat',
       name: 'chat-mobile',
       component: () => import('@/views/chat-mobile/ChatMobileView.vue'),
+      children: mobileChatRoutes,
        beforeEnter: (to, from, next) => {
         if (window.innerWidth > 800) {
           next('/chat')
