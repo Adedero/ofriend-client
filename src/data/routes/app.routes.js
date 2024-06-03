@@ -1,6 +1,6 @@
 const appRoutes = [
   {
-    path: 'home',
+    path: '',
     name: 'app-home',
     component: () => import('../../views/app/AppHomeView.vue')
   },

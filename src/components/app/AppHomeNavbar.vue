@@ -5,7 +5,7 @@ import { RouterLink } from "vue-router";
 const routes = [
   {
     name: 'Home',
-    path: '/app/home',
+    path: '/app',
     params: '12345',
     icon: 'pi pi-home'
   },
@@ -20,12 +20,12 @@ const routes = [
     path: '/app/saved-posts',
     icon: 'pi pi-bookmark'
   },
-  {
+  /* {
     name: 'My Products',
     path: '/app/products-and-services',
     params: '12345',
     icon: 'pi pi-briefcase'
-  },
+  }, */
   {
     name: 'My Profile',
     path: '/app/profile',

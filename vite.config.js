@@ -10,6 +10,7 @@ export default defineConfig({
   plugins: [
     vue(),
     Components({
+      deep: true,
       resolvers: [
         PrimeVueResolver()
       ]

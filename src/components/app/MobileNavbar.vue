@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router';
 const links = [
   {
     name: 'Home',
-    path: '/app/home',
+    path: '/app',
     icon: 'pi pi-home',
   },
   {

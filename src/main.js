@@ -8,6 +8,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import Tooltip from 'primevue/tooltip';
+import BadgeDirective from 'primevue/badgedirective';
 
 
 
@@ -21,5 +22,6 @@ app.use(createPinia());
 app.use(router);
 app.use(PrimeVue);
 app.directive('tooltip', Tooltip);
+app.directive('badge', BadgeDirective);
 
 app.mount('#app');

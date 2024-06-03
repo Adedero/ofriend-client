@@ -3,7 +3,7 @@ import CommentItem from './CommentItem.vue'
 </script>
 
 <template>
-  <div class="grid gap-4">
+  <div class="grid gap-5">
     <CommentItem />
     <CommentItem />
     <CommentItem />
