@@ -1,13 +1,5 @@
 <script setup>
 import { ref, defineAsyncComponent } from 'vue';
-import NewComment from './NewComment.vue';
-import PostTextContent from './PostTextContent.vue';
-import RePost from './RePost.vue';
-import PostImageAttachment from './PostImageAttachment.vue';
-import PostStats from './PostStats.vue';
-import LikeButton from './LikeButton.vue';
-import CommentButton from './CommentButton.vue';
-import ShareButton from './ShareButton.vue';
 
 const menu = ref(null);
 
@@ -99,7 +91,7 @@ const longHtmlText = `
       </template>
 
       <template #footer>
-        <div class="text-xs cs:text-sm">
+        <div class="text-sm">
           <PostStats @like-click="isLikersVisible = true" />
 
           <Divider />
@@ -130,10 +122,9 @@ const longHtmlText = `
 
         <div class="videos"></div>
 
-        <div class="documents"></div>
       </div>
 
-      <div class="mt-5">
+      <div class="mt-5 px-2">
         <RePost />
       </div>
     </Panel>

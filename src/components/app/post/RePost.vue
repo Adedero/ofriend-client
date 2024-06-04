@@ -14,7 +14,7 @@
 
       <template #footer>
         <div class="text-xs cs:text-sm">
-          <div class="flex items-center gap-2 cs:justify-end">
+          <div class="flex items-center gap-2 justify-end">
             <p>2.5k Likes</p>
             <span class="pi pi-circle-fill" style="font-size: 0.25rem"></span>
             <p>1.2k Comments</p>

@@ -1,55 +1,49 @@
 <script setup>
-import { ref } from 'vue';
-/* 
-
-import EmojiPicker from 'vue3-emoji-picker'
+import { computed, defineAsyncComponent, ref } from 'vue';
+import { onClickOutside } from '@vueuse/core';
 import 'vue3-emoji-picker/css'
+
+const EmojiPicker = defineAsyncComponent({
+  loader: () => import('vue3-emoji-picker'),
+});
+
+const AudioRecorder = defineAsyncComponent({
+  loader: () => import('@/components/ui/AudioRecorder.vue')
+})
+
+const message = ref('');
+const isTyping = computed(() => message.value !== '');
 
 const emojiBox = ref();
 const isAddingEmoji = ref(false);
+
 const onSelectEmoji = (emoji) => {
   message.value = message.value.concat(emoji.i)
-  onClickOutside(emojiBox, () => isAddingEmoji.value = false)
 }
 
- */
-const message = ref('')
+onClickOutside(emojiBox, () => isAddingEmoji.value = false);
 
 </script>
 
 <template>
-  <div class="sticky bottom-0 bg-white p-3 rounded-br-lg">
-    <div class="relative flex items-end gap-2">
-      <div class="absolute right-12 -top-0.5 z-10 cs-2:relative cs-2:right-[unset] cs-2:top-[unset]">
-        <!-- <Button @click="isAddingEmoji = true" text severity="secondary" icon="pi pi-face-smile" /> -->
-        <Button text severity="secondary" icon="pi pi-paperclip" />
-      </div>
+  <div class="sticky bottom-0 bg-white p-3 rounded-br-lg flex items-end gap-1">
 
-      <Editor v-model="message" editorStyle="max-width: 100%; max-height: 4.2rem; font-size: 0.875rem; overflow-y: auto"
-        class="flex-grow bg-soft-gray-2 text-sm max-h-28 overflow-x-hidden">
-        <template v-slot:toolbar>
-          <span class="ql-formats">
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-underline"></button>
-          </span>
-        </template>
-      </Editor>
-      <!-- <Textarea v-model="message"  placeholder="Type a message" rows="1" auto-resize
-        class="flex-grow bg-soft-gray-2 text-sm max-h-28" /> -->
-      <div class="s-2:relative">
-        <Button text severity="secondary" icon="pi pi-microphone" class="hidden" />
-        <Button text severity="secondary" icon="pi pi-send" />
-      </div>
+    <div class="flex-grow flex items-end bg-soft-gray-2 rounded-md">
+      
+      <Button @click="isAddingEmoji = true" text severity="secondary" icon="pi pi-face-smile" />
+
+      <Textarea v-model="message" placeholder="Type a message" rows="1" auto-resize
+        class="flex-grow py-1 mb-[0.4rem] px-0 bg-transparent outline-none border-none focus:border-none cs:text-sm max-h-28" />
+
+      <Button text severity="secondary" icon="pi pi-paperclip" />
+  
     </div>
+
+    <Button v-if="isTyping" class="btn" icon="pi pi-send" />
+    <AudioRecorder v-else />
   </div>
-  <!-- 
-  <div v-if="isAddingEmoji" ref="emojiBox" class="fixed bottom-20">
-    <EmojiPicker @select="onSelectEmoji" :native="true" :display-recent="true" />
+
+  <div ref="emojiBox" class="fixed bottom-20" :class="{'hidden' : !isAddingEmoji}">
+    <EmojiPicker ref="emojiBox" v-if="isAddingEmoji" @select="onSelectEmoji" :native="true" :display-recent="true" />
   </div>
- -->
-  <!--  <div class="fixed bottom-20">
-    <VueVoiceRecording @getAsMp3="saveAsMp3" visualizationType="FrequencyBars" :visualization-options="options">
-    </VueVoiceRecording>
-  </div> -->
 </template>
