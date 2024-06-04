@@ -55,6 +55,9 @@ const initializeMediaRecorder = () => {
       audioChunks.value = [];
       isDeleting.value = false;
       emit('onDeleted');
+      stream.value.getTracks().forEach(track => track.stop());
+      stream.value = null;
+      mediaRecorder.value = null;
       return;
     }
 
@@ -67,6 +70,10 @@ const initializeMediaRecorder = () => {
       blob: blob,
       audioUrl: audioUrl.value,
     });
+
+    stream.value.getTracks().forEach(track =>  track.stop());
+    stream.value = null;
+    mediaRecorder.value = null;
   }
 }
 
