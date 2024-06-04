@@ -7,7 +7,7 @@
           size="small" class="p-2" />
       </header>
 
-      <ChatList />
+      <MobileChatList />
     </div>
 
     <!-- <div ref="convoBox" class="flex-grow overflow-y-scroll">
