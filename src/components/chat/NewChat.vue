@@ -35,7 +35,7 @@ onClickOutside(emojiBox, () => isAddingEmoji.value = false);
       <Textarea v-model="message" placeholder="Type a message" rows="1" auto-resize
         class="flex-grow py-1 mb-[0.4rem] px-0 bg-transparent outline-none border-none focus:border-none cs:text-sm max-h-28" />
 
-      <Button text severity="secondary" icon="pi pi-paperclip" />
+      <ChatMediaAttachment />
   
     </div>
 
