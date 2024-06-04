@@ -123,7 +123,7 @@ onUnmounted(() => {
 <template>
   <div class="relative">
     <div v-if="isRecording"
-      class="bottom-10 right-[4.5rem] fixed bg-white shadow-lg border border-slate-500 rounded-full py-1 px-2 flex items-center gap-3 w-[22rem] justify-between">
+      class="bottom-[4.5rem] left-0 cs-2:bottom-10 cs-2:right-[2rem] lg:right-[4.5rem] fixed bg-white shadow-lg border border-slate-500 rounded-full py-1 px-2 flex items-center gap-3 w-full cs-2:left-[unset] cs-2:w-[22rem] justify-between">
 
       <Button @click="toggleRecord" severity="info" rounded :icon="isPaused ? 'pi pi-play' : 'pi pi-pause'"
         class="flex-shrink-0" />
