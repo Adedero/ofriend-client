@@ -23,6 +23,7 @@
     "vue-3-sanitize": "^0.1.4",
     "vue-audio-recorder": "^3.0.1",
     "vue-dompurify-html": "^5.0.1",
+    "vue-md-player": "^2.1.2",
     "vue-router": "^4.3.0",
     "vue-sanitize": "^0.2.3",
     "vue-voice-recording": "^1.0.4",

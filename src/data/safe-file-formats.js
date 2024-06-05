@@ -6,4 +6,22 @@ const safeFileFormats = [
   'video/webm'  // WebM
 ];
 
+export const safeDocFormats = [
+  '.doc',
+  '.docx',
+  '.odt',
+  '.pdf',
+  '.ppt',
+  '.pptx',
+  '.rtf',
+  '.txt',
+  '.xls',
+  '.xlsx',
+  '.zip',
+  '.rar',
+  '.7z',
+  '.tar',
+  '.gz',
+]
+
 export default safeFileFormats;

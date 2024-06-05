@@ -1,7 +1,8 @@
 <script setup>
 import { computed, defineAsyncComponent, ref } from 'vue';
 import { onClickOutside } from '@vueuse/core';
-import 'vue3-emoji-picker/css'
+import 'vue3-emoji-picker/css';
+import ChatMediaAttachment from './attachments/ChatMediaAttachment.vue';
 
 const EmojiPicker = defineAsyncComponent({
   loader: () => import('vue3-emoji-picker'),
@@ -35,7 +36,9 @@ onClickOutside(emojiBox, () => isAddingEmoji.value = false);
       <Textarea v-model="message" placeholder="Type a message" rows="1" auto-resize
         class="flex-grow py-1 mb-[0.4rem] px-0 bg-transparent outline-none border-none focus:border-none cs:text-sm max-h-28" />
 
-      <ChatMediaAttachment />
+      <div>
+        <ChatMediaAttachment />
+      </div>
   
     </div>
 
