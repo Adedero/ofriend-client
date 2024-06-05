@@ -1,6 +1,6 @@
 <script setup>
-import InputOtp from 'primevue/inputotp';
-import Button from 'primevue/button';
+import InputOtp from 'primevue/inputotp'
+import Button from 'primevue/button'
 </script>
 
 <template>

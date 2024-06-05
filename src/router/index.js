@@ -1,17 +1,17 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import IndexLayout from '@/layouts/IndexLayout.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import IndexLayout from '@/layouts/IndexLayout.vue'
 /* import OnboardingLayout from '@/layouts/OnboardingLayout.vue';
 import LegalLayout from '@/layouts/LegalLayout.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ChatLayout from '@/layouts/ChatLayout.vue'; */
 
-import HomeView from '@/views/index/HomeView.vue';
+import HomeView from '@/views/index/HomeView.vue'
 
-import indexRoutes from '@/data/routes/index.routes';
-import onboardingRoutes from '@/data/routes/onboarding.routes';
-import legalRoutes from '@/data/routes/legal.routes';
-import appRoutes from '@/data/routes/app.routes';
-import mobileChatRoutes from '@/data/routes/mobile-chat.routes';
+import indexRoutes from '@/data/routes/index.routes'
+import onboardingRoutes from '@/data/routes/onboarding.routes'
+import legalRoutes from '@/data/routes/legal.routes'
+import appRoutes from '@/data/routes/app.routes'
+import mobileChatRoutes from '@/data/routes/mobile-chat.routes'
 /* import chatRoutes from '@/data/routes/chat.routes'; */
 
 const router = createRouter({
@@ -26,7 +26,8 @@ const router = createRouter({
           name: 'home',
           component: HomeView
         },
-        ...indexRoutes]
+        ...indexRoutes
+      ]
     },
     {
       path: '/onboarding',
@@ -67,13 +68,13 @@ const router = createRouter({
       name: 'chat-mobile',
       component: () => import('@/views/chat-mobile/ChatMobileView.vue'),
       children: mobileChatRoutes,
-       beforeEnter: (to, from, next) => {
+      beforeEnter: (to, from, next) => {
         if (window.innerWidth > 800) {
           next('/chat')
         } else {
           next()
         }
-      },
+      }
     }
   ]
 })

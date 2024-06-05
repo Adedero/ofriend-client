@@ -1,4 +1,3 @@
-
 <template>
   <div class="p-1">
     <div class="flex items-center justify-between">
@@ -13,10 +12,14 @@
     <div class="flex items-end gap-1">
       <CommentMediaAttachment />
 
-      <Textarea rows="1" auto-resize placeholder="Say something..."
-        class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow" />
+      <Textarea
+        rows="1"
+        auto-resize
+        placeholder="Say something..."
+        class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow"
+      />
 
-        <Button icon="pi pi-send" class="btn h-9" />
+      <Button icon="pi pi-send" class="btn h-9" />
     </div>
   </div>
 </template>

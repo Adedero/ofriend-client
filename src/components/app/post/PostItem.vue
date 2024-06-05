@@ -1,10 +1,9 @@
 <script setup>
-import { ref, defineAsyncComponent } from 'vue';
+import { ref, defineAsyncComponent } from 'vue'
 
-const menu = ref(null);
+const menu = ref(null)
 
-const isLikersVisible = ref(false);
-
+const isLikersVisible = ref(false)
 
 const LikersList = defineAsyncComponent({
   loader: () => import('./LikersList.vue')
@@ -30,11 +29,11 @@ const items = ref([
     label: 'Report',
     icon: 'pi pi-flag'
   }
-]);
+])
 
 const toggle = (event) => {
-  menu.value.toggle(event);
-};
+  menu.value.toggle(event)
+}
 
 const longHtmlText = `
   <p>Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Quisque sit amet accumsan arcu. 
@@ -50,66 +49,66 @@ const longHtmlText = `
   Praesent ac magna convallis, <em>facilisis est</em> nec, tincidunt nisi. 
   Nullam a semper eros, ut pellentesque nisi. Duis a nisi <strong>eu odio fermentum</strong> 
   viverra. Nulla auctor enim id metus vulputate, in porttitor magna pellentesque.</p>
-`;
+`
 </script>
 
 <template>
-  
-
-    <div>
-      <Panel toggleable>
-        <template #header>
-          <div class="flex align-items-center gap-2">
-            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" size="large"
-              shape="circle" />
-            <div class="grid">
-              <span class="font-bold">Amy Elsner</span>
-              <small class="text-slate-500">2 days ago</small>
-            </div>
+  <div>
+    <Panel toggleable>
+      <template #header>
+        <div class="flex align-items-center gap-2">
+          <Avatar
+            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
+            size="large"
+            shape="circle"
+          />
+          <div class="grid">
+            <span class="font-bold">Amy Elsner</span>
+            <small class="text-slate-500">2 days ago</small>
           </div>
-        </template>
+        </div>
+      </template>
 
-        <template #footer>
-          <div class="text-sm">
-            <PostStats @like-click="isLikersVisible = true" />
+      <template #footer>
+        <div class="text-sm">
+          <PostStats @like-click="isLikersVisible = true" />
 
-            <Divider />
+          <Divider />
 
-            <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
-              <LikeButton />
-              <CommentButton @comment-click="$router.push('/app/post')" />
-              <ShareButton class="cs:ml-auto" />
-            </div>
+          <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
+            <LikeButton />
+            <CommentButton @comment-click="$router.push('/app/post')" />
+            <ShareButton class="cs:ml-auto" />
           </div>
-        </template>
+        </div>
+      </template>
 
-        <template #icons>
-          <button class="p-panel-header-icon p-link mr-2" @click="toggle">
-            <span class="pi pi-ellipsis-v"></span>
-          </button>
-          <Menu ref="menu" id="config_menu" :model="items" popup />
-        </template>
+      <template #icons>
+        <button class="p-panel-header-icon p-link mr-2" @click="toggle">
+          <span class="pi pi-ellipsis-v"></span>
+        </button>
+        <Menu ref="menu" id="config_menu" :model="items" popup />
+      </template>
 
-        <div>
-          <PostTextContent :text="longHtmlText" />
+      <div>
+        <PostTextContent :text="longHtmlText" />
+      </div>
+
+      <div>
+        <div class="images grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
+          <PostImageAttachment />
         </div>
 
-        <div>
-          <div class="images grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-            <PostImageAttachment />
-          </div>
+        <div class="videos"></div>
+      </div>
 
-          <div class="videos"></div>
+      <div class="mt-5 px-2">
+        <RePost />
+      </div>
+    </Panel>
+  </div>
 
-        </div>
-
-        <div class="mt-5 px-2">
-          <RePost />
-        </div>
-      </Panel>
-    </div>
-
-    <Sidebar v-model:visible="isLikersVisible" header="People who liked this" position="right">
-      <LikersList />
-    </Sidebar>
+  <Sidebar v-model:visible="isLikersVisible" header="People who liked this" position="right">
+    <LikersList />
+  </Sidebar>
 </template>

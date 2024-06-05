@@ -15,7 +15,13 @@ const steps = [
 
     <div class="mt-8 grid gap-10 items-center md:gap-5 md:grid-cols-2">
       <div class="grid place-content-center">
-        <img data-aos="fade-left" data-aos-duration="800" src="../../assets/images/steps-img.png" alt="steps" class="">
+        <img
+          data-aos="fade-left"
+          data-aos-duration="800"
+          src="../../assets/images/steps-img.png"
+          alt="steps"
+          class=""
+        />
       </div>
 
       <div class="lg:text-lg">

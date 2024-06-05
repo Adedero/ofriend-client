@@ -1,10 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
-const op = ref();
-const toggle = (event) => op.value.toggle(event);
+const op = ref()
+const toggle = (event) => op.value.toggle(event)
 </script>
-
 
 <template>
   <div>

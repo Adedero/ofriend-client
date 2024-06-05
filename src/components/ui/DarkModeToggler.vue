@@ -1,10 +1,13 @@
 <script setup>
-import { useDark } from '@vueuse/core';
-const isDark = useDark();
+import { useDark } from '@vueuse/core'
+const isDark = useDark()
 </script>
 <template>
-  <input type="checkbox" v-model="isDark" id="dark-toggler" class="hidden">
-  <label for="dark-toggler" class="p-2 rounded hover:bg-soft-gray-2 grid place-content-center cursor-pointer">
+  <input type="checkbox" v-model="isDark" id="dark-toggler" class="hidden" />
+  <label
+    for="dark-toggler"
+    class="p-2 rounded hover:bg-soft-gray-2 grid place-content-center cursor-pointer"
+  >
     <span :class="isDark ? 'pi pi-moon' : 'pi pi-sun'"></span>
   </label>
   <!--  <input v-model="isDark" type="checkbox"

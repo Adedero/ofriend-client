@@ -1,10 +1,10 @@
 <script setup>
-import { RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 const links = [
   {
     name: 'Home',
     path: '/app',
-    icon: 'pi pi-home',
+    icon: 'pi pi-home'
   },
   {
     name: 'Messages',
@@ -15,20 +15,25 @@ const links = [
   {
     name: 'Profile',
     path: '/app/profile',
-    icon: 'pi pi-user',
+    icon: 'pi pi-user'
   },
   {
     name: 'Notifications',
     path: '/app/notifications',
-    icon: 'pi pi-bell',
+    icon: 'pi pi-bell'
   }
 ]
 </script>
 
-
 <template>
   <div class="flex items-center justify-between bg-white">
-    <RouterLink v-for="link in links" :key="link.name" :to="link.path" class="mobile-nav text-sm flex flex-col items-center justify-center" :class="{ 'link-active': link.isCurrent }">
+    <RouterLink
+      v-for="link in links"
+      :key="link.name"
+      :to="link.path"
+      class="mobile-nav text-sm flex flex-col items-center justify-center"
+      :class="{ 'link-active': link.isCurrent }"
+    >
       <span :class="link.icon" style="font-weight: 400"></span>
       <p class="font-semibold text-sm -mt-0.5">{{ link.name }}</p>
     </RouterLink>
@@ -36,16 +41,15 @@ const links = [
 </template>
 
 <style scoped>
-
 a.mobile-nav {
   span {
-    @apply px-4 py-2
+    @apply px-4 py-2;
   }
 }
 
 a.mobile-nav.link-active {
   span {
-    @apply bg-primary text-white  rounded-full
+    @apply bg-primary text-white  rounded-full;
   }
 }
 </style>

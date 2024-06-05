@@ -1,9 +1,8 @@
 <script setup>
-import { RouterView } from 'vue-router';
-import IndexHeader from '@/components/headers/IndexHeader.vue';
-import IndexFooter from '@/components/footers/IndexFooter.vue';
-import JoinOfriend from '@/components/footers/JoinOfriend.vue';
-
+import { RouterView } from 'vue-router'
+import IndexHeader from '@/components/headers/IndexHeader.vue'
+import IndexFooter from '@/components/footers/IndexFooter.vue'
+import JoinOfriend from '@/components/footers/JoinOfriend.vue'
 </script>
 
 <template>
@@ -13,8 +12,7 @@ import JoinOfriend from '@/components/footers/JoinOfriend.vue';
     <RouterView />
 
     <JoinOfriend />
-    
+
     <IndexFooter />
   </main>
 </template>
-

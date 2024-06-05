@@ -1,7 +1,7 @@
 .btn {
-  @apply bg-primary border-primary px-4 py-2 rounded text-white hover:bg-primary-lighter/90
+  @apply bg-primary border-primary px-4 py-2 rounded text-white hover:bg-primary-lighter/90;
 }
 
 .btn-outlined {
-  @apply border-primary bg-transparent text-primary rounded hover:bg-primary-lighter/30
+  @apply border-primary bg-transparent text-primary rounded hover:bg-primary-lighter/30;
 }

@@ -1,33 +1,33 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed } from 'vue'
 
-const emit = defineEmits(['onFileSend', 'onCancelUpload']);
+const emit = defineEmits(['onFileSend', 'onCancelUpload'])
 
-const file = ref(null);
-const fileURL = ref(null);
-const caption = ref('');
-const visible = computed(() => file.value ? true : false);
+const file = ref(null)
+const fileURL = ref(null)
+const caption = ref('')
+const visible = computed(() => (file.value ? true : false))
 
 const setFile = (event) => {
-  file.value = event.target.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file.value);
-  reader.onload = () => fileURL.value = reader.result;
-};
+  file.value = event.target.files[0]
+  const reader = new FileReader()
+  reader.readAsDataURL(file.value)
+  reader.onload = () => (fileURL.value = reader.result)
+}
 
 const cancelUpload = () => {
-  file.value = null;
-  fileURL.value = null;
-  caption.value = '';
-  emit('onCancelUpload');
-};
+  file.value = null
+  fileURL.value = null
+  caption.value = ''
+  emit('onCancelUpload')
+}
 
 const sendFile = () => {
   emit('onFileSend', {
     file: file.value,
-    caption: caption.value,
-  });
-  cancelUpload();
+    caption: caption.value
+  })
+  cancelUpload()
 }
 </script>
 
@@ -41,11 +41,17 @@ const sendFile = () => {
     </template>
 
     <div class="p-2 bg-primary rounded-md grid gap-3 place-content-center">
-      <img v-if="fileURL" :src="fileURL" alt="file.name" class="max-w-full">
+      <img v-if="fileURL" :src="fileURL" alt="file.name" class="max-w-full" />
 
       <div class="flex gap-2 justify-between">
         <InputText filled v-model="caption" placeholder="Caption (optional)" class="flex-grow" />
-        <Button @click="sendFile" rounded severity="secondary" icon="pi pi-send" class="flex-shrink-0" />
+        <Button
+          @click="sendFile"
+          rounded
+          severity="secondary"
+          icon="pi pi-send"
+          class="flex-shrink-0"
+        />
       </div>
     </div>
   </Dialog>
@@ -53,9 +59,17 @@ const sendFile = () => {
   <div>
     <label class="cursor-pointer flex flex-col items-center" for="camera">
       <span
-        class="p-3 aspect-square rounded-full grid place-content-center bg-orange-400 text-white pi pi-camera"></span>
+        class="p-3 aspect-square rounded-full grid place-content-center bg-orange-400 text-white pi pi-camera"
+      ></span>
       <p class="text-xs text-center">Camera</p>
     </label>
-    <input @input="setFile" id="camera" type="file" accept="image/*" capture="environment" class="hidden">
+    <input
+      @input="setFile"
+      id="camera"
+      type="file"
+      accept="image/*"
+      capture="environment"
+      class="hidden"
+    />
   </div>
 </template>

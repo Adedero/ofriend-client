@@ -1,11 +1,10 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref } from 'vue'
 const convoBox = ref()
 onMounted(() => {
-  convoBox.value.scrollTop = convoBox.value.scrollHeight;
+  convoBox.value.scrollTop = convoBox.value.scrollHeight
 })
 </script>
-
 
 <template>
   <section class="mt-2 h-[calc(100dvh-8rem)]">

@@ -16,12 +16,14 @@
         </div>
 
         <div class="mt-1 text-sm border rounded-lg p-1 md:p-2">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda, rem magnam at recusandae cum nam incidunt
-          delectus ex quidem corrupti odit! Asperiores pariatur minus iure molestias, voluptatem nesciunt vitae?
-          Aliquam.
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Assumenda, rem magnam at
+          recusandae cum nam incidunt delectus ex quidem corrupti odit! Asperiores pariatur minus
+          iure molestias, voluptatem nesciunt vitae? Aliquam.
         </div>
 
-        <div class="mt-1 cursor-context-menu flex items-center justify-between gap-2 text-sm font-medium">
+        <div
+          class="mt-1 cursor-context-menu flex items-center justify-between gap-2 text-sm font-medium"
+        >
           <Button label="21 replies" size="small" rounded severity="secondary" />
 
           <button>Reply</button>
@@ -31,10 +33,6 @@
   </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

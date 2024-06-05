@@ -1,9 +1,21 @@
 <script setup>
 const features = [
-  { title: 'Easy and Efficient Learning', description: 'Plan your learning schedule and enjoy our learning experience' },
-  { title: 'Learning Communities', description: 'Plan your learning schedule and enjoy our learning experience' },
-  { title: 'E-library and Organizations', description: 'Plan your learning schedule and enjoy our learning experience' },
-  { title: 'Discover new interests', description: 'Plan your learning schedule and enjoy our learning experience' }
+  {
+    title: 'Easy and Efficient Learning',
+    description: 'Plan your learning schedule and enjoy our learning experience'
+  },
+  {
+    title: 'Learning Communities',
+    description: 'Plan your learning schedule and enjoy our learning experience'
+  },
+  {
+    title: 'E-library and Organizations',
+    description: 'Plan your learning schedule and enjoy our learning experience'
+  },
+  {
+    title: 'Discover new interests',
+    description: 'Plan your learning schedule and enjoy our learning experience'
+  }
 ]
 </script>
 
@@ -13,8 +25,12 @@ const features = [
 
     <div class="mt-12 lg:grid lg:grid-cols-2 lg:gap-5">
       <div class="hidden lg:block">
-        <img data-aos="fade-right" data-aos-duration="800" src="../../assets/images/features-img.png"
-          alt="we love to learn">
+        <img
+          data-aos="fade-right"
+          data-aos-duration="800"
+          src="../../assets/images/features-img.png"
+          alt="we love to learn"
+        />
       </div>
 
       <div class="grid gap-6 md:grid-cols-2">
@@ -30,5 +46,3 @@ const features = [
     </div>
   </section>
 </template>
-
-

@@ -1,37 +1,36 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref } from 'vue'
 import { VideoPlayer } from 'vue-md-player'
 import 'vue-md-player/dist/style.css'
 
 const emit = defineEmits(['onFileSend', 'onCancelUpload'])
-const file = ref(null);
-const isUrlAvailable = ref(false);
+const file = ref(null)
+const isUrlAvailable = ref(false)
 
-const visible = computed(() => file.value ? true : false);
+const visible = computed(() => (file.value ? true : false))
 
 const setFile = (event) => {
-  file.value = event.target.files[0];
-  
-  const reader = new FileReader();
-  reader.readAsDataURL(file.value);
+  file.value = event.target.files[0]
+
+  const reader = new FileReader()
+  reader.readAsDataURL(file.value)
   reader.onload = () => {
-    file.value.url = reader.result;
-    isUrlAvailable.value = true;
+    file.value.url = reader.result
+    isUrlAvailable.value = true
   }
-};
+}
 
 const sendFile = () => {
-  emit('onFileSend', file.value);
-  file.value = null;
-  isUrlAvailable.value = false;
+  emit('onFileSend', file.value)
+  file.value = null
+  isUrlAvailable.value = false
 }
 
 const cancelUpload = () => {
-  file.value = null;
-  isUrlAvailable.value = false;
-  emit('onCancelUpload');
-};
-
+  file.value = null
+  isUrlAvailable.value = false
+  emit('onCancelUpload')
+}
 </script>
 
 <template>
@@ -60,9 +59,11 @@ const cancelUpload = () => {
 
   <div>
     <label class="cursor-pointer flex flex-col items-center" for="video">
-      <span class="p-3 aspect-square rounded-full grid place-content-center bg-green-400 text-white pi pi-video"></span>
+      <span
+        class="p-3 aspect-square rounded-full grid place-content-center bg-green-400 text-white pi pi-video"
+      ></span>
       <p class="text-xs text-center">Video</p>
     </label>
-    <input @input="setFile" id="video" type="file" accept="video/*" class="hidden">
+    <input @input="setFile" id="video" type="file" accept="video/*" class="hidden" />
   </div>
 </template>

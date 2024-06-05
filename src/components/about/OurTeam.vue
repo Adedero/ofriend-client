@@ -1,5 +1,5 @@
 <script setup>
-import members from '@/data/team.js';
+import members from '@/data/team.js'
 </script>
 
 <template>
@@ -8,14 +8,15 @@ import members from '@/data/team.js';
 
     <div class="grid place-content-center gap-10 md:grid-cols-2 lg:gap-20">
       <div class="md:order-2">
-        <img src="../../assets/images/our-team-img.png" alt="our team">
+        <img src="../../assets/images/our-team-img.png" alt="our team" />
       </div>
 
       <div class="grid gap-3 place-content-center text-center md:text-left md:order-1">
         <h3 class="font-bold">Meet our team of seasoned professionals</h3>
         <p>
-          Stay updated with our latest updates, new features and exciting packages by inputting your email below. Stay
-          update with our latest updates, new features and exciting packages by inputting your email below.
+          Stay updated with our latest updates, new features and exciting packages by inputting your
+          email below. Stay update with our latest updates, new features and exciting packages by
+          inputting your email below.
         </p>
       </div>
     </div>
@@ -26,7 +27,7 @@ import members from '@/data/team.js';
 
     <div class="mt-5 flex flex-wrap gap-5 justify-center">
       <div v-for="member in members" :key="member.name">
-        <img :src="member.image" alt="member.name">
+        <img :src="member.image" alt="member.name" />
         <div class="bg-primary text-white p-2">
           <p class="font-semibold">{{ member.name }}</p>
           <p class="font-thin">{{ member.title }}</p>

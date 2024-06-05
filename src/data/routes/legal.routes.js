@@ -16,4 +16,4 @@ const legalRoutes = [
   }
 ]
 
-export default legalRoutes;
+export default legalRoutes

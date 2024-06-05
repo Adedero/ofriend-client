@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue";
-import { RouterLink } from "vue-router";
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const routes = [
   {
@@ -45,7 +45,7 @@ const routes = [
     icon: 'pi pi-user'
   }
 ]
-const menu = ref();
+const menu = ref()
 const items = ref([
   {
     label: 'Options',
@@ -64,19 +64,21 @@ const items = ref([
       }
     ]
   }
-]);
+])
 
 const toggle = (event) => {
-  menu.value.toggle(event);
-};
-
+  menu.value.toggle(event)
+}
 </script>
 
 <template>
   <div class="flex flex-col items-center h-full">
     <div class="text-center flex flex-col items-center flex-shrink-0">
-      <img src="../../assets/images/default-profile-img.png" alt="default profile image0"
-        class="block w-16 lg:w-20 aspect-square object-cover">
+      <img
+        src="../../assets/images/default-profile-img.png"
+        alt="default profile image0"
+        class="block w-16 lg:w-20 aspect-square object-cover"
+      />
 
       <div class="hidden mt-2 lg:flex flex-col items-center">
         <h3 class="font-semibold">John Smith</h3>
@@ -102,17 +104,22 @@ const toggle = (event) => {
 
     <div class="mt-auto lg:w-full flex-shrink-0">
       <Button icon="pi pi-sign-out" icon-pos="right" size="large" class="btn lg:hidden w-12" />
-      <Button label="Sign out" icon="pi pi-sign-out" icon-pos="right" class="w-full btn hidden lg:flex" />
+      <Button
+        label="Sign out"
+        icon="pi pi-sign-out"
+        icon-pos="right"
+        class="w-full btn hidden lg:flex"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
 a.app-nav {
-  @apply flex items-center gap-4 p-5 rounded-lg transition-colors hover:bg-accent/10 lg:p-3 lg:pl-5 lg:rounded-md
+  @apply flex items-center gap-4 p-5 rounded-lg transition-colors hover:bg-accent/10 lg:p-3 lg:pl-5 lg:rounded-md;
 }
 
 a.app-nav.router-link-exact-active {
-  @apply bg-accent/10 font-semibold text-primary relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent
+  @apply bg-accent/10 font-semibold text-primary relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent;
 }
 </style>

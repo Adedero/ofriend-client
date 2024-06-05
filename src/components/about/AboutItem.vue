@@ -1,5 +1,5 @@
 <script setup>
-import Button from 'primevue/button';
+import Button from 'primevue/button'
 </script>
 
 <template>
@@ -8,13 +8,14 @@ import Button from 'primevue/button';
 
     <div class="mt-10 grid place-content-center gap-10 md:grid-cols-2">
       <div class="grid place-content-center md:block">
-        <img src="../../assets/images/about-video.png" alt="about ofriend video">
+        <img src="../../assets/images/about-video.png" alt="about ofriend video" />
       </div>
 
       <div class="flex flex-col gap-8 items-start justify-center">
         <p class="text-center md:text-left">
-          Lorem ipsum dolor sit amet consectetur. Varius faucibus a risus fermentum lectus. Tristique maecenas justo non
-          lectus arcu lorem bibendum hendrerit gravida. Sit velit interdum lacus pulvinar non.
+          Lorem ipsum dolor sit amet consectetur. Varius faucibus a risus fermentum lectus.
+          Tristique maecenas justo non lectus arcu lorem bibendum hendrerit gravida. Sit velit
+          interdum lacus pulvinar non.
         </p>
 
         <div class="grid place-content-center w-full md:block">
@@ -24,4 +25,3 @@ import Button from 'primevue/button';
     </div>
   </section>
 </template>
-

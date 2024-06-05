@@ -6,4 +6,4 @@ const chatRoutes = [
   }
 ]
 
-export default chatRoutes;
+export default chatRoutes

@@ -1,12 +1,14 @@
 <script setup>
-import {  RouterLink } from 'vue-router';
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-  <footer class="bg-primary text-white grid gap-y-8 pt-16 pb-6 px-5 text-sm lg:text-base md:grid-cols-5 lg:px-20 ">
+  <footer
+    class="bg-primary text-white grid gap-y-8 pt-16 pb-6 px-5 text-sm lg:text-base md:grid-cols-5 lg:px-20"
+  >
     <div class="md:col-span-2">
       <RouterLink to="/" class="flex items-center gap-2">
-        <img src="../../assets/images/icon.png" alt="ofriend-icon">
+        <img src="../../assets/images/icon.png" alt="ofriend-icon" />
         <h1 class="font-bold text-3xl">Ofriend</h1>
       </RouterLink>
     </div>
@@ -42,20 +44,18 @@ import {  RouterLink } from 'vue-router';
     </div>
 
     <div class="md:col-span-5 mt-4 text-sm flex items-center gap-4 md:gap-10">
-      <hr class="block flex-grow border-soft-gray">
+      <hr class="block flex-grow border-soft-gray" />
       <div class="text-center">
         <p class="font-medium">Ofriend Technologies</p>
         <p class="text-xs lg:text-sm mt-1">All rights reserved 2022</p>
       </div>
-      <hr class="block flex-grow border-soft-gray">
+      <hr class="block flex-grow border-soft-gray" />
     </div>
-
   </footer>
 </template>
 
 <style scoped>
 a.link {
-  @apply hover:underline
+  @apply hover:underline;
 }
 </style>
-

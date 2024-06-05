@@ -1,10 +1,17 @@
 <template>
   <section class="mt-2 h-[calc(100dvh-8rem)]">
     <div class="h-full">
-      <header class=" border-b border-primary flex items-center justify-between">
+      <header class="border-b border-primary flex items-center justify-between">
         <h1 class="font-bold text-lg">Messages</h1>
-        <Button @click="$router.push('/app')" severity="secondary" text icon="pi pi-angle-left" label="Home"
-          size="small" class="p-2" />
+        <Button
+          @click="$router.push('/app')"
+          severity="secondary"
+          text
+          icon="pi pi-angle-left"
+          label="Home"
+          size="small"
+          class="p-2"
+        />
       </header>
 
       <MobileChatList />
@@ -18,11 +25,7 @@
 </template>
 
 <script>
-  export default {
-    
-  }
+export default {}
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

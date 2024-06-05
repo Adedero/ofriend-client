@@ -1,13 +1,7 @@
 <template>
-  <div>
-    To share a post
-  </div>
+  <div>To share a post</div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

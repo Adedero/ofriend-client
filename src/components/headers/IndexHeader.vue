@@ -1,17 +1,19 @@
 <script setup>
-import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
-import Button from 'primevue/button';
-import Sidebar from 'primevue/sidebar';
+import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
+import Button from 'primevue/button'
+import Sidebar from 'primevue/sidebar'
 
-const visible = ref(false);
+const visible = ref(false)
 </script>
 
 <template>
-  <header class="sticky top-0 z-10 bg-white flex items-center justify-between shadow-sm py-2 px-5 lg:px-20">
+  <header
+    class="sticky top-0 z-10 bg-white flex items-center justify-between shadow-sm py-2 px-5 lg:px-20"
+  >
     <div class="logo">
       <RouterLink to="/">
-        <img src="../../assets/images/logo-dark.svg" alt="">
+        <img src="../../assets/images/logo-dark.svg" alt="" />
       </RouterLink>
     </div>
 
@@ -38,8 +40,11 @@ const visible = ref(false);
         <Button label="Sign In" class="btn" />
       </RouterLink>
 
-      <button @click="visible = true" type="button"
-        class="grid place-content-center p-2.5 transition rounded hover:bg-soft-gray-2">
+      <button
+        @click="visible = true"
+        type="button"
+        class="grid place-content-center p-2.5 transition rounded hover:bg-soft-gray-2"
+      >
         <span class="pi pi-bars text-primary" style="font-size: 1.2rem"></span>
       </button>
     </div>
@@ -47,7 +52,7 @@ const visible = ref(false);
 
   <Sidebar v-model:visible="visible" position="right" class="w-[min(80dvw,20rem)] md:w-72">
     <template #header>
-      <img src="../../assets/images/logo-dark.svg" alt="ofriend logo" class="w-28">
+      <img src="../../assets/images/logo-dark.svg" alt="ofriend logo" class="w-28" />
     </template>
 
     <div class="links grid justify-start gap-8 lg:hidden">
@@ -67,10 +72,14 @@ const visible = ref(false);
       </RouterLink>
     </div>
 
-    <hr class="my-8">
+    <hr class="my-8" />
 
     <div class="links grid justify-start gap-8 lg:hidden">
-      <RouterLink @click="visible = false" to="/onboarding/signup" class="nav flex items-center gap-3">
+      <RouterLink
+        @click="visible = false"
+        to="/onboarding/signup"
+        class="nav flex items-center gap-3"
+      >
         <span class="pi pi-user-plus -translate-y-0.5"></span>
         <span>Sign Up</span>
       </RouterLink>
@@ -85,18 +94,18 @@ const visible = ref(false);
 
 <style>
 a.nav {
-  @apply font-medium relative
+  @apply font-medium relative;
 }
 
 a.nav::before {
-  @apply absolute content-[""] left-0 bottom-0 w-0 h-1 bg-accent rounded translate-y-0.5 transition-all
+  @apply absolute content-[""] left-0 bottom-0 w-0 h-1 bg-accent rounded translate-y-0.5 transition-all;
 }
 
 a.nav:hover:before {
-  @apply w-full
+  @apply w-full;
 }
 
 a.nav.router-link-exact-active {
-  @apply before:w-full
+  @apply before:w-full;
 }
 </style>

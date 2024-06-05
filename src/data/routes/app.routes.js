@@ -31,4 +31,4 @@ const appRoutes = [
   }
 ]
 
-export default appRoutes;
+export default appRoutes

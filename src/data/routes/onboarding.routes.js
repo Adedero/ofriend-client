@@ -6,7 +6,7 @@ const onboardingRoutes = [
   },
   {
     path: 'signup',
-    name:'signup',
+    name: 'signup',
     component: () => import('@/views/onboarding/SignupView.vue')
   },
   {
@@ -20,4 +20,4 @@ const onboardingRoutes = [
     component: () => import('@/views/onboarding/OtpView.vue')
   }
 ]
-export default onboardingRoutes;
+export default onboardingRoutes

@@ -1,16 +1,19 @@
 <script setup>
 const faqs = [
   {
-    question: "How does Ofriend Edu work?",
-    answer: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
+    question: 'How does Ofriend Edu work?',
+    answer:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
   },
   {
-    question: "Can i get free courses?",
-    answer: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
+    question: 'Can i get free courses?',
+    answer:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
   },
   {
-    question: "Do you offer earning opportunities to learners?",
-    answer: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
+    question: 'Do you offer earning opportunities to learners?',
+    answer:
+      "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable."
   }
 ]
 </script>
