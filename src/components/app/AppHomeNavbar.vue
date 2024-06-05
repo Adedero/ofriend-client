@@ -10,6 +10,12 @@ const routes = [
     icon: 'pi pi-home'
   },
   {
+    name: 'Products',
+    path: '/chat',
+    params: '12345',
+    icon: 'pi pi-briefcase'
+  },
+  {
     name: 'Chats',
     path: '/chat',
     params: '12345',
@@ -27,16 +33,16 @@ const routes = [
     icon: 'pi pi-briefcase'
   }, */
   {
-    name: 'My Profile',
-    path: '/app/profile',
-    params: '12345',
-    icon: 'pi pi-user'
-  },
-  {
     name: 'Notifications',
     path: '/app/notifications',
     params: '12345',
     icon: 'pi pi-bell'
+  },
+  {
+    name: 'My Profile',
+    path: '/app/profile',
+    params: '12345',
+    icon: 'pi pi-user'
   }
 ]
 const menu = ref();
@@ -90,7 +96,7 @@ const toggle = (event) => {
     <nav class="grid gap-1 flex-shrink-0 lg:w-full">
       <RouterLink v-for="route in routes" :key="route.name" :to="route.path" class="app-nav">
         <span :class="[route.icon]"></span>
-        <span class="hidden lg:inline">{{ route.name }}</span>
+        <span class="hidden text-sm lg:inline">{{ route.name }}</span>
       </RouterLink>
     </nav>
 

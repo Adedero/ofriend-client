@@ -5,6 +5,11 @@ const appRoutes = [
     component: () => import('@/views/app/AppHomeView.vue')
   },
   {
+    path: 'post',
+    name: 'user-post',
+    component: () => import('@/views/app/PostDetailsVue.vue')
+  },
+  {
     path: 'notifications',
     name: 'app-notifications',
     component: () => import('@/views/app/NotificationsView.vue')

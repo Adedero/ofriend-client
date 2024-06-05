@@ -15,7 +15,7 @@ const setFiles = (data) => files.value = data
       </div>
 
       <div class="flex-grow">
-        <Textarea v-model="post" rows="1" auto-resize class="bg-soft-gray-2 focus:bg-white w-full max-h-[400px]" />
+        <Textarea v-model="post" placeholder="Ready to share your knowledge?" rows="1" auto-resize class="bg-soft-gray-2 focus:bg-white w-full max-h-[400px]" />
       </div>
     </div>
 
