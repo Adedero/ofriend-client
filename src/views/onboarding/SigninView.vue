@@ -5,9 +5,11 @@ import { usePost } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
 const toast = useToast();
+const userStore = useUserStore();
 
 const res = ref({});
 const user = ref({});
@@ -26,6 +28,7 @@ const signin = async () => {
     }
     const { isVerified } = res.value.data.user;
     if (isVerified) {
+      userStore.setUser(res.value.data.user);
       router.push({ name: 'app-home' });
       return;
     }

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref(sessionStorage.getItem('user') || {
+    id: '',
     name: '',
     email: '',
     isVerified: false,
