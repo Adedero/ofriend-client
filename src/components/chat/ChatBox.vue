@@ -29,7 +29,7 @@ const toggle = (event) => {
   >
     <div>
       <h3 class="font-medium">John Smith</h3>
-      <p class="text-sm truncate max-w-96 text-text-light">
+      <p class="text-sm truncate max-w-72 text-text-light cs:max-w-96">
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </p>
     </div>
