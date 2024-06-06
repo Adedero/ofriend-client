@@ -19,6 +19,7 @@ const signin = async () => {
   res.value.loading = true;
   try {
     res.value = await usePost('auth/sign-in', user.value);
+    if (!res.value) return;
     addToast(res.value, toast, false);
     if (res.value.error || res.value.status !== 200) {
       return
@@ -90,7 +91,7 @@ const sendMail = async () => {
       <Password v-model="user.password" toggleMask :feedback="false" input-class="w-full"
         placeholder="Confirm Password" />
 
-      <RouterLink to="/" class="-mt-3 text-stone-400 hover:underline hover:text-accent text-right">Forgot password?
+      <RouterLink to="/recovery/forgot-password" class="-mt-3 text-stone-400 hover:underline hover:text-accent text-right">Forgot password?
       </RouterLink>
 
       <Button @click="signin" :loading="res.loading" :disabled="!isSubmissionValid" label="Sign in" icon="pi pi-sign-in"

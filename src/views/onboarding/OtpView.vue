@@ -87,7 +87,7 @@ onUnmounted(() => {
   <Dialog v-model:visible="isVerified" modal :closable="false" class="rounded-none md:rounded-xl md:max-w-[32rem]">
     <div class="grid place-content-center gap-5">
       <div class="grid place-content-center">
-        <img src="../../assets/images/success-icon.svg" alt="success icon" >
+        <img src="../../assets/images/success-icon.png" alt="success icon">
       </div>
       <div class="grid gap-3 text-center">
         <p class="font-bold">Congratulations</p>
@@ -96,7 +96,9 @@ onUnmounted(() => {
           <p v-if="res">Welcome onboard <span class="font-semibold">{{ res.data.user.name }}</span></p>
         </div>
       </div>
-      <Button severity="secondary" label="Redirecting..." icon="pi pi-spinner pi pi-spin" class="w-fit mx-auto" />
+      <div class="grid place-content-center -mt-4">
+        <span class="text-accent pi pi-spinner pi pi-spin mt-4" style="font-size: 1.2rem"></span>
+      </div>
     </div>
   </Dialog>
 

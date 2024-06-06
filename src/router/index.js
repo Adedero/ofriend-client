@@ -12,6 +12,7 @@ import onboardingRoutes from '@/data/routes/onboarding.routes'
 import legalRoutes from '@/data/routes/legal.routes'
 import appRoutes from '@/data/routes/app.routes'
 import mobileChatRoutes from '@/data/routes/mobile-chat.routes'
+import recoveryRoutes from '@/data/routes/recovery.routes'
 /* import chatRoutes from '@/data/routes/chat.routes'; */
 
 const router = createRouter({
@@ -34,6 +35,11 @@ const router = createRouter({
       component: () => import('@/layouts/OnboardingLayout.vue'),
       redirect: { name: 'signin' },
       children: onboardingRoutes
+    },
+    {
+      path: '/recovery/forgot-password',
+      component: () => import('@/layouts/RecoveryLayout.vue'),
+      children: recoveryRoutes
     },
     {
       path: '/legal',
