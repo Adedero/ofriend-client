@@ -33,7 +33,7 @@ const toggle = (event) => {
         Lorem ipsum dolor sit amet consectetur adipisicing elit.
       </p>
     </div>
-    <Button @click="toggle" text icon="pi pi-ellipsis-h" />
+    <Button @click="toggle" text icon="pi pi-ellipsis-h" class="flex-shrink-0" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
   </header>
 
