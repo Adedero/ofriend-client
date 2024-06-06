@@ -6,7 +6,7 @@ export function addToast(response, toast, onSuccess = true, life = 5000) {
         summary: response.data.info? response.data.info: 'Failed',
         detail: response.data.message,
         life: life
-      })
+      });
     } else {
       if (onSuccess) {
         toast.add({

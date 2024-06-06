@@ -20,6 +20,9 @@ const signin = async () => {
   try {
     res.value = await usePost('auth/sign-in', user.value);
     addToast(res.value, toast, false);
+    if (res.value.error || res.value.status !== 200) {
+      return
+    }
     const { isVerified } = res.value.data.user;
     if (isVerified) {
       router.push({ name: 'app-home' });
@@ -36,7 +39,12 @@ const mailResponse = ref({});
 const sendMail = async () => {
   mailResponse.value.loading = true;
   try {
-    mailResponse.value = await usePost(`auth/send-mail/${user.value.email}`)
+    mailResponse.value = await usePost(`auth/send-mail/${user.value.email}`);
+    if (mailResponse.value.data.success) {
+      router.push({  name: 'otp' });
+      return;
+    }
+    addToast(mailResponse.value, toast, false);
   } catch (error) {
     console.log(error);
   }
@@ -46,15 +54,25 @@ const sendMail = async () => {
 
 <template>
   <Toast class="max-w-96" />
-  <Dialog v-model:visible="isUnverified" modal header="Verify Account" :style="{ width: '25rem' }">
-    <div>
-      <h1 class="font-bold text-5xl">Almost there!</h1>
-      <p>Please take a moment to verify your email.</p>
-    </div>
+  <Dialog v-model:visible="isUnverified" modal header="Verify Account" class="md:w-[40rem]">
+    <div class="grid gap-5 md:grid-cols-2">
+      <div>
+        <img src="../../assets/images/verification.svg" alt="verification">
+      </div>
 
-    <div class="flex justify-end gap-2">
-      <Button type="button" label="Cancel" severity="secondary" @click="isUnverified = false"></Button>
-      <Button type="button" label="Proceed" class="btn" @click="sendMail" :loading="mailResponse.loading"></Button>
+      <div class="text-center flex flex-col  gap-4  md:justify-center md:gap-6 md:text-left">
+        <div>
+          <h1 class="font-bold text-3xl">Almost there!</h1>
+
+        </div>
+
+        <p>Please take a moment to verify your email. <br> You will need to do this just once.</p>
+
+        <div class="flex gap-2 justify-center md:justify-normal">
+          <Button type="button" label="Cancel" severity="secondary" @click="isUnverified = false"></Button>
+          <Button type="button" label="Proceed" class="btn" @click="sendMail" :loading="mailResponse.loading"></Button>
+        </div>
+      </div>
     </div>
   </Dialog>
 
