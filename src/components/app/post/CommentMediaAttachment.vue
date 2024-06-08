@@ -1,16 +1,24 @@
 <script setup>
 import { computed, ref } from 'vue'
-const emit = defineEmits(['onFileUpload'])
+const emit = defineEmits(['onFileUpload', 'onCancelUpload'])
 const formats = '.jpg,.jpeg,.png,.gif,.mp4.,.mpeg'
 
 const file = ref(null)
 const isUploaded = computed(() => (file.value ? true : false))
 
 const setFile = (event) => {
+  const fileType = event.target.files[0].type.split('/')[0];
+  if (fileType !== 'image' && fileType !== 'video') {
+    return;
+  }
   file.value = event.target.files[0]
   emit('onFileUpload', file.value)
+  file.value = null;
 }
-const cancelUpload = () => (file.value = null)
+const cancelUpload = () => {
+  file.value = null;
+  emit('onFileUpload');
+}
 </script>
 
 <template>
@@ -30,6 +38,6 @@ const cancelUpload = () => (file.value = null)
     >
       <span class="pi pi-images" style="font-size: 1.2rem"></span>
     </label>
-    <input @input="setFile" id="media" type="file" :accept="formats" class="hidden" />
+    <input @input="setFile" @cancel="cancelUpload" id="media" type="file" :accept="formats" class="hidden" />
   </div>
 </template>

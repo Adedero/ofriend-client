@@ -2,7 +2,7 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref(sessionStorage.getItem('user') || {
+  const user = ref(JSON.parse(sessionStorage.getItem('user')) || {
     id: '',
     name: '',
     email: '',

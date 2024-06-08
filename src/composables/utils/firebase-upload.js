@@ -5,35 +5,48 @@ import { ref as firebaseRef, uploadBytes, getDownloadURL, deleteObject } from 'f
 export default function useFirebaseUpload() {
   //Upload One File
   async function uploadSingleFile(dir = '', file) {
-    const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${file.name}`);
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const fileName = `${timestamp}-${randomString}${file.name}`;
+    
+    const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
+    let url, error;
     try {
-        // Upload the main image
-        const snapshot = await uploadBytes(storageRef, file);
-        console.log('Uploaded');
-        // Get the download URL
-        const url = await getDownloadURL(snapshot.ref);
-        return url;
-    } catch (error) {
-        console.error(error);
+      // Upload the main image
+      const snapshot = await uploadBytes(storageRef, file);
+      console.log('Uploaded');
+      // Get the download URL
+      url = await getDownloadURL(snapshot.ref);
+      return [url, null];
+    } catch (err) {
+      console.error(err);
+      error = err
+      return [null, error]
     }
   }
 
   //Upload Multiple Files
   async function uploadMultipleFiles(dir = '', files = []) {
-    const urlArray = [];
+    let urlArray = [];
+    let error = null;
     for (let i = 0; i < files.length; i++) {
-      const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${ files[i].name }`);
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substring(2, 8);
+      const fileName = `${timestamp}-${randomString}${files[i].name}`;
 
+      const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
       try {
           const snapshot = await uploadBytes(storageRef, files[i]);
           console.log(`Uploaded ${i + 1} ${ i + 1 > 1 ? 'files': 'file' }`);
           const url = await getDownloadURL(snapshot.ref);
           urlArray.push(url);
-      } catch (error) {
-          console.error(error);
+          return [urlArray, null]
+      } catch (err) {
+          console.error(err);
+          error = err;
+          return [null, error]
       }
     }
-    return urlArray;
   }
 
   async function deleteFiles(urlArray = []) {

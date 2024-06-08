@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="textContainer" :class="{ truncated: isTruncated }" v-html="props.text"></div>
+    <div ref="textContainer" class="whitespace-pre" :class="{ truncated: isTruncated }">{{ text }}</div>
     <Button v-if="showButton" @click="toggleText" size="small" severity="info" text class="mt-2">{{
       buttonText
     }}</Button>

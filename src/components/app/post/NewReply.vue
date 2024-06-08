@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePost } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
@@ -7,11 +7,15 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
 
-const emit = defineEmits(['onCommentCreated']);
+const emit = defineEmits(['onReplyCreated']);
 const router = useRouter();
 const toast = useToast();
 const props = defineProps({
   postId: {
+    type: String,
+    required: true
+  },
+  commentId: {
     type: String,
     required: true
   }
@@ -19,6 +23,8 @@ const props = defineProps({
 const comment = ref({
   post: props.postId,
   textContent: '',
+  isReply: true,
+  parentComment: props.commentId,
   hasText: false,
   hasMedia: false
 });
@@ -27,7 +33,7 @@ const media = ref(null);
 const setMedia = (file) => media.value = file;
 
 const res = ref({});
-const postComment = async () => {
+const postReply = async () => {
   if (!comment.value.hasText && !comment.value.hasMedia) return;
   res.value.loading = true;
   if (media.value) {
@@ -50,13 +56,8 @@ const postComment = async () => {
       return;
     }
     if (res.value.data.success) {
-      emit('onCommentCreated', res.value.data.comment);
-      comment.value = {
-        post: props.postId,
-        textContent: '',
-        hasText: false,
-        hasMedia: false
-      };
+      emit('onReplyCreated', res.value.data.comment);
+      comment.value.textContent = ''
       media.value = null;
       return
     }
@@ -73,6 +74,8 @@ watchEffect(() => {
   comment.value.hasText = (comment.value.textContent !== '');
   comment.value.hasMedia = (media.value !== null);
 });
+
+onMounted(() => document.getElementById('reply-textarea').focus());
 </script>
 
 <template>
@@ -82,6 +85,7 @@ watchEffect(() => {
       <CommentMediaAttachment @on-file-upload="setMedia" @on-cancel-upload="media = null" />
 
       <Textarea
+        id="reply-textarea"
         v-model="comment.textContent"
         rows="1"
         auto-resize
@@ -89,7 +93,7 @@ watchEffect(() => {
         class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow"
       />
 
-      <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn h-9" />
+      <Button @click="postReply" :loading="res.loading" icon="pi pi-send" class="btn h-9" />
     </div>
   </div>
 </template>

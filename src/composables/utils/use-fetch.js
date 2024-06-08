@@ -29,7 +29,9 @@ export const useGet = async (url, options = {}) => {
 }
 
 
-export const usePost = async (url, postData, method = 'POST', options = {}) => {
+export const usePost = async (url, postData, method = 'POST', options = {}, timeout = 10000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
   const loading = ref(false);
   const error = ref(null);
   const data = ref(null);
@@ -45,13 +47,13 @@ export const usePost = async (url, postData, method = 'POST', options = {}) => {
         },
         credentials: 'include',
         body: JSON.stringify(postData),
+        signal: controller.signal,
       ...options
       });
 
       data.value = await res.json();
       status.value = res.status;
       error.value = null;
-
     } catch (error) {
       error.value = error.message;
     } finally {
@@ -60,6 +62,8 @@ export const usePost = async (url, postData, method = 'POST', options = {}) => {
   }
 
   await postRequest();
+
+  clearTimeout(timeoutId);
 
   return { loading, status, data, error }
 }

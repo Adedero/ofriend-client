@@ -31,6 +31,21 @@ const router = createRouter({
       ]
     },
     {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      beforeEnter: (to, from, next) => { next('/404') }
+    },
+    {
+        path: '/404',
+        name: '404',
+        component: () => import('@/views/errors/Error404View.vue')
+    },
+    {
+      path: '/500',
+      name: '500',
+      component: () => import('@/views/errors/Error500View.vue')
+    },
+    {
       path: '/onboarding',
       component: () => import('@/layouts/OnboardingLayout.vue'),
       redirect: { name: 'signin' },

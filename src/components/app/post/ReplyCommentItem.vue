@@ -1,0 +1,44 @@
+<script setup>
+import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
+import { timeAgo } from '@/composables/utils/formats';
+
+defineProps({
+  comment: {
+    type: Object
+  }
+});
+
+</script>
+
+<template>
+  <div>
+    <div class="flex gap-1">
+      <DynamicAvatar shape="circle" :user="comment.author" />
+      <div class="w-full">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <p class="font-bold">{{ comment.author.name }}</p>
+            <p class="text-text-light text-sm">{{ timeAgo(comment.createdAt) }}</p>
+          </div>
+
+          <div class="text-small flex items-center gap-2">
+            <CommentLikeButton :likes="comment.likes"/>
+          </div>
+        </div>
+
+        <div v-if="comment.hasText" class="whitespace-pre mt-1 text-sm border rounded-lg p-1 md:p-2">
+          {{ comment.textContent }}
+        </div>
+
+        <div v-if="comment.hasMedia">
+          <Image v-if="fileType === 'image'" :src="comment.mediaUrl" alt="Image" width="100%" preview />
+
+          <video v-if="fileType === 'video'">
+            <source :src="comment.mediaUrl" type="video/*" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

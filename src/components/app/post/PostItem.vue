@@ -1,14 +1,21 @@
 <script setup>
-import { ref, defineAsyncComponent } from 'vue'
-
-const menu = ref(null)
-
-const isLikersVisible = ref(false)
-
+import { defineAsyncComponent, ref } from 'vue';
+import { timeAgo } from '@/composables/utils/formats';
+defineProps({
+  post: {
+    type: Object,
+    required: true
+  }
+})
 const LikersList = defineAsyncComponent({
   loader: () => import('./LikersList.vue')
-})
+});
+const isLikersVisible = ref(false);
 
+
+
+
+const menu = ref(null);
 const items = ref([
   {
     label: 'Follow User',
@@ -29,27 +36,12 @@ const items = ref([
     label: 'Report',
     icon: 'pi pi-flag'
   }
-])
+]);
 
 const toggle = (event) => {
   menu.value.toggle(event)
 }
 
-const longHtmlText = `
-  <p>Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Quisque sit amet accumsan arcu. 
-  Nulla sit amet <em>volutpat magna</em>. Cras in risus eget nisl facilisis vehicula. 
-  Sed sollicitudin urna vel ex bibendum, <a href="#">quis cursus nisi hendrerit</a>. 
-  Nam et ligula at nulla malesuada scelerisque.</p>
-  <p>Curabitur at <strong>velit sit amet libero</strong> auctor faucibus. 
-  Aliquam erat volutpat. Maecenas <em>fringilla</em> magna nec justo dignissim, 
-  nec varius quam suscipit. Suspendisse potenti. 
-  Proin vitae turpis auctor, lacinia ante eu, <strong>tincidunt nunc</strong>. 
-  Sed non ex vel eros fermentum mollis.</p>
-  <p>Donec eget <a href="#">sapien tincidunt</a>, lacinia quam vitae, accumsan sem. 
-  Praesent ac magna convallis, <em>facilisis est</em> nec, tincidunt nisi. 
-  Nullam a semper eros, ut pellentesque nisi. Duis a nisi <strong>eu odio fermentum</strong> 
-  viverra. Nulla auctor enim id metus vulputate, in porttitor magna pellentesque.</p>
-`
 </script>
 
 <template>
@@ -57,28 +49,10 @@ const longHtmlText = `
     <Panel toggleable>
       <template #header>
         <div class="flex align-items-center gap-2">
-          <Avatar
-            image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png"
-            size="large"
-            shape="circle"
-          />
+          <DynamicAvatar size="large" shape="circle" :user="post.author" />
           <div class="grid">
-            <span class="font-bold">Amy Elsner</span>
-            <small class="text-slate-500">2 days ago</small>
-          </div>
-        </div>
-      </template>
-
-      <template #footer>
-        <div class="text-sm">
-          <PostStats @like-click="isLikersVisible = true" />
-
-          <Divider />
-
-          <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
-            <LikeButton />
-            <CommentButton @comment-click="$router.push('/app/post')" />
-            <ShareButton class="cs:ml-auto" />
+            <span class="font-bold">{{ post.author.name }}</span>
+            <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
           </div>
         </div>
       </template>
@@ -90,11 +64,11 @@ const longHtmlText = `
         <Menu ref="menu" id="config_menu" :model="items" popup />
       </template>
 
-      <div>
-        <PostTextContent :text="longHtmlText" />
+      <div v-if="post.hasText">
+        <PostTextContent :text="post.textContent" />
       </div>
 
-      <div>
+      <div v-if="post.hasMedia">
         <div class="images grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
           <PostImageAttachment />
         </div>
@@ -102,9 +76,21 @@ const longHtmlText = `
         <div class="videos"></div>
       </div>
 
-      <div class="mt-5 px-2">
+      <div v-if="post.isReposting" class="mt-5 px-2">
         <RePost />
       </div>
+
+      <template #footer>
+        <div class="text-sm">
+          <PostStats :likes="post.likes" :comments="post.comments" :reposts="post.reposts" @like-click="isLikersVisible = true" />
+          <Divider />
+          <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
+            <LikeButton />
+            <CommentButton @comment-click="$router.push('/app/post')" />
+            <ShareButton class="cs:ml-auto" />
+          </div>
+        </div>
+      </template>
     </Panel>
   </div>
 

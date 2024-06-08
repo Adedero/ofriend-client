@@ -5,7 +5,7 @@ const appRoutes = [
     component: () => import('@/views/app/AppHomeView.vue')
   },
   {
-    path: 'post',
+    path: 'post/:postId',
     name: 'user-post',
     component: () => import('@/views/app/PostDetailsVue.vue')
   },
