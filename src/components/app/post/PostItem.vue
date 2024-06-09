@@ -7,6 +7,11 @@ defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['onLikeClick', 'onPostShared']);
+
+const sendEmit = (data) => emit('onLikeClick', data);
+
 const LikersList = defineAsyncComponent({
   loader: () => import('./LikersList.vue')
 });
@@ -68,12 +73,8 @@ const toggle = (event) => {
         <PostTextContent :text="post.textContent" />
       </div>
 
-      <div v-if="post.hasMedia">
-        <div class="images grid gap-2 grid-cols-[repeat(auto-fill,minmax(200px,1fr))]">
-          <PostImageAttachment />
-        </div>
-
-        <div class="videos"></div>
+      <div v-if="post.hasMedia" class="mt-5">
+        <PostMedia :media="post.media" />
       </div>
 
       <div v-if="post.isReposting" class="mt-5 px-2">
@@ -82,12 +83,12 @@ const toggle = (event) => {
 
       <template #footer>
         <div class="text-sm">
-          <PostStats :likes="post.likes" :comments="post.comments" :reposts="post.reposts" @like-click="isLikersVisible = true" />
+          <PostStats :post="post" />
           <Divider />
           <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
-            <LikeButton />
-            <CommentButton @comment-click="$router.push('/app/post')" />
-            <ShareButton class="cs:ml-auto" />
+            <LikeButton :post="post" @on-like-click="sendEmit" />
+            <CommentButton @comment-click="$router.push(`/app/post/${post._id}`)" />
+            <ShareButton :post="post" class="cs:ml-auto" @on-post-shared="$emit('onPostShared')" />
           </div>
         </div>
       </template>

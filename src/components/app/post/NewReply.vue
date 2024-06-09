@@ -30,19 +30,28 @@ const comment = ref({
 });
 
 const media = ref(null);
-const setMedia = (file) => media.value = file;
+const setMedia = (file) => {
+  media.value = file;
+  isCommentCreated.value = false;
+}
+
+const isCommentCreated = ref(false);
 
 const res = ref({});
 const postReply = async () => {
-  if (!comment.value.hasText && !comment.value.hasMedia) return;
+  if (!comment.value.textMedia && !media.value) return;
   res.value.loading = true;
   if (media.value) {
+    const fileType = media.value.type;
     const [url, error] = await useFirebaseUpload().uploadSingleFile('POSTS', media.value);
     if (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload file. Please, check your network connection and try again later.' });
       return;
     }
-    comment.value.mediaUrl = url;
+    comment.value.media = {
+      url: url,
+      type: fileType
+    }
   }
   try {
     res.value = await usePost('api/create-comment', comment.value);
@@ -59,6 +68,7 @@ const postReply = async () => {
       emit('onReplyCreated', res.value.data.comment);
       comment.value.textContent = ''
       media.value = null;
+      isCommentCreated.value = true;
       return
     }
     addToast(res.value, toast, false);
@@ -82,7 +92,7 @@ onMounted(() => document.getElementById('reply-textarea').focus());
   <Toast class="max-w-96" />
   <div class="p-1">
     <div class="flex items-end gap-1">
-      <CommentMediaAttachment @on-file-upload="setMedia" @on-cancel-upload="media = null" />
+      <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
 
       <Textarea
         id="reply-textarea"

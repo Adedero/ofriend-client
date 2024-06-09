@@ -24,19 +24,28 @@ const comment = ref({
 });
 
 const media = ref(null);
-const setMedia = (file) => media.value = file;
+const setMedia = (file) => {
+  media.value = file;
+  isCommentCreated.value = false;
+}
+
+const isCommentCreated = ref(false);
 
 const res = ref({});
 const postComment = async () => {
-  if (!comment.value.hasText && !comment.value.hasMedia) return;
+  if (!comment.value.textContent && !media.value) return;
   res.value.loading = true;
   if (media.value) {
+    const fileType = media.value.type;
     const [url, error] = await useFirebaseUpload().uploadSingleFile('POSTS', media.value);
     if (error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload file. Please, check your network connection and try again later.' });
       return;
     }
-    comment.value.mediaUrl = url;
+    comment.value.media = {
+      url: url,
+      type: fileType
+    }
   }
   try {
     res.value = await usePost('api/create-comment', comment.value);
@@ -58,6 +67,7 @@ const postComment = async () => {
         hasMedia: false
       };
       media.value = null;
+      isCommentCreated.value = true;
       return
     }
     addToast(res.value, toast, false);
@@ -79,15 +89,10 @@ watchEffect(() => {
   <Toast class="max-w-96" />
   <div class="p-1">
     <div class="flex items-end gap-1">
-      <CommentMediaAttachment @on-file-upload="setMedia" @on-cancel-upload="media = null" />
+      <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
 
-      <Textarea
-        v-model="comment.textContent"
-        rows="1"
-        auto-resize
-        placeholder="Say something..."
-        class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow"
-      />
+      <Textarea v-model="comment.textContent" rows="1" auto-resize placeholder="Say something..."
+        class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow" />
 
       <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn h-9" />
     </div>

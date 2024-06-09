@@ -1,7 +1,13 @@
 <script setup>
-import { computed, ref } from 'vue'
-const emit = defineEmits(['onFileUpload', 'onCancelUpload'])
-const formats = '.jpg,.jpeg,.png,.gif,.mp4.,.mpeg'
+import { computed, ref, watchEffect } from 'vue'
+const emit = defineEmits(['onFileUpload', 'onCancelUpload']);
+const props = defineProps({
+  isCommentCreated: {
+    type: Boolean,
+    default: false
+  }
+})
+const formats = '.jpg,.jpeg,.png,.gif,.3gp,.mp4,.mpeg'
 
 const file = ref(null)
 const isUploaded = computed(() => (file.value ? true : false))
@@ -11,20 +17,23 @@ const setFile = (event) => {
   if (fileType !== 'image' && fileType !== 'video') {
     return;
   }
-  file.value = event.target.files[0]
-  emit('onFileUpload', file.value)
-  file.value = null;
+  file.value = event.target.files[0];
+  emit('onFileUpload', file.value);
 }
 const cancelUpload = () => {
   file.value = null;
   emit('onFileUpload');
 }
+
+watchEffect(() => {
+  props.isCommentCreated ? file.value : file.value = false;
+})
 </script>
 
 <template>
   <div class="relative grid place-content-center w-fit">
     <Chip
-      v-if="isUploaded"
+      v-if="isUploaded && !isCommentCreated"
       @remove="cancelUpload"
       label="file attached"
       icon="pi pi-paperclip"

@@ -14,6 +14,8 @@ const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
+const hasMoreComments = ref(false);
+const commentSection = ref(null);
 
 const res = ref({
   loading: true,
@@ -39,7 +41,6 @@ const newComments = ref([]);
 //Adds a new comment to the list of comments
 const onCommentCreated = (comment) => {
   const authorId = comment.author;
-  console.log(userStore.user)
   comment = {
     ...comment,
     author: {
@@ -49,27 +50,32 @@ const onCommentCreated = (comment) => {
     }
   }
   res.value.data.post.comments++;
-  console.log(comment);
-  newComments.value.unshift(comment);
+  newComments.value.push(comment);
 }
 
 
 const SKIP = computed(() => comments.value.length);
 const LIMIT = 5;
 const commentsRes = ref({});
+
 const loadComments = async () => {
   commentsRes.value.loading = true;
   try {
     commentsRes.value = await useGet(`api/get-comments/${route.params.postId}?skip=${SKIP.value}&limit=${LIMIT}`);
-    console.log(commentsRes.value.data);
+    //console.log(commentsRes.value.data);
     if (!commentsRes.value || commentsRes.value.error) {
       toast.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong. Please try again later' });
       return;
     }
     if (commentsRes.value.status === 200) {
       newComments.value = [];
-      comments.value.push(...commentsRes.value.data.comments);
-      return
+      if (commentsRes.value.data.comments.length) {
+        comments.value.push(...commentsRes.value.data.comments);
+        hasMoreComments.value = true;
+        return
+      }
+      hasMoreComments.value = false;
+      return;
     }
     addToast(commentsRes.value, toast, false);
   } catch (error) {
@@ -80,8 +86,15 @@ const loadComments = async () => {
   }
 }
 
+//updates the likes on the post
+const updateLikes = (data) => {
+  const { isLiked } = data;
+  isLiked ? res.value.data.post.likes ++ : res.value.data.post.likes--
+}
+
 onMounted(async () => {
   await getPost();
+  commentSection.value.scrollIntoView();
 });
 </script>
 
@@ -90,7 +103,7 @@ onMounted(async () => {
   <PostDetailsSkeleton v-if="res.loading" />
   <div v-else>
     <div>
-      <PostItem :post="res.data.post" />
+      <PostItem :post="res.data.post" @on-like-click="updateLikes" @on-post-shared="res.data.post.reposts++" />
     </div>
 
     <div class="mt-3">
@@ -113,12 +126,12 @@ onMounted(async () => {
       </div>
 
       <div>
-        <Button v-if="comments.length > 0 && comments.length < res.data.post.comments" @click="loadComments"
+        <Button v-if="hasMoreComments" @click="loadComments"
           :loading="commentsRes.loading" label="More comments" text
           class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
       </div>
 
-      <div class="sticky mt-2 -bottom-3 cs:-bottom-12 bg-white">
+      <div ref="commentSection" class="sticky mt-2 -bottom-3 cs:-bottom-12 bg-white">
         <NewComment @on-comment-created="onCommentCreated" :post-id="res.data.post._id" />
       </div>
     </div>

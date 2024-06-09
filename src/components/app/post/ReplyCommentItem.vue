@@ -2,6 +2,7 @@
 import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
 import { timeAgo } from '@/composables/utils/formats';
 
+
 defineProps({
   comment: {
     type: Object
@@ -22,7 +23,7 @@ defineProps({
           </div>
 
           <div class="text-small flex items-center gap-2">
-            <CommentLikeButton :likes="comment.likes"/>
+            <CommentLikeButton :comment />
           </div>
         </div>
 
@@ -31,12 +32,7 @@ defineProps({
         </div>
 
         <div v-if="comment.hasMedia">
-          <Image v-if="fileType === 'image'" :src="comment.mediaUrl" alt="Image" width="100%" preview />
-
-          <video v-if="fileType === 'video'">
-            <source :src="comment.mediaUrl" type="video/*" />
-            Your browser does not support the video tag.
-          </video>
+          <CommentMedia :media="comment.media" />
         </div>
       </div>
     </div>

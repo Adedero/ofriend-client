@@ -5,13 +5,17 @@ export function getFileType(url) {
 
   // Extract the file extension from the URL
   const extension = url.split('?alt')[0].slice(-3).toLowerCase();
-  console.log(extension)
-
   // Check if the extension matches any image or video extension
   if (imageExtensions.includes(extension)) {
-    return 'image';
+    return {
+      file: 'image',
+      type: `image/${extension}`
+    };
   } else if (videoExtensions.includes(extension)) {
-    return 'video';
+    return {
+      file: 'video',
+      type: `video/${extension}`
+    }
   } else {
     return 'unknown';
   }
