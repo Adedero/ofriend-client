@@ -23,7 +23,14 @@ import AppHomeAside from '@/components/app/AppHomeAside.vue'
       </section>
 
       <aside class="hidden h-full overflow-y-auto md:block lg:col-span-2 xl:col-span-2">
-        <AppHomeAside />
+        <Suspense>
+          <template #default>
+            <AppHomeAside />
+          </template>
+          <template #fallback>
+            <AppHomeAsideSkeleton />
+          </template>
+        </Suspense>
       </aside>
 
       <div class="absolute w-full -bottom-3 cs:hidden">

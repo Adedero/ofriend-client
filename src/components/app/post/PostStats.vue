@@ -54,14 +54,15 @@ const showLikers = async () => {
 <template>
   <Toast class="max-w-96" />
   <div class="flex items-center gap-2">
-    <button @click="showLikers" class="hover:font-semibold">{{ formatNumber(post.likes) }} Likes</button>
+    <button @click="showLikers" class="hover:font-semibold">{{ formatNumber(post.likes) }} {{ post.likes == 1 ? 'Like' :
+      'Likes' }}</button>
 
     <span class="pi pi-circle-fill" style="font-size: 0.25rem"></span>
 
-    <button>{{ formatNumber(post.comments) }} Comments</button>
+    <button>{{ formatNumber(post.comments) }} {{ post.comments == 1 ? 'Comment' : 'Comments' }}</button>
     <span class="pi pi-circle-fill" style="font-size: 0.25rem"></span>
 
-    <p class="cursor-context-menu">{{ formatNumber(post.reposts) }} Reposts</p>
+    <p class="cursor-context-menu">{{ formatNumber(post.reposts) }} {{ post.reposts == 1 ? 'Share' : 'Shares' }}</p>
   </div>
 
   <Sidebar v-model:visible="visible" header="People who liked this" position="right">

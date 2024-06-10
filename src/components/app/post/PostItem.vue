@@ -1,6 +1,7 @@
 <script setup>
-import { defineAsyncComponent, ref } from 'vue';
+import { ref } from 'vue';
 import { timeAgo } from '@/composables/utils/formats';
+
 defineProps({
   post: {
     type: Object,
@@ -12,37 +13,7 @@ const emit = defineEmits(['onLikeClick', 'onPostShared']);
 
 const sendEmit = (data) => emit('onLikeClick', data);
 
-const LikersList = defineAsyncComponent({
-  loader: () => import('./LikersList.vue')
-});
-const isLikersVisible = ref(false);
-
-
-
-
 const menu = ref(null);
-const items = ref([
-  {
-    label: 'Follow User',
-    icon: 'pi pi-user-plus'
-  },
-  {
-    label: 'Save',
-    icon: 'pi pi-bookmark'
-  },
-  {
-    label: 'Copy Link',
-    icon: 'pi pi-copy'
-  },
-  {
-    separator: true
-  },
-  {
-    label: 'Report',
-    icon: 'pi pi-flag'
-  }
-]);
-
 const toggle = (event) => {
   menu.value.toggle(event)
 }
@@ -56,7 +27,10 @@ const toggle = (event) => {
         <div class="flex align-items-center gap-2">
           <DynamicAvatar size="large" shape="circle" :user="post.author" />
           <div class="grid">
-            <span class="font-bold">{{ post.author.name }}</span>
+            <p>
+              <span class="font-bold">{{ post.author.name }}</span>
+              <span v-if="post.isReposting" class="italic font-medium"> shared a post</span>
+            </p>
             <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
           </div>
         </div>
@@ -66,7 +40,18 @@ const toggle = (event) => {
         <button class="p-panel-header-icon p-link mr-2" @click="toggle">
           <span class="pi pi-ellipsis-v"></span>
         </button>
-        <Menu ref="menu" id="config_menu" :model="items" popup />
+        <OverlayPanel ref="menu">
+          <Suspense>
+            <template #default>
+              <PostOptions :post />
+            </template>
+            <template #fallback>
+              <div class="w-20 h-20 grid place-content-center">
+                <span class="pi pi-spinner pi-spin text-accent" style="font-size: 1.2rem"></span>
+              </div>
+            </template>
+          </Suspense>
+        </OverlayPanel>
       </template>
 
       <div v-if="post.hasText">
@@ -78,7 +63,7 @@ const toggle = (event) => {
       </div>
 
       <div v-if="post.isReposting" class="mt-5 px-2">
-        <RePost />
+        <RePost :post="post.repostedPost" />
       </div>
 
       <template #footer>
@@ -94,8 +79,4 @@ const toggle = (event) => {
       </template>
     </Panel>
   </div>
-
-  <Sidebar v-model:visible="isLikersVisible" header="People who liked this" position="right">
-    <LikersList />
-  </Sidebar>
 </template>

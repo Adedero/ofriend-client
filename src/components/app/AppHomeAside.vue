@@ -1,3 +1,7 @@
+<script setup>
+//Get followers and following
+</script>
+
 <template>
   <aside class="grid gap-3">
     <div class="followers flex-shrink-0 flex flex-col items-center lg:items-start">
@@ -45,7 +49,3 @@
     </div>
   </aside>
 </template>
-
-<script setup></script>
-
-<style lang="scss" scoped></style>

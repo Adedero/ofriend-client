@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
+import { computed, defineAsyncComponent, ref, watch, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useGet } from '@/composables/utils/use-fetch';
@@ -24,7 +24,7 @@ const res = ref({
 const getPost = async () => {
   try {
     res.value = await useGet(`api/get-post/${route.params.postId}`);
-    //console.log(res.value.data);
+    console.log(res.value.data);
     if (!res.value || res.value.error) return router.push('/500');
     if (res.value.status === 401 && res.value.data.authMessage) return router.push({ name: 'signin' });
     if (res.value.status === 404 || !res.value.data) return router.push('/404');
@@ -92,10 +92,15 @@ const updateLikes = (data) => {
   isLiked ? res.value.data.post.likes ++ : res.value.data.post.likes--
 }
 
-onMounted(async () => {
-  await getPost();
-  commentSection.value.scrollIntoView();
-});
+watch(
+  () => route.params.postId,
+  () => {
+    comments.value = [];
+    newComments.value = [];
+  }
+)
+watchEffect(async () => await getPost())
+
 </script>
 
 <template>
@@ -115,19 +120,19 @@ onMounted(async () => {
     </div>
 
     <div class="relative">
-      <div v-if="newComments.length" class="mt-5 grid gap-5">
-        <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="res.data.post.comments++"
-          :comment="comment" />
-      </div>
 
       <div v-if="comments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in comments" :key="comment._id" :comment="comment"
           @on-reply-created="res.data.post.comments++" />
       </div>
 
+      <div v-if="newComments.length" class="mt-5 grid gap-5">
+        <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="res.data.post.comments++"
+          :comment="comment" />
+      </div>
+
       <div>
-        <Button v-if="hasMoreComments" @click="loadComments"
-          :loading="commentsRes.loading" label="More comments" text
+        <Button v-if="hasMoreComments" @click="loadComments" :loading="commentsRes.loading" label="More comments" text
           class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
       </div>
 

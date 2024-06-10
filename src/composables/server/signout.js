@@ -1,8 +1,6 @@
-import { useRouter } from "vue-router";
 import { useGet } from "../utils/use-fetch";
 
-const signout = async () => {
-  const router = useRouter();
+const signout = async (router) => {
   try {
     const payload = useGet('auth/sign-out');
     if (payload.error) {

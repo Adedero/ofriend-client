@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { usePost } from '@/composables/utils/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -39,7 +39,7 @@ const toggleLike = async () => {
   }
 }
 
-//watchEffect(() => myPost.value = props.post);
+watchEffect(() => myPost.value = props.post);
 </script>
 
 <template>

@@ -1,6 +1,11 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+import { formatDate } from '@/composables/utils/formats';
+import signout from '@/composables/server/signout';
+
+const userStore = useUserStore();
 
 const routes = [
   {
@@ -74,15 +79,11 @@ const toggle = (event) => {
 <template>
   <div class="flex flex-col items-center h-full">
     <div class="text-center flex flex-col items-center flex-shrink-0">
-      <img
-        src="../../assets/images/default-profile-img.png"
-        alt="default profile image0"
-        class="block w-16 lg:w-20 aspect-square object-cover"
-      />
+      <DynamicAvatar :user="userStore.user" shape="circle" class="text-3xl w-16 h-16 lg:w-[4.5rem] lg:h-[4.5rem] flex-shrink-0" />
 
       <div class="hidden mt-2 lg:flex flex-col items-center">
-        <h3 class="font-semibold">John Smith</h3>
-        <p class="text-text-light">Joined 14 April, 2024</p>
+        <h3 class="font-semibold">{{ userStore.user.name }}</h3>
+        <p class="text-text-light">Joined {{ formatDate(userStore.user.createdAt) }}</p>
 
         <p class="mt-2 text-sm font-medium">UI/UX designer | Brand Promoter</p>
       </div>
@@ -103,13 +104,8 @@ const toggle = (event) => {
     </nav>
 
     <div class="mt-auto lg:w-full flex-shrink-0">
-      <Button icon="pi pi-sign-out" icon-pos="right" size="large" class="btn lg:hidden w-12" />
-      <Button
-        label="Sign out"
-        icon="pi pi-sign-out"
-        icon-pos="right"
-        class="w-full btn hidden lg:flex"
-      />
+      <Button @click="signout($router)" icon="pi pi-sign-out" icon-pos="right" size="large" class="btn lg:hidden w-12" />
+      <Button @click="signout($router)" label="Sign out" icon="pi pi-sign-out" icon-pos="right" class="w-full btn hidden lg:flex" />
     </div>
   </div>
 </template>
