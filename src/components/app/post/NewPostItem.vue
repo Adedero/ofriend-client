@@ -7,9 +7,13 @@ import visibilityOptions from '@/data/visibilty';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
 import { usePost } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
+import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
+import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
 const toast = useToast();
+const userStore = useUserStore();
+
 const status = ref(visibilityOptions[0]);
 
 const files = ref([]);
@@ -96,8 +100,8 @@ const createPost = async () => {
       </div>
 
       <div class="flex items-start gap-2 justify-between">
-        <img src="../../../assets/images/default-profile-img.png" alt="default profile image"
-          class="w-10 aspect-square rounded-full object-cover" />
+        <DynamicAvatar shape="circle" class="w-10 h-10" :user="userStore.user" />
+
         <div class="flex-grow">
           <Textarea v-model="post.textContent" placeholder="Ready to share your knowledge?" rows="1" auto-resize
             class="bg-soft-gray-2 focus:bg-white w-full max-h-[400px]" />
@@ -107,12 +111,12 @@ const createPost = async () => {
     </div>
 
     <div class="mt-3 flex items-start justify-between">
-      <div>
+      <div class="flex items-start gap-2">
         <AttachMedia @on-file-upload="setFiles" @on-cancel-upload="files = []" />
       </div>
 
-      <Button @click="createPost" :loading="res.loading" label="Post" icon="pi pi-angle-double-right" icon-pos="right" size="small"
-        class="bg-primary border-primary hover:bg-primary-lighter transition-colors" />
+      <Button @click="createPost" :loading="res.loading" label="Post" icon="pi pi-angle-double-right" icon-pos="right"
+        size="small" class="bg-primary border-primary hover:bg-primary-lighter transition-colors" />
     </div>
   </div>
 </template>

@@ -8,7 +8,8 @@ export const useUserStore = defineStore('user', () => {
     email: '',
     isVerified: false,
     isOrg: false,
-    createdAt: ''
+    createdAt: '',
+    bio: ''
   });
 
   const setUser = (value = {}) => {

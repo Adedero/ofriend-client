@@ -85,7 +85,7 @@ const toggle = (event) => {
         <h3 class="font-semibold">{{ userStore.user.name }}</h3>
         <p class="text-text-light">Joined {{ formatDate(userStore.user.createdAt) }}</p>
 
-        <p class="mt-2 text-sm font-medium">UI/UX designer | Brand Promoter</p>
+        <p class="mt-2 text-sm font-medium truncate-3">{{ userStore.user.bio }}.</p>
       </div>
 
       <div class="mt-2 lg:hidden">
@@ -117,5 +117,12 @@ a.app-nav {
 
 a.app-nav.router-link-exact-active {
   @apply bg-accent/10 font-semibold text-primary relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent;
+}
+
+.truncate-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 </style>
