@@ -6,6 +6,10 @@ import { addToast } from '@/composables/utils/add-toast';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import maskEmail from '@/composables/utils/mask-email';
+import { useUserStore } from '@/stores/user';
+
+
+const userStore = useUserStore();
 
 const router = useRouter();
 const toast = useToast();
@@ -31,9 +35,10 @@ const verifyOTP = async () => {
     verifyResponse.value = await usePost(`auth/verify-account/${OTP.value}`);
     if (verifyResponse.value.data.success) {
       isVerified.value = true;
+      userStore.setUser(res.value.data.user);
       setTimeout(() => {
         router.push({ name: 'app-home' });
-      }, 5000);
+      }, 3000);
       return
     }
     addToast(verifyResponse.value, toast, false);
