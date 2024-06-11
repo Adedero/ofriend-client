@@ -1,9 +1,6 @@
 <script setup>
-import { watchEffect } from 'vue';
 import { useGet } from '@/composables/utils/use-fetch';
 const { data } = await useGet('api/followers-and-following');
-//Get followers and following
-watchEffect(() => console.log(data.value))
 </script>
 
 <template>
