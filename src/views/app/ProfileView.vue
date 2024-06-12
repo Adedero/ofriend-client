@@ -44,7 +44,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
     <div id="banner" class="relative">
       <ProfileBanner :isViewingSelf="user.isViewingSelf" :bannerImageUrl="user.bannerImageUrl ?? ''"
         @onBannerImageChange="setBannerImageUrl" />
-      <div v-if="!user.isViewingSelf" class="grid justify-end absolute right-0">
+      <div v-if="!user.isViewingSelf" class="grid justify-end absolute z-10 right-0">
         <UserFollowButton :user @onFollowToggle="setFollowerCount" />
       </div>
     </div>
