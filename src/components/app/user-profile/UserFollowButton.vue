@@ -28,7 +28,7 @@ const toggleFollowUser = async () => {
       return;
     }
     isFollowing.value = followStatus.value.isFollowing;
-    emit('onFollowToggle', followStatus.vaue.isFollowing) 
+    emit('onFollowToggle', followStatus.value.isFollowing) 
   } catch (error) {
     useToastError(toast, error)
   } finally {
