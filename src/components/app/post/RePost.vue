@@ -13,7 +13,7 @@ defineProps({
     <Panel>
       <template #header>
         <div class="flex items-center gap-2">
-          <DynamicAvatar :user="post.author" size="large" shape="circle" />
+          <DynamicAvatar :user="post.author" size="large" shape="circle" class="w-12 h-12" />
           <div class="grid">
             <span class="font-bold">{{ post.author.name }}</span>
             <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
