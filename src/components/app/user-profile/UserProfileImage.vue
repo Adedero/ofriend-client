@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { usePost } from '@/composables/utils/use-fetch';
 import { addToast, useToastError } from '@/composables/utils/add-toast';
@@ -20,6 +20,10 @@ const firebaseUpload = useFirebaseUpload();
 const toast = useToast();
 const file = ref(null);
 const imageUrl = ref(props.user.imageUrl);
+watch(
+  () => props.user.imageUrl,
+  () => imageUrl.value = props.user.imageUrl
+)
 
 const setFile = async (event) => {
   const image = event.target.files[0];
