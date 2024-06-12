@@ -50,14 +50,18 @@ export default function useFirebaseUpload() {
   }
 
   async function deleteFiles(urlArray = []) {
+    let error = null;
     for (let i = 0; i < urlArray.length; i++) {
       const storageRef = firebaseRef(storage, urlArray[i]);
       try {
           // Delete the file
           await deleteObject(storageRef);
           console.log(`Deleted ${i + 1} ${i + 1 > 1 ? 'files' : 'file'}`);
-      } catch (error) {
-          console.error(error);
+          return null;
+      } catch (err) {
+          console.error(err);
+          error = err;
+          return error
       }
     } 
   }

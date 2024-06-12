@@ -15,7 +15,7 @@ const appRoutes = [
     component: () => import('@/views/app/NotificationsView.vue')
   },
   {
-    path: 'profile',
+    path: 'profile/:userId',
     name: 'user-profile',
     component: () => import('@/views/app/ProfileView.vue')
   },

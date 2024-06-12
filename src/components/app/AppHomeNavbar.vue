@@ -45,7 +45,7 @@ const routes = [
   },
   {
     name: 'My Profile',
-    path: '/app/profile',
+    path: `/app/profile/${userStore.user.id}`,
     params: '12345',
     icon: 'pi pi-user'
   }
@@ -85,7 +85,7 @@ const toggle = (event) => {
         <h3 class="font-semibold">{{ userStore.user.name }}</h3>
         <p class="text-text-light">Joined {{ formatDate(userStore.user.createdAt) }}</p>
 
-        <p class="mt-2 text-sm font-medium truncate-3">{{ userStore.user.bio }}.</p>
+        <p class="mt-2 text-sm font-medium truncate-3">{{ userStore.user.bio }}</p>
       </div>
 
       <div class="mt-2 lg:hidden">

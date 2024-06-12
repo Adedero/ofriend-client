@@ -6,19 +6,16 @@ import AppHomeNavbar from '@/components/app/AppHomeNavbar.vue'
 import AppHomeAside from '@/components/app/AppHomeAside.vue'
 </script>
 <template>
-  <main class="px-2 pt-2 pb-5 lg:px-10">
+  <main class="px-2 pt-2 pb-5 lg:px-5">
     <AppHeader />
 
-    <section
-      class="relative h-[calc(100dvh-5.5rem)] pt-5 md:grid md:grid-cols-8 lg:grid-cols-12 xl:grid-cols-11"
-    >
+    <section class="relative h-[calc(100dvh-5.5rem)] pt-5 md:grid md:grid-cols-8 lg:grid-cols-12 xl:grid-cols-11">
+      
       <nav class="hidden h-full overflow-y-auto md:block lg:col-span-2 xl:col-span-2">
         <AppHomeNavbar />
       </nav>
 
-      <section
-        class="h-full overflow-y-auto pb-12 md:px-5 md:col-span-6 lg:col-span-8 xl:col-span-7"
-      >
+      <section class="h-full overflow-y-auto pb-12 md:px-5 md:col-span-6 lg:col-span-8 xl:col-span-7">
         <RouterView />
       </section>
 

@@ -79,11 +79,13 @@ const loadReplies = async () => {
   <Toast class="max-w-96" />
   <div>
     <div class="flex gap-1">
-      <DynamicAvatar shape="circle" :user="refComment.author" />
+      <DynamicAvatar @click="$router.push(`/app/profile/${refComment.author._id}`)" shape="circle"
+        :user="refComment.author" class="cursor-pointer w-8 h-8 aspect-square" />
       <div class="w-full">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <p class="font-bold">{{ refComment.author.name }}</p>
+            <p @click="$router.push(`/app/profile/${refComment.author._id}`)" class="cursor-pointer font-bold">{{
+              refComment.author.name }}</p>
             <p class="text-text-light text-sm">{{ timeAgo(refComment.createdAt) }}</p>
           </div>
 
@@ -118,8 +120,7 @@ const loadReplies = async () => {
     </div>
 
     <div class="mt-3 ml-8">
-      <Button v-if="hasMoreReplies" @click="loadReplies"
-        :loading="replyRes.loading" label="More replies" text
+      <Button v-if="hasMoreReplies" @click="loadReplies" :loading="replyRes.loading" label="More replies" text
         class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
     </div>
 

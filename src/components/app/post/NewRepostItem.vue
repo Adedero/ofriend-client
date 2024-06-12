@@ -80,7 +80,7 @@ const createPost = async () => {
       </div>
 
       <div class="flex items-center gap-2 justify-between">
-        <DynamicAvatar :user="userStore.user" shape="circle" size="large" />
+        <DynamicAvatar :user="userStore.user" shape="circle" size="large" class="h-12 aspect-square" />
         <div class="flex-grow">
           <Textarea v-model="post.textContent" placeholder="Say something about this." rows="1" auto-resize
             class="bg-soft-gray-2 focus:bg-white w-full max-h-[100px]" />

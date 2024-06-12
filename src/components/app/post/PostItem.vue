@@ -24,8 +24,8 @@ const toggle = (event) => {
   <div>
     <Panel toggleable>
       <template #header>
-        <div class="flex align-items-center gap-2">
-          <DynamicAvatar size="large" shape="circle" :user="post.author" />
+        <div @click="$router.push(`/app/profile/${post.author._id}`)" class="cursor-pointer flex align-items-center gap-2">
+          <DynamicAvatar size="large" shape="circle" :user="post.author" class="w-12 h-12" />
           <div class="grid">
             <p>
               <span class="font-bold">{{ post.author.name }}</span>

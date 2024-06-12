@@ -21,8 +21,8 @@ defineEmits(['onLoadMore']);
 <template>
   <div flex flex-col gap-3>
     <!-- Wrap this in a router link later on to lead to the user's profile -->
-    <div v-for="like in likers" :key="like.liker._id" class="flex-shrink-0 flex items-center gap-1 p-2">
-      <DynamicAvatar shape="circle" :user="like.liker" />
+    <div v-for="like in likers" :key="like.liker._id" @click="$router.push(`/app/profile/${like.liker._id}`)" class="cursor-pointer flex-shrink-0 flex items-center gap-1 p-2 hover:font-semibold">
+      <DynamicAvatar shape="circle" :user="like.liker" class="w-8 aspect-square" />
       <p>{{ like.liker.name }}</p>
     </div>
 

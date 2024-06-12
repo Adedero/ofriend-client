@@ -11,7 +11,7 @@ const { data } = await useGet('api/followers-and-following');
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-for="follower in data.followers" :key="follower._id" class="flex items-center gap-2 min-w-0">
 
-          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="flex-shrink-0" />
+          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-12 w-12 flex-shrink-0" />
           <div class="hidden overflow-x-hidden lg:block">
             <p class="font-medium">{{ follower.user.name }}</p>
             <p class="text-xs  truncate">{{ follower.user.bio }}</p>
@@ -42,7 +42,7 @@ const { data } = await useGet('api/followers-and-following');
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-for="follower in data.following" :key="follower._id" class="flex items-center gap-2 min-w-0">
 
-          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="flex-shrink-0" />
+          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-12 w-12 flex-shrink-0" />
           <div class="hidden overflow-x-hidden lg:block">
             <p class="font-medium">{{ follower.user.name }}</p>
             <p class="text-xs  truncate">{{ follower.user.bio }}</p>
