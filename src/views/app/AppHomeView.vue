@@ -16,7 +16,8 @@ const getPosts = async () => {
   try {
     res.value = await useGet(`api/content-reel/${posts.value.length}`);
     //console.log(res.value.data)
-    if (!res.value || res.value.error) return router.push('/500')
+    if (!res.value || res.value.error) return router.push('/500');
+    if (res.value.status === 401 && res.value.data.authMessage) return router.push({ name: 'signin' });
     if (res.value.status !== 200) return addToast(res.value, toast, false);
     posts.value.push(...res.value.data);
   } catch (error) {
