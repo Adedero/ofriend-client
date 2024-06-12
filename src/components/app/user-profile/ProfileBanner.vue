@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { usePost } from '@/composables/utils/use-fetch';
 import { addToast, useToastError } from '@/composables/utils/add-toast';
@@ -23,7 +23,10 @@ const props = defineProps({
 const emit = defineEmits(['onBannerImageChange']);
 
 const imageUrl = ref(props.bannerImageUrl);
-
+watch(
+  () => props.bannerImageUrl,
+  () => imageUrl.value = props.bannerImageUrl
+)
 const file = ref(null);
 const isEditing = ref(false);
 
