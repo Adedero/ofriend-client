@@ -49,7 +49,7 @@ const onFollowClick = async (event) => {
 
 const items = ref([
   {
-    label: 'Unfollow Adedero?',
+    label: `Unfollow ${props.user.name}?`,
     icon: 'pi pi-user',
     command: async () => await toggleFollowUser()
   }
