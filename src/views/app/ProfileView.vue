@@ -30,6 +30,10 @@ const setImageUrl = (data) => user.value.imageUrl = data;
 //Update banner image Url
 const setBannerImageUrl = (data) => user.value.bannerImageUrl = data;
 
+const setFollowerCount = (data) => {
+  data ? user.value.followers++ : user.value.followers--
+}
+
 watchEffect(async () => await getUserProfile(route.params.userId));
 
 </script>
@@ -41,7 +45,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
       <ProfileBanner :isViewingSelf="user.isViewingSelf" :bannerImageUrl="user.bannerImageUrl ?? ''"
         @onBannerImageChange="setBannerImageUrl" />
       <div v-if="!user.isViewingSelf" class="grid justify-end absolute right-0">
-        <UserFollowButton :user />
+        <UserFollowButton :user @onFollowToggle="setFollowerCount" />
       </div>
     </div>
 
