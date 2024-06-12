@@ -39,7 +39,7 @@ const isCommentCreated = ref(false);
 
 const res = ref({});
 const postReply = async () => {
-  if (!comment.value.textMedia && !media.value) return;
+  if (!comment.value.textContent && !media.value) return;
   res.value.loading = true;
   if (media.value) {
     const fileType = media.value.type;
