@@ -10,7 +10,7 @@ const user = ref(null);
 const getUserProfile = async (id) => {
   try {
     const { status, data, error } = await useGet(`api/get-user-profile/${id}`);
-    console.log(data.value);
+    //console.log(data.value);
     if (error.value) return router.push('/500');
     if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
     if (status.value !== 200) return router.push('/404');
@@ -75,18 +75,21 @@ watchEffect(async () => await getUserProfile(route.params.userId));
 
 
       <div class="lg:col-span-3">
-        <TabView :lazy="true" class="mt-16 h-full">
+        <TabView :lazy="true" scrollable class="mt-5 lg:mt-16 h-[calc(100dvh-17rem)]">
           <TabPanel header="Posts">
-            <UserPosts />
+            <UserPosts :userId="user._id" />
           </TabPanel>
+
           <TabPanel header="Gallery">
-
+            <UserGallery :userId="user._id" />
           </TabPanel>
+
           <TabPanel header="Followers">
-
+            <UserFollowers :user />
           </TabPanel>
-          <TabPanel header="Following">
 
+          <TabPanel header="Following">
+            <UserFollowing :user />
           </TabPanel>
         </TabView>
       </div>
@@ -94,13 +97,16 @@ watchEffect(async () => await getUserProfile(route.params.userId));
   </div>
 
   <div v-else>
-    <Skeleton height="14rem" width="100%" />
+    <Skeleton height="12rem" width="100%" />
     <div class="grid gap-3 lg:grid-cols-5 mt-3">
-      <div class="lg:col-span-2">
-        <Skeleton width="100%" height="16rem" />
+      <div class="grid content-start gap-3 lg:col-span-2">
+        <Skeleton shape="circle" width="8rem" height="8rem" class="mx-auto" />
+        <Skeleton width="100%" height="4rem" />
+        <Skeleton width="100%" height="4rem" />
       </div>
-      <div class="lg:col-span-3">
-        <Skeleton width="100%" height="30rem" />
+      <div class="lg:col-span-3 grid grid-cols-4 gap-3">
+        <Skeleton v-for="i in 4" :key="i" height="2rem" />
+        <Skeleton width="100%" height="20rem" class="col-span-4" />
       </div>
     </div>
   </div>

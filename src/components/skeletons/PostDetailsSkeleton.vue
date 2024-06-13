@@ -1,5 +1,5 @@
 <template>
-  <div class="p-2 h-dvh flex flex-col">
+  <div class="p-2 h-[80dvh] flex flex-col">
     <div class="flex items-center gap-2">
       <Skeleton shape="circle" width="4rem" height="4rem" class="flex-shrink-0" />
       <div class="grid gap-2 items-start">

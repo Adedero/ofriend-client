@@ -21,7 +21,7 @@ const toggle = (event) => {
 </script>
 
 <template>
-  <div>
+  <div class="min-w-0">
     <Panel toggleable>
       <template #header>
         <div @click="$router.push(`/app/profile/${post.author._id}`)" class="cursor-pointer flex align-items-center gap-2">
