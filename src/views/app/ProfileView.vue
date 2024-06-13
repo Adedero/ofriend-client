@@ -67,7 +67,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
             <ProfileDetails :user />
           </div>
 
-          <div class="p-2 border rounded-lg mt-3 w-full">
+          <div class="p-2 border rounded-lg mt-3 w-full h-60">
             <UserBio :user @on-bio-updated="setBio" />
           </div>
         </div>

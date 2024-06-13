@@ -86,7 +86,7 @@ const updateBannerImage = async () => {
     <Button v-if="isViewingSelf" @click="isEditing? cancelUpload() : isEditing = true" icon="pi pi-camera" rounded
       severity="secondary" class="absolute z-10 right-2 bottom-2" />
 
-    <div v-if="isEditing" class="bg-white border rounded-xl absolute right-0 z-10 p-2 w-52">
+    <div v-if="isEditing" class="bg-white border rounded-xl absolute right-0 z-10 p-2 w-60">
       <div class="text-sm">
         <input @input="setFile" @cancel="cancelUpload" type="file" id="banner-image" accept="image/*" class="hidden">
         <label for="banner-image"
@@ -96,7 +96,7 @@ const updateBannerImage = async () => {
         </label>
       </div>
       <Divider />
-      <div class="mt-4 grid gap-3">
+      <div class="mt-4 grid grid-cols-2 gap-3">
         <Button @click="cancelUpload" label="Cancel" severity="secondary" class="w-full" />
         <Button @click="updateBannerImage" :loading label="Save" class="w-full btn" />
       </div>

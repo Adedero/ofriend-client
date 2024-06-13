@@ -68,7 +68,8 @@ const toggle = (event) => menu.value.toggle(event);
       <p class="font-semibold">Bio</p>
       <Button v-if="user.isViewingSelf" @click="toggle" text icon="pi pi-ellipsis-v" rounded size="small" />
     </div>
-    <div v-if="isEditing" >
+    
+    <div v-if="isEditing">
       <Textarea v-model="editedBio" maxlength="250" rows="6" auto-resize
         class="bg-soft-gray-2 focus:bg-white w-full max-h-[200px]" />
       <small>Word count: {{ wordCount }}/ {{ MAX_WORD_COUNT }}</small>
@@ -79,7 +80,6 @@ const toggle = (event) => menu.value.toggle(event);
     </div>
 
     <p v-else class="text-sm whitespace-pre">{{ user.bio }}</p>
-
     <Menu ref="menu" :model="items" :popup="true" />
   </div>
 </template>
