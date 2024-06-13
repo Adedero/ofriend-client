@@ -84,7 +84,7 @@ const updateBannerImage = async () => {
         image-class="w-full h-full object-cover object-center" />
     </div>
     <Button v-if="isViewingSelf" @click="isEditing? cancelUpload() : isEditing = true" icon="pi pi-camera" rounded
-      severity="secondary" class="absolute right-2 bottom-2" />
+      severity="secondary" class="absolute z-10 right-2 bottom-2" />
 
     <div v-if="isEditing" class="bg-white border rounded-xl absolute right-0 z-10 p-2 w-52">
       <div class="text-sm">
