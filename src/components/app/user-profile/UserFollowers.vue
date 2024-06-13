@@ -57,6 +57,7 @@ watchEffect( async () => await getUserFollowers());
 <template>
   <Toast class="max-w-96" />
   <div v-if="followers.length" @scroll="onScroll" class="lg:w-full flex flex-col gap-4 h-[calc(100dvh-17rem)] overflow-y-auto">
+    <SearchFollowing :user-id="user._id" search="followers" />
 
     <div v-for="follower in followers" :key="follower.id" class="w-full flex-shrink-0 hover:bg-accent/10">
       <RouterLink :to="{ name: 'user-profile', params: { userId: follower.id } }" class="flex items-center gap-2">
