@@ -21,7 +21,7 @@ const editedBio = ref(props.user.bio);
 
 const MAX_WORD_COUNT = 250;
 
-const wordCount = computed(() => editedBio.value.length)
+const wordCount = computed(() => editedBio.value?.length?? 0)
 const isEditing = ref(false);
 
 const loading = ref(false);
@@ -62,8 +62,9 @@ const toggle = (event) => menu.value.toggle(event);
 </script>
 
 <template>
-  <Toast class="max-w-96" />
   <div>
+    <Toast class="max-w-96" />
+
     <div class="flex items-center gap-2 justify-between">
       <p class="font-semibold">Bio</p>
       <Button v-if="user.isViewingSelf" @click="toggle" text icon="pi pi-ellipsis-v" rounded size="small" />

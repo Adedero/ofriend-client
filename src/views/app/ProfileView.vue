@@ -51,7 +51,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
 
     <section class="grid gap-x-3 lg:grid-cols-5 mt-1">
       <div class="w-full relative lg:col-span-2">
-        <div class="flex flex-col lg:items-center -mt-16 z-10 lg:absolute lg:w-full -top-20 lg:-mt-0 lg:-top-20 xl:-top-28">
+        <div class="flex flex-col lg:items-center -mt-16 lg:absolute lg:w-full -top-20 lg:-mt-0 lg:-top-20 xl:-top-28">
           <div class="w-28 md:w-32 lg:w-[50%]">
             <UserProfileImage :user @onProfilePictureChange="setImageUrl" />
           </div>
