@@ -62,19 +62,21 @@ const toggle = (event) => menu.value.toggle(event);
 </script>
 
 <template>
+  <Toast class="max-w-96" />
   <div>
-    <Toast class="max-w-96" />
     <div class="flex items-center gap-2 justify-between">
       <p class="font-semibold">Bio</p>
       <Button v-if="user.isViewingSelf" @click="toggle" text icon="pi pi-ellipsis-v" rounded size="small" />
     </div>
-    
+
     <div v-if="isEditing">
       <Textarea v-model="editedBio" maxlength="250" rows="6" auto-resize
         class="bg-soft-gray-2 focus:bg-white w-full max-h-[200px]" />
       <small>Word count: {{ wordCount }}/ {{ MAX_WORD_COUNT }}</small>
+
       <div class="grid grid-cols-2 gap-2 mt-2">
-        <Button @click="isEditing = false" severity="secondary" label="Cancel" size="small" icon="pi pi-times" class="block" />
+        <Button @click="isEditing = false" severity="secondary" label="Cancel" size="small" icon="pi pi-times"
+          class="block" />
         <Button @click="saveBio" :loading label="Save" icon="pi pi-check" size="small" class="block btn" />
       </div>
     </div>
