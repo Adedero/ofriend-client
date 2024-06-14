@@ -23,6 +23,8 @@ const changePassword = async () => {
     error.value.message = 'Password must be at least 6 characters';
     return;
   }
+  if (newpassword === oldpassword) return;
+  
   if (confirm !== newpassword) {
     error.value.isError = true;
     error.value.message = 'Passwords do not match';
