@@ -14,7 +14,7 @@ defineProps({
 <template>
   <div>
     <div class="flex gap-1">
-      <DynamicAvatar shape="circle" :user="comment.author" class="h-12 w-12" />
+      <DynamicAvatar shape="circle" :user="comment.author" class="h-8 w-8" />
       <div class="w-full">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
