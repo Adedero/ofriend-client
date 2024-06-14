@@ -29,7 +29,7 @@ onMounted(async () => await getFullProfile());
       <h1 class="font-bold text-lg">Edit Profile</h1>
     </div>
 
-    <div v-if="user" class="mt-3 flex flex-col gap-8">
+    <div v-if="user" class="mt-3 flex flex-col gap-6">
       <NameChange :user />
       <EmailChange :user />
       <BusinessDetailsChange :user />
@@ -38,7 +38,7 @@ onMounted(async () => await getFullProfile());
       <CountryChange :user />
       <AddressChange :user />
       <Divider />
-      <BlockedUsersList />
+      <BlockedUsers />
       <Divider />
       <PasswordChange :user />
       <Divider />
