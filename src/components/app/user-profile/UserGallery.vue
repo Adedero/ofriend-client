@@ -1,8 +1,10 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useGet } from '@/composables/utils/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+
+const isNewUser = ref(false);
 
 const props = defineProps({
   userId: {
@@ -23,6 +25,7 @@ const allLoaded = ref(false);
 const getUserMedia = async () => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
+  isNewUser.value ? media.value = [] : media.value
   try {
     res.value = await useGet(`api/get-user-media/${props.userId}/${length.value}`);
     const userMedia = res.value.data;
@@ -47,6 +50,13 @@ const onScroll = async (event) => {
     await getUserMedia()
   }
 }
+watch(
+  () => props.userId,
+  async () => {
+    isNewUser.value = true;
+    await getUserMedia();
+  }
+);
 
 onMounted(async () => await getUserMedia())
 </script>

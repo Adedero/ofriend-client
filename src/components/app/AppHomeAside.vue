@@ -9,16 +9,18 @@ const { data } = await useGet('api/followers-and-following');
       <h1 class="text-center font-bold lg:text-left">Followers</h1>
 
       <div class="mt-5 grid gap-3 lg:w-full">
-        <div v-for="follower in data.followers" :key="follower._id" class="flex items-center gap-2 min-w-0">
+        <div v-if="data.followers && data.followers.length">
+          <div v-for="follower in data.followers" :key="follower._id" class="flex items-center gap-2 min-w-0">
 
-          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-10 w-10 flex-shrink-0" />
-          <div class="hidden overflow-x-hidden lg:block">
-            <p class="font-medium">{{ follower.user.name }}</p>
-            <p class="text-xs  truncate">{{ follower.user.bio }}</p>
+            <DynamicAvatar :user="follower.follower" shape="circle" size="large" class="h-10 w-10 flex-shrink-0" />
+            <div class="hidden overflow-x-hidden lg:block">
+              <p class="font-medium">{{ follower.follower.name }}</p>
+              <p class="text-xs  truncate">{{ follower.follower.bio }}</p>
+            </div>
           </div>
         </div>
 
-        <div v-if="!data.followers.length">
+        <div v-else>
           <div class="text-slate-400 text-6xl lg:hidden">0</div>
           <div class="hidden lg:grid gap-3 text-sm text-slate-500 p-1">
             <img src="../../assets/images/no-following.svg" alt="no followers">
@@ -40,16 +42,18 @@ const { data } = await useGet('api/followers-and-following');
       <h1 class="text-center font-bold lg:text-left">Following</h1>
 
       <div class="mt-5 grid gap-3 lg:w-full">
-        <div v-for="follower in data.following" :key="follower._id" class="flex items-center gap-2 min-w-0">
+        <div v-if="data.following && data.following.length">
+          <div v-for="follower in data.following" :key="follower._id" class="flex items-center gap-2 min-w-0">
 
-          <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-10 w-10 flex-shrink-0" />
-          <div class="hidden overflow-x-hidden lg:block">
-            <p class="font-medium">{{ follower.user.name }}</p>
-            <p class="text-xs  truncate">{{ follower.user.bio }}</p>
+            <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-10 w-10 flex-shrink-0" />
+            <div class="hidden overflow-x-hidden lg:block">
+              <p class="font-medium">{{ follower.user.name }}</p>
+              <p class="text-xs  truncate">{{ follower.user.bio }}</p>
+            </div>
           </div>
         </div>
 
-        <div v-if="!data.following.length">
+        <div v-else>
           <div class="text-slate-400 text-6xl lg:hidden">0</div>
           <div class="hidden lg:grid gap-3 text-sm text-slate-500 p-1">
             <img src="../../assets/images/no-followers.jpg" alt="no followers">

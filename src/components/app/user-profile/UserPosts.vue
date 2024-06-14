@@ -3,7 +3,9 @@ import { computed, onMounted, ref } from 'vue';
 import { useGet } from '@/composables/utils/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { watch } from 'vue';
 
+const isNewUser = ref(false);
 const props = defineProps({
   userId: {
     type: String,
@@ -23,6 +25,7 @@ const allLoaded = ref(false);
 const getUserPosts = async () => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
+  isNewUser.value ? posts.value = [] : posts.value
   try {
     res.value = await useGet(`api/get-user-posts/${props.userId}/${length.value}`);
     const userPosts = res.value.data;
@@ -47,6 +50,14 @@ const onScroll = async (event) => {
     await getUserPosts()
   }
 }
+
+watch(
+  () => props.userId,
+  async () => {
+    isNewUser.value = true;
+    await getUserPosts();
+  }
+);
 
 onMounted(async () => await getUserPosts())
 </script>

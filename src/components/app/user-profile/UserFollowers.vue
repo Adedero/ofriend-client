@@ -60,7 +60,7 @@ watchEffect( async () => await getUserFollowers());
     <SearchFollowing :user-id="user._id" search="followers" />
 
     <div v-for="follower in followers" :key="follower.id" class="w-full flex-shrink-0 hover:bg-accent/10">
-      <RouterLink :to="{ name: 'user-profile', params: { userId: follower.id } }" class="flex items-center gap-2">
+      <RouterLink :to="{ name: 'user-profile', params: { userId: follower.id } }" class="flex items-center gap-2 p-1">
         <DynamicAvatar shape="circle" :user="follower" size="small" class="w-10 h-10 flex-shrink-0" />
         <p class="text-sm font-semibold">{{ follower.name }}</p>
       </RouterLink>
