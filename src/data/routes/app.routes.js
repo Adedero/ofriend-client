@@ -20,6 +20,11 @@ const appRoutes = [
     component: () => import('@/views/app/ProfileView.vue')
   },
   {
+    path: 'edit-profile',
+    name: 'edit-profile',
+    component: () => import('@/views/app/EditProfileView.vue')
+  },
+  {
     path: 'products-and-services',
     name: 'products',
     component: () => import('@/views/app/ProductsView.vue')

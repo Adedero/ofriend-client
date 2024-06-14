@@ -17,7 +17,6 @@ const emit = defineEmits(['onBioUpdated']);
 const toast = useToast();
 const userStore = useUserStore();
 
-const textarea = ref(null);
 const editedBio = ref(props.user.bio);
 
 const MAX_WORD_COUNT = 250;
@@ -55,14 +54,12 @@ const items = [
   {
     label: 'Edit',
     icon: 'pi pi-pencil',
-    command: () => {
-      isEditing.value = true;
-      textarea.value.focus();
-    }
+    command: () => isEditing.value = true
   }
 ]
 
 const toggle = (event) => menu.value.toggle(event);
+
 </script>
 
 <template>
@@ -75,7 +72,7 @@ const toggle = (event) => menu.value.toggle(event);
     </div>
 
     <div v-if="isEditing">
-      <Textarea ref="textarea" v-model="editedBio" maxlength="250" rows="6" auto-resize
+      <Textarea v-model="editedBio" maxlength="250" rows="6" auto-resize
         class="bg-soft-gray-2 focus:bg-white w-full max-h-[200px]" />
       <small>Word count: {{ wordCount }}/ {{ MAX_WORD_COUNT }}</small>
 

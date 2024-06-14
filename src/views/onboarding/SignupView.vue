@@ -66,7 +66,7 @@ const submit = async () => {
 
       <Calendar v-model="user.birthday" dateFormat="dd/mm/yy" class="w-full" placeholder="Date of Birth" />
 
-      <Dropdown v-model="user.gender" :options="['Female', 'Male']" class="w-full" placeholder="Gender" />
+      <Dropdown v-model="user.gender" :options="['Female', 'Male', 'Other']" class="w-full" placeholder="Gender" />
 
       <Dropdown v-model="user.country" filter :options="countries" option-label="name" checkmark
         :highlightOnSelect="false" class="w-full" placeholder="Country" />
