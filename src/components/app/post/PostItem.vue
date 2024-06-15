@@ -59,7 +59,7 @@ const toggle = (event) => {
       </div>
 
       <div v-if="post.hasMedia" class="mt-5">
-        <PostMedia :media="post.media" />
+        <PostMedia :media="post.media" preview />
       </div>
 
       <div v-if="post.isReposting" class="mt-5 px-2">
