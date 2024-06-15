@@ -94,7 +94,7 @@ const loadReplies = async () => {
           </div>
         </div>
 
-        <div class="whitespace-pre mt-1 text border rounded-lg p-1 md:p-2">
+        <div class="whitespace-pre-wrap mt-1 text border rounded-lg p-1 md:p-2">
           <p v-if="refComment.hasText">{{ refComment.textContent }}</p>
           <div v-if="refComment.hasMedia" class="mt-3">
             <CommentMedia :media="refComment.media" />

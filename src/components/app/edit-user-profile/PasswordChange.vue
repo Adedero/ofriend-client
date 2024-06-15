@@ -24,7 +24,7 @@ const changePassword = async () => {
     return;
   }
   if (newpassword === oldpassword) return;
-  
+
   if (confirm !== newpassword) {
     error.value.isError = true;
     error.value.message = 'Passwords do not match';
@@ -38,7 +38,6 @@ const changePassword = async () => {
   loading.value = true;
   try {
     const { data, status, error: err } = await usePost('api/change-password', passwords, 'PUT');
-    console.log(data.value);
     if (err.value) {
       error.value.isError = true;
       error.value.message = err.value;
