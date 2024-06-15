@@ -75,7 +75,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
 
 
       <div class="lg:col-span-3">
-        <TabView :lazy="true" scrollable class="mt-5 lg:mt-16 h-[calc(100dvh-17rem)]">
+        <TabView :lazy="true" scrollable class="mt-5 lg:mt-16 h-[calc(100dvh-10rem)]">
           <TabPanel header="Posts">
             <UserPosts :userId="user._id" />
           </TabPanel>

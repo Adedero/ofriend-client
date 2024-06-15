@@ -56,7 +56,7 @@ watchEffect(async () => await getUserFollowing());
 <template>
   <Toast class="max-w-96" />
   <div v-if="following.length" @scroll="onScroll"
-    class="lg:w-full flex flex-col gap-4 h-[calc(100dvh-17rem)] overflow-y-auto">
+    class="lg:w-full flex flex-col gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
 
     <SearchFollowing :user-id="user._id" search="following" />
 

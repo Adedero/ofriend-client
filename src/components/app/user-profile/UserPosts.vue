@@ -46,7 +46,7 @@ const getUserPosts = async () => {
 
 const onScroll = async (event) => {
   const container = event.target;
-  if (container.scrollTop + container.clientHeight >= container.scrollHeight - 10) {
+  if (container.scrollTop + container.clientHeight >= container.scrollHeight - 20) {
     await getUserPosts()
   }
 }
@@ -65,7 +65,7 @@ onMounted(async () => await getUserPosts())
 <template>
   <Toast class="max-w-96" />
 
-  <div v-if="posts.length" @scroll="onScroll" class="lg:w-full grid gap-4 h-[calc(100dvh-17rem)] overflow-y-auto">
+  <div v-if="posts.length" @scroll="onScroll" class="pb-3 lg:w-full grid gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
     <PostItem v-for="post in posts" :key="post._id" :post
       @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--" @on-post-shared="post.reposts++" />
     <PostDetailsSkeleton v-if="loading" />

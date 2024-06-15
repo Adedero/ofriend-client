@@ -15,7 +15,10 @@ defineProps({
         <div class="flex items-center gap-2">
           <DynamicAvatar :user="post.author" size="large" shape="circle" class="w-12 h-12" />
           <div class="grid">
-            <span class="font-bold">{{ post.author.name }}</span>
+            <p>
+              <span class="font-bold">{{ post.author.name }}</span>
+              <span v-if="post.isReposting" class="italic font-medium"> shared a post</span>
+            </p>
             <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
           </div>
         </div>
@@ -34,10 +37,6 @@ defineProps({
 
         <div v-if="post.hasMedia" class="mt-5">
           <PostMedia :media="post.media" />
-        </div>
-
-        <div v-if="post.isReposting" class="mt-5 px-2">
-          <RePost :post="post.repostedPost" />
         </div>
       </div>
     </Panel>

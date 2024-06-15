@@ -46,7 +46,7 @@ const toggle = (event) => {
               <PostOptions :post />
             </template>
             <template #fallback>
-              <div class="w-20 h-20 grid place-content-center">
+              <div class="w-40 h-20 grid place-content-center">
                 <span class="pi pi-spinner pi-spin text-accent" style="font-size: 1.2rem"></span>
               </div>
             </template>

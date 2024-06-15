@@ -63,7 +63,7 @@ onMounted(async () => await getUserMedia())
 
 <template>
   <Toast class="max-w-96" />
-  <div v-if="media.length" @scroll="onScroll" class="gallery-container lg:w-full grid gap-4 h-[calc(100dvh-17rem)] overflow-y-auto">
+  <div v-if="media.length" @scroll="onScroll" class="gallery-container pb-3 lg:w-full grid gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
     <div v-for="(item, index) in media" :key="index">
       <Image v-if="item.type.includes('image')" :src="item.url" :alt="'media-' + index" class="w-full" preview image-class="w-full" />
       <video v-if="item.type.includes('video')" controls class=" w-full">

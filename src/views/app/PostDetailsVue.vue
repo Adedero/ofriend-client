@@ -24,7 +24,7 @@ const res = ref({
 const getPost = async () => {
   try {
     res.value = await useGet(`api/get-post/${route.params.postId}`);
-    console.log(res.value.data);
+    //console.log(res.value.data);
     if (!res.value || res.value.error) return router.push('/500');
     if (res.value.status === 401 && res.value.data.authMessage) return router.push({ name: 'signin' });
     if (res.value.status === 404 || !res.value.data) return router.push('/404');
