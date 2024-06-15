@@ -70,7 +70,7 @@ function checkIfTextExceedsLines() {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: calc(1.2em * 8);
+  max-height: calc(1.5em * 8);
   /* Adjust line-height as needed */
   line-height: 1.5em;
   /* Adjust line-height as needed */
