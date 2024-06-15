@@ -1,6 +1,8 @@
+}
+</style>
 <template>
   <div>
-    <div ref="textContainer" class="whitespace-pre" :class="{ 'trunc': isTruncated }">{{ text }}</div>
+    <div ref="textContainer" :class="{ 'trunc': isTruncated }">{{ text }}</div>
     <Button v-if="showButton" @click="toggleText" size="small" severity="info" text class="mt-2">{{
       buttonText
     }}</Button>
@@ -71,8 +73,6 @@ function checkIfTextExceedsLines() {
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: calc(1.5em * 8);
-  /* Adjust line-height as needed */
   line-height: 1.5em;
-  /* Adjust line-height as needed */
 }
 </style>
