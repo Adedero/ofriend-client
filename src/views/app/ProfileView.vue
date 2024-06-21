@@ -63,6 +63,10 @@ watchEffect(async () => await getUserProfile(route.params.userId));
             <p>Following: <span class="font-semibold">{{ formatNumber(user.following) }}</span></p>
           </div>
 
+          <div v-if="!user.isViewingSelf">
+            <MessageUserButton :user />
+          </div>
+
           <div class="p-2 border rounded-lg mt-3 w-full">
             <ProfileDetails :user />
           </div>

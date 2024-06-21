@@ -9,7 +9,7 @@ const visible = ref(false);
   <div>
     <div class="flex items-center gap-3">
       <p class="font-semibold">Blocked Users</p>
-      <Button label="View blocked users" severity="secondary" />
+      <Button @click="visible = true" label="View blocked users" severity="secondary" />
     </div>
 
     <Sidebar v-model:visible="visible" position="bottom"></Sidebar>

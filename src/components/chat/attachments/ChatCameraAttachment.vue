@@ -25,8 +25,9 @@ const cancelUpload = () => {
 const sendFile = () => {
   emit('onFileSend', {
     file: file.value,
-    caption: caption.value
-  })
+    caption: caption.value,
+    fileUrl: fileURL.value
+  });
   cancelUpload()
 }
 </script>

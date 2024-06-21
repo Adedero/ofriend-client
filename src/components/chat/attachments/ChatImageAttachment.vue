@@ -17,7 +17,7 @@ const setFiles = (event) => {
     reader.onload = () => {
       images.value.push({
         file: file,
-        imageURL: reader.result,
+        fileUrl: reader.result,
         caption: ''
       })
     }
@@ -54,7 +54,7 @@ const cancelUpload = () => {
         <template #item="slotProps">
           <div class="grid place-content-center gap-2 max-w-96">
             <img
-              :src="slotProps.data.imageURL"
+              :src="slotProps.data.fileUrl"
               :alt="slotProps.data.name"
               class="w-full h-80 object-cover"
             />

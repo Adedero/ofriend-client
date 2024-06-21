@@ -33,6 +33,11 @@ const appRoutes = [
     path: 'saved-posts',
     name: 'saved-posts',
     component: () => import('@/views/app/SavedPostsView.vue')
+  },
+  {
+    path: 'products',
+    name: 'products',
+    component: () => import('@/views/app/ProductsView.vue')
   }
 ]
 

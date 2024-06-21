@@ -10,7 +10,9 @@ const isUrlAvailable = ref(false)
 const visible = computed(() => (file.value ? true : false))
 
 const setFile = (event) => {
-  file.value = event.target.files[0]
+  if (!event.target.files[0].type.includes('video')) return;
+
+  file.value = event.target.files[0];
 
   const reader = new FileReader()
   reader.readAsDataURL(file.value)
@@ -21,7 +23,11 @@ const setFile = (event) => {
 }
 
 const sendFile = () => {
-  emit('onFileSend', file.value)
+  emit('onFileSend', {
+    file: file.value,
+    fileUrl: file.value.url,
+    caption: file.value.caption
+  });
   file.value = null
   isUrlAvailable.value = false
 }

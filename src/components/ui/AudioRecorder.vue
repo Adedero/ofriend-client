@@ -66,10 +66,12 @@ const initializeMediaRecorder = () => {
     audioChunks.value = []
     audioUrl.value = URL.createObjectURL(blob)
     emit('onStop', {
-      blob: blob,
-      audioUrl: audioUrl.value
-    })
-
+      file: blob,
+      type: blob.type,
+      name: `audio-file-${ Date.now() }`,
+      url: audioUrl.value,
+      extension: 'webm'
+    });
     stream.value.getTracks().forEach((track) => track.stop())
     stream.value = null
     mediaRecorder.value = null

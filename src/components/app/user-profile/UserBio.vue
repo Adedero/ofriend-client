@@ -83,7 +83,7 @@ const toggle = (event) => menu.value.toggle(event);
       </div>
     </div>
 
-    <p v-else class="text-sm whitespace-pre">{{ user.bio }}</p>
+    <p v-else class="text-sm whitespace-pre-wrap">{{ user.bio }}</p>
     <Menu ref="menu" :model="items" :popup="true" />
   </div>
 </template>

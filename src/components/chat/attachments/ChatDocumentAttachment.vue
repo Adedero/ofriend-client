@@ -7,9 +7,18 @@ const emit = defineEmits(['onFileSend', 'onCancelUpload'])
 const formats = safeDocFormats.toString()
 const file = ref(null)
 const visible = computed(() => (file.value ? true : false))
-const setFile = (event) => (file.value = event.target.files[0])
+
+const setFile = (event) => {
+
+  file.value = event.target.files[0]
+};
+
 const sendFile = () => {
-  emit('onFileSend', file.value)
+  emit('onFileSend', {
+    file: file.value,
+    type: file.value.type,
+    name: file.value.name
+  })
   file.value = null
 }
 const cancelUpload = () => {

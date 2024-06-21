@@ -11,6 +11,10 @@
   @tailwind utilities;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply font-['Inter_Variable'] text-text-dark;
 }

@@ -21,7 +21,10 @@ const setFile = (event) => {
 }
 
 const sendFile = () => {
-  emit('onFileSend', file.value)
+  emit('onFileSend', {
+    file: file.value,
+    fileUrl: file.value.url,
+  });
   file.value = null
   isUrlAvailable.value = false
 }

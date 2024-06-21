@@ -5,7 +5,7 @@ import NewPostItem from '@/components/app/post/NewPostItem.vue';
 import { useGet } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
 import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast'
+import { useToast } from 'primevue/usetoast';
 
 const router = useRouter();
 const toast = useToast();

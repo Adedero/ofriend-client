@@ -29,7 +29,26 @@ export default function useFirebaseUpload() {
   async function uploadMultipleFiles(dir = '', files = []) {
     let urlArray = [];
     let error = null;
-    for (let i = 0; i < files.length; i++) {
+    try {
+      await Promise.all(files.map( async (file, i) => {
+        const timestamp = Date.now();
+        const randomString = Math.random().toString(36).substring(2, 8);
+        const fileName = `${timestamp}-${randomString}${file.name}`;
+        const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
+
+        const snapshot = await uploadBytes(storageRef, file);
+        console.log(`Uploaded ${i + 1} ${ i + 1 > 1 ? 'files': 'file' }`);
+        const url = await getDownloadURL(snapshot.ref);
+        urlArray.push(url);
+      }));
+      return [urlArray, null]
+    } catch (err) {
+        console.error(err);
+        error = err;
+        return [null, error]
+    }
+   
+    /* for (let i = 0; i < files.length; i++) {
       const timestamp = Date.now();
       const randomString = Math.random().toString(36).substring(2, 8);
       const fileName = `${timestamp}-${randomString}${files[i].name}`;
@@ -46,7 +65,7 @@ export default function useFirebaseUpload() {
           error = err;
           return [null, error]
       }
-    }
+    } */
   }
 
   async function deleteFiles(urlArray = []) {

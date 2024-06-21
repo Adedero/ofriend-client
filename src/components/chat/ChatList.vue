@@ -1,41 +1,58 @@
+<script setup>
+import { formatTime } from '@/composables/utils/formats';
+import { useUserStore } from '@/stores/user';
+defineProps({
+  chats: {
+    type: Array,
+    required: true
+  }
+})
+defineEmits(['onUserSelect']);
+
+const userStore = useUserStore();
+
+</script>
+
 <template>
-  <div class="relative mt-3 h-[calc(100%-4rem)] overflow-y-auto">
+
+  <div class="relative mt-3 h-[calc(100%-4rem)] w-full overflow-y-auto">
     <div class="sticky top-0 bg-white z-10 pb-3">
-      <IconField iconPosition="left">
-        <InputIcon class="pi pi-search"> </InputIcon>
-        <InputText
-          placeholder="Search..."
-          class="w-full border-transparent bg-soft-gray-2 focus:bg-white"
-        />
-      </IconField>
+      <ChatSearchbar />
     </div>
 
-    <div class="flex flex-col gap-3 mt-5">
-      <div
-        v-for="i in 10"
-        :key="i"
-        class="text-sm cursor-pointer hover:bg-accent/5 flex-shrink-0 p-2 rounded flex items-center gap-2 w-full relative before:absolute before:content-[''] before:left-0 before:h-full before:w-1 before:bg-accent"
-      >
-        <Avatar label="U" shape="circle" size="large" class="flex-shrink-0" />
+    <div class="flex flex-col gap-3 mt-2">
 
-        <div class="flex-grow overflow-hidden">
-          <div class="w-full flex items-end justify-between">
-            <h3 class="font-semibold">John Smith</h3>
-            <small>10:50 PM</small>
-          </div>
+      <div v-for="chat in chats" :key="chat.id" class="relative flex-shrink-0">
+        <label :for="chat.id" class="flex items-center gap-2 pl-2 py-2 pr-2">
+          <DynamicAvatar :user="chat.friend" shape="circle" size="large" class="w-[3.5rem] h-[3.5rem] flex-shrink-0" />
+          <div class="flex-grow overflow-hidden">
 
-          <div class="flex items-center justify-between">
-            <p class="truncate text-text-light">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit!
-            </p>
-            <Badge value="2" class="bg-accent" />
+            <div class="w-full flex items-end justify-between">
+              <h3 class="font-semibold truncate">{{ chat.friend.name }}</h3>
+              <small v-if="chat.lastMessage" class="flex-shrink-0">{{ formatTime(chat.lastMessage.createdAt, true)
+                }}</small>
+            </div>
+
+            <div v-if="chat.lastMessage" class="flex items-center justify-between">
+              <p v-if="chat.lastMessage.isDeleted" class="truncate text-text-light text-sm italic">
+                This message was deleted.
+              </p>
+
+              <p v-else-if="chat.lastMessage.hasText" class="max-w-40 truncate text-text-light text-sm">
+                <span v-if="chat.lastMessage.sender === userStore.user.id">You: </span>
+                {{ chat.lastMessage.textContent }}
+              </p>
+              <p v-else-if="chat.lastMessage.hasFile" class="truncate text-text-light text-sm">
+                {{ `${ chat.friend.name.split(' ')[0]} sent a file.` }}
+              </p>
+
+              <Badge v-if="chat.unreadMessages" :value="chat.unreadMessages" class="bg-accent" />
+            </div>
           </div>
-        </div>
+        </label>
+        <input @input="$emit('onUserSelect', chat.id)" type="radio" name="user" :id="chat.id"
+          class="absolute rounded hover:bg-accent/5 appearance-none w-full h-full left-0 top-0  before:absolute before:content-[''] before:left-0 before:h-full before:w-1 checked:before:bg-accent -z-10">
       </div>
     </div>
   </div>
 </template>
-
-<script setup></script>
-
-<style lang="scss" scoped></style>

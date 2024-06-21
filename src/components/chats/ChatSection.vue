@@ -1,21 +1,16 @@
 <script setup>
-import { onMounted, provide, ref, nextTick } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { inject, onMounted, ref, nextTick, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import socket from '@/config/socket.config';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
 import { useUserStore } from '@/stores/user';
 
-const emit = defineEmits(['onUserMessageSend']);
-
-
+const emit = defineEmits(['onUserMessageSend', 'chatDeleted'])
 
 const router = useRouter();
-const route = useRoute();
 const userStore = useUserStore();
 
-
-provide('chatId', route.params.chatId);
-//const chatId = inject('chatId');
+const chatId = inject('chatId');
 
 const isTyping = ref(false);
 
@@ -28,7 +23,7 @@ const getMessages = async (limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
   try {
-    const { status, data, error } = await useGet(`api/get-messages/${route.params.chatId}?skip=${messages.value.length}&limit=${limit}`);
+    const { status, data, error } = await useGet(`api/get-messages/${chatId.value}?skip=${messages.value.length}&limit=${limit}`);
     if (error.value) {
       console.log(error.value);
       router.push('/500');
@@ -92,7 +87,7 @@ socket.on('messageEdited', (messageId, text) => {
   }
 });
 
-const emitOpenMessage = () => socket.emit('openMessage', route.params.chatId, userStore.user.id);
+const emitOpenMessage = () => socket.emit('openMessage', chatId.value, userStore.user.id);
 
 const onMessageSend = (message) => emit('onUserMessageSend', message);
 
@@ -107,8 +102,8 @@ const updateOptimisticMessage = (tempId, id) => {
   msg._id = id;
 }
 
-//watch(route, () => socket.emit('joinRoom', route.params.chatId));
-//watch(chatId, async () => await getMessages(15))
+watch(chatId, () => socket.emit('joinRoom', chatId.value));
+watch(chatId, async () => await getMessages(15))
 
 const box = ref(null);
 
@@ -140,10 +135,10 @@ const setObserver = () => {
 
 //watch(() => messages.value.length, () => setObserver());
 
-onMounted(async () => {
+onMounted(async() => {
   await getMessages(15);
   scrollToBottom();
-  socket.emit('joinRoom', route.params.chatId);
+  socket.emit('joinRoom', chatId.value);
   emitOpenMessage();
 });
 
@@ -151,11 +146,11 @@ onMounted(async () => {
 //Handle message actions
 const deleteMessage = async (message) => {
   if (!message._id) return;
-  const { status } = await usePost(`api/delete-message/${message._id}`, { url: message.file.url }, 'PUT');
+  const {status} = await usePost(`api/delete-message/${message._id}`, { url: message.file.url }, 'PUT');
   if (status.value !== 200) return;
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.isDeleted = true;
-  socket.emit('deleteMessage', route.params.chatId, message._id);
+  socket.emit('deleteMessage', chatId.value, message._id);
 }
 
 const editMessage = async (message, text) => {
@@ -164,7 +159,7 @@ const editMessage = async (message, text) => {
   if (status.value !== 200) return;
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.textContent = text;
-  socket.emit('editMessage', route.params.chatId, message._id, text);
+  socket.emit('editMessage', chatId.value, message._id, text);
 
 }
 
@@ -185,7 +180,7 @@ const cancelReply = () => {
 <template>
   <div class="w-full h-full flex flex-col">
     <header v-if="receiver.name">
-      <ChatSectionHeader :receiver :chatId="route.params.chatId" @messagesCleared="onMessagesCleared" @chatDeleted="$router.push({ name: 'mobile-chat-list'})" />
+      <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')" />
     </header>
 
     <main ref="box" @scroll="handleScroll" class="flex-grow overflow-y-auto flex flex-col gap-2 p-3">
@@ -200,7 +195,7 @@ const cancelReply = () => {
     </main>
 
     <footer class="grid items-end">
-      <MobileChatSectionFooter @onOptimisticMessage="addOptimisticMessage" @updateOptimisticMessage="updateOptimisticMessage"
+      <ChatSectionFooter @onOptimisticMessage="addOptimisticMessage" @updateOptimisticMessage="updateOptimisticMessage"
         @onMessageSend="onMessageSend" @cancelReply="cancelReply" :isReplying :quotedMessage :receiver />
     </footer>
   </div>
