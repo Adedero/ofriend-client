@@ -22,7 +22,7 @@ const signin = async () => {
   try {
     res.value = await usePost('auth/sign-in', user.value);
     if (!res.value) return;
-    //console.log(res.value.data)
+    console.log(res.value.data)
     addToast(res.value, toast, false);
     if (res.value.error || res.value.status !== 200) {
       return

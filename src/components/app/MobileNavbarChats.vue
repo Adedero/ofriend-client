@@ -1,5 +1,9 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
+
 const links = [
   {
     name: 'Home',
@@ -14,7 +18,7 @@ const links = [
   },
   {
     name: 'Profile',
-    path: '/app/profile',
+    path: `/app/profile/${userStore.user.id}`,
     icon: 'pi pi-user'
   },
   {

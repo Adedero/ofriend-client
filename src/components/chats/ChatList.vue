@@ -38,15 +38,29 @@ const userStore = useUserStore();
                 This message was deleted.
               </p>
 
-              <p v-else-if="chat.lastMessage.hasText" class="max-w-40 truncate text-text-light text-sm">
-                <span v-if="chat.lastMessage.sender === userStore.user.id">You: </span>
-                {{ chat.lastMessage.textContent }}
-              </p>
-              <p v-else-if="chat.lastMessage.hasFile" class="truncate text-text-light text-sm">
-                {{ `${ chat.friend.name.split(' ')[0]} sent a file.` }}
-              </p>
+              <div v-else class="min-w-0">
+                <p v-if="chat.lastMessage.hasText" class="max-w-full truncate text-text-light text-sm">
+                  <span v-show="chat.lastMessage.sender === userStore.user.id">
+                    You: {{ chat.lastMessage.textContent }}
+                  </span>
 
-              <Badge v-if="chat.unreadMessages" :value="chat.unreadMessages" class="bg-accent" />
+                  <span v-show="chat.lastMessage.sender !== userStore.user.id">
+                    {{ chat.lastMessage.textContent }}
+                  </span>
+                </p>
+
+                <p v-else-if="chat.lastMessage.hasFile" class="truncate text-text-light text-sm">
+                  <span v-show="chat.lastMessage.sender === userStore.user.id">
+                    You sent a file
+                  </span>
+
+                  <span v-show="chat.lastMessage.sender !== userStore.user.id" class="truncate text-text-light text-sm">
+                    Received a file
+                  </span>
+                </p>
+              </div>
+
+              <Badge v-show="chat.unreadMessages" :value="chat.unreadMessages" class="bg-accent flex-shrink-0" />
             </div>
           </div>
         </label>

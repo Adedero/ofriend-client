@@ -77,7 +77,7 @@ const toggle = (event) => {
           <p>online</p>
         </div>
         <p v-else class="text-sm text-text-light">
-          last seen {{ formatTime(receiver.lastSeen) }}
+          last seen {{ receiver.lastSeen ? formatTime(receiver.lastSeen) : 'offline' }}
         </p>
       </div>
     </div>

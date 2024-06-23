@@ -11,7 +11,6 @@ const routes = [
   {
     name: 'Home',
     path: '/app',
-    params: '12345',
     icon: 'pi pi-home'
   },
   {
@@ -23,7 +22,6 @@ const routes = [
   {
     name: 'Chats',
     path: '/chat',
-    params: '12345',
     icon: 'pi pi-comments'
   },
   {
@@ -34,7 +32,6 @@ const routes = [
   {
     name: 'Notifications',
     path: '/app/notifications',
-    params: '12345',
     icon: 'pi pi-bell'
   },
   {

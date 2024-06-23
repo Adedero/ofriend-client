@@ -138,9 +138,9 @@ const saveEdit = async () => {
       </div>
     </div>
 
-    <div class="flex items-end gap-3 mt-2">
-      <Textarea v-if="post.hasText" v-model.trim="text" rows="1" auto-resize class="textarea max-h-96 flex-grow" />
-      <Button :loading @click="saveEdit" label="Save" icon="pi pi-check" class="btn h-10 flex-shrink-0" />
+    <div class="flex flex-col cs-2:flex-row cs-2:items-end gap-3 mt-2">
+      <Textarea v-if="post.hasText" v-model.trim="text" rows="1" auto-resize class="textarea max-h-80 flex-grow" />
+      <Button :loading @click="saveEdit" label="Save" icon="pi pi-check" class="btn h-10 flex-shrink-0 w-fit self-end" />
     </div>
   </div>
 </template>

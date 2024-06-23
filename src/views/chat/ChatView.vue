@@ -5,7 +5,7 @@ import ChatListSkeleton from '@/components/skeletons/ChatListSkeleton.vue';
 import socket from '@/config/socket.config';
 
 const ChatList = defineAsyncComponent({
-  loader: () => import('@/components/chat/ChatList.vue'),
+  loader: () => import('@/components/chats/ChatList.vue'),
   loadingComponent: ChatListSkeleton
 })
 
@@ -17,7 +17,7 @@ const getChats = async () => {
   res.value.loading = true;
   try {
     res.value = await useGet(`api/get-chats?skip=${chatsLength.value}`);
-    //console.log(res.value.data);
+    console.log(res.value.data);
     if (res.value.status !== 200) return;
     chats.value.push(...res.value.data);
   } catch (e) {
@@ -63,7 +63,7 @@ const updateLastMessageOfViewer = (message) => {
   const chat = chats.value.find(chat => chat.id === message.chat);
   if (!chat) return;
   chat.lastMessage = message;
-} 
+}
 
 onMounted(async () => await getChats());
 
@@ -94,7 +94,8 @@ onMounted(async () => await getChats());
         </div>
 
         <div class="flex-grow">
-          <ChatSection v-if="currentChatId" @onUserMessageSend="updateLastMessageOfViewer" @chatDeleted="onChatDeleted" />
+          <ChatSection v-if="currentChatId" @onUserMessageSend="updateLastMessageOfViewer"
+            @chatDeleted="onChatDeleted" />
 
           <div v-else class="cursor-context-menu flex flex-col items-center justify-center text-center h-full w-full">
             <img src="../../assets/images/default-profile-img.png" alt="Ofriend logo" class="opacity-90 block">

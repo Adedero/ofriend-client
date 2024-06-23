@@ -21,7 +21,7 @@ const handleCommentCreated = (comment) => {
   <Button @click="visible = true" label="Comment" icon="pi pi-comment" severity="secondary" rounded text
     class="text cs:text-sm"></Button>
 
-  <Sidebar v-model:visible="visible" header="Leave a comment" position="bottom">
+  <Sidebar v-model:visible="visible" header="Leave a comment" position="bottom" class="h-auto">
     <NewComment @on-comment-created="handleCommentCreated" :post-id="post._id" />
   </Sidebar>
 </template>

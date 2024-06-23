@@ -17,12 +17,12 @@ const userStore = useUserStore();
     </div>
 
     <div class="flex items-center gap-3">
-      <div class="hidden icons cs:flex items-center gap-1">
-        <RouterLink to="/" class="p-2 rounded hover:bg-soft-gray-2 grid place-content-center">
+      <div class="hidden icons cs-2:flex items-center gap-2">
+        <RouterLink :to="`/app/profile/${userStore.user.id}`" class="p-2 rounded-full bg-soft-gray-2 grid place-content-center">
           <span class="pi pi-user"></span>
         </RouterLink>
 
-        <RouterLink to="/" class="p-2 rounded hover:bg-soft-gray-2 grid place-content-center">
+        <RouterLink to="/app/notifications" class="p-2 rounded-full bg-soft-gray-2 grid place-content-center">
           <span class="pi pi-bell"></span>
         </RouterLink>
 
@@ -32,7 +32,7 @@ const userStore = useUserStore();
       <DynamicAvatar :user="userStore.user" shape="circle"
         class="w-9 h-9 text-xl cursor-context-menu" />
 
-      <MenuPopup class="cs:hidden" />
+      <MenuPopup class="cs-2:hidden" />
     </div>
   </header>
 </template>

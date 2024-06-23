@@ -6,7 +6,7 @@ import socket from '@/config/socket.config';
 import { useRouter } from 'vue-router';
 
 const ChatList = defineAsyncComponent({
-  loader: () => import('@/components/chat/ChatList.vue'),
+  loader: () => import('@/components/chats/ChatList.vue'),
   loadingComponent: ChatListSkeleton
 })
 
