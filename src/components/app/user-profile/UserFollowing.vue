@@ -58,16 +58,6 @@ watchEffect(async () => await getUserFollowing());
   <div v-if="following.length" @scroll="onScroll"
     class="lg:w-full flex flex-col gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
 
-    <SearchFollowing :user-id="user._id" search="following" />
-
-    <div v-for="user in following" :key="user.id" class="w-full flex-shrink-0 hover:bg-accent/10">
-
-      <RouterLink :to="{ name: 'user-profile', params: { userId: user.id } }" class="flex items-center gap-2 p-1">
-        <DynamicAvatar shape="circle" :user="user" size="small" class="w-10 h-10 flex-shrink-0" />
-        <p class="text-sm font-semibold">{{ user.name }}</p>
-      </RouterLink>
-    </div>
-
     <div v-if="loading" class="mt-5 grid gap-3 lg:w-full">
       <div v-for="i in 3" :key="i" class="flex items-center gap-2">
         <Skeleton shape="circle" width="3rem" height="3rem" />
@@ -75,7 +65,19 @@ watchEffect(async () => await getUserFollowing());
       </div>
     </div>
 
+    <div v-else class="flex flex-col gap-4 flex-shrink-0">
+      <SearchFollowing :user-id="user._id" search="following" />
+
+      <div v-for="user in following" :key="user.id" class="w-full flex-shrink-0 hover:bg-accent/10">
+
+        <RouterLink :to="{ name: 'user-profile', params: { userId: user.id } }" class="flex items-center gap-2 p-1">
+          <DynamicAvatar shape="circle" :user="user" size="small" class="w-10 h-10 flex-shrink-0" />
+          <p class="text-sm font-semibold">{{ user.name }}</p>
+        </RouterLink>
+      </div>
+    </div>
   </div>
+
   <div v-else class="grid gap-3 place-content-center">
     <img src="../../../assets/images/no-following.svg" alt="no followers" class="max-w-96 rounded-full">
     <p class="font-semibold text-center">Not following anyone yet!</p>
