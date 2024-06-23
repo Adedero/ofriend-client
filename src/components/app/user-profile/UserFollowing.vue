@@ -59,9 +59,9 @@ watchEffect(async () => await getUserFollowing());
     class="lg:w-full flex flex-col gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
 
     <div v-if="loading" class="mt-5 grid gap-3 lg:w-full">
-      <div v-for="i in 3" :key="i" class="flex items-center gap-2">
+      <div v-for="i in 4" :key="i" class="flex items-center gap-2">
         <Skeleton shape="circle" width="3rem" height="3rem" />
-        <Skeleton width="5rem" height="1.5rem" />
+        <Skeleton width="8rem" height="1.5rem" />
       </div>
     </div>
 
