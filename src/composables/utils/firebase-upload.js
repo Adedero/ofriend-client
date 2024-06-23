@@ -67,6 +67,16 @@ export default function useFirebaseUpload() {
       }
     } */
   }
+  async function deleteSingleFile(url) {
+    const storageRef = firebaseRef(storage, url);
+    try {
+      await deleteObject(storageRef);
+      return null;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
 
   async function deleteFiles(urlArray = []) {
     const deletePromises = urlArray.map((url, index) => {
@@ -114,5 +124,5 @@ export default function useFirebaseUpload() {
     } 
   } */
 
-  return { uploadSingleFile, uploadMultipleFiles, deleteFiles };
+  return { uploadSingleFile, uploadMultipleFiles, deleteSingleFile, deleteFiles };
 }

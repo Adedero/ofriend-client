@@ -58,7 +58,9 @@ const SKIP = computed(() => comments.value.length);
 const LIMIT = 5;
 const commentsRes = ref({});
 
+const allLoaded = ref(false);
 const loadComments = async () => {
+  if (allLoaded.value) return;
   commentsRes.value.loading = true;
   try {
     commentsRes.value = await useGet(`api/get-comments/${route.params.postId}?skip=${SKIP.value}&limit=${LIMIT}`);
@@ -75,6 +77,7 @@ const loadComments = async () => {
         return
       }
       hasMoreComments.value = false;
+      allLoaded.value = true;
       return;
     }
     addToast(commentsRes.value, toast, false);
@@ -104,6 +107,7 @@ watchEffect(async () => await getPost());
 //Comment options
 const removeComment = (id) => {
   comments.value = comments.value.filter(comment => comment._id !== id);
+  newComments.value = comments.value.filter(comment => comment._id !== id);
   res.value.data.post.comments--;
 }
 

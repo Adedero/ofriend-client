@@ -8,6 +8,7 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { addToast, useToastError } from '@/composables/utils/add-toast';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
+import useFirebaseUpload from '@/composables/utils/firebase-upload';
 
 const ReplyCommentItem = defineAsyncComponent({
   loader: () => import('@/components/app/post/ReplyCommentItem.vue')
@@ -84,15 +85,44 @@ const loadReplies = async () => {
 const op = ref();
 const toggle = (event) => op.value.toggle(event);
 
+//editing a comment
+const visible = ref(false);
+const textToEdit = ref(props.comment.textContent || '');
+
+const editRes = ref({});
+const saveEdit = async () => {
+  if (!textToEdit.value || textToEdit.value === props.comment.textContent) return;
+  const edit = { textContent: textToEdit.value, isEdited: true };
+  editRes.value = await usePost(`api/edit-comment/${props.comment._id}`, { edit }, 'PUT');
+  console.log(editRes.value);
+  refComment.value.textContent = textToEdit.value;
+  visible.value = false;
+}
+
 //Delete comment
-const deleteComment = async (id) => {
-  const { error, status, data } = await usePost(`api/delete-comment/${id}`, {}, 'DELETE');
+const deleteLoading = ref(false);
+const deleteComment = async () => {
+  deleteLoading.value = true;
+
+  if (refComment.value.hasMedia) {
+    const result = useFirebaseUpload().deleteSingleFile(refComment.value.media.url);
+    if (result) {
+      deleteLoading.value = false;
+      useToastError(toast, result);
+      return;
+    }
+  }
+  
+  const { loading, error, status, data } = await usePost(`api/delete-comment/${refComment.value._id}/${refComment.value.post}?parent=${refComment.value.parentComment}`, {}, 'DELETE');
+
+  deleteLoading.value = loading.value;
+  
   if (error.value) return useToastError(toast, error.value);
   if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
   if (status.value !== 200) {
     return toast.add({ severity: 'warn', summary: data.value.info, detail: data.value.message, life: 5000 });
   }
-  emit('onCommentDeleted', id);
+  emit('onCommentDeleted', refComment.value._id);
 }
 </script>
 
@@ -109,6 +139,7 @@ const deleteComment = async (id) => {
             <p @click="$router.push(`/app/profile/${refComment.author._id}`)" class="cursor-pointer font-bold">{{
               refComment.author.name }}</p>
             <p class="text-text-light text-sm">{{ timeAgo(refComment.createdAt) }}</p>
+            <small v-show="refComment.isEdited" class="text-text-light italic">edited</small>
           </div>
 
           <div class="flex items-center gap-1">
@@ -118,12 +149,26 @@ const deleteComment = async (id) => {
 
             <Button @click="toggle" v-if="viewerIsCommenAuthor" text rounded severity="secondary"
               icon="pi pi-ellipsis-v" />
+
             <OverlayPanel ref="op">
               <div class="grid gap-2">
-                <Button v-show="refComment.hasText" label="Edit" severity="secondary" icon="pi pi-file-edit" size="small" />
-                <Button @click="deleteComment(refComment._id)" label="Delete" severity="danger" icon="pi pi-trash" text size="small" />
+                <Button @click="visible = true" v-show="refComment.hasText" label="Edit" severity="secondary"
+                  icon="pi pi-file-edit" size="small" />
+
+                <Button @click="deleteComment" :loading="deleteLoading" label="Delete" severity="danger" icon="pi pi-trash" text
+                  size="small" />
               </div>
             </OverlayPanel>
+
+            <Sidebar v-model:visible="visible" header="Edit comment" position="bottom" class="h-auto">
+              <div class="flex flex-col cs-2:flex-row cs-2:items-end gap-3 mt-2">
+                <Textarea v-model.trim="textToEdit" rows="1" auto-resize
+                  class="textarea max-h-80 flex-grow" />
+
+                <Button :loading="editRes.loading" @click="saveEdit" label="Save" icon="pi pi-check"
+                  class="btn h-10 flex-shrink-0 w-fit self-end" />
+              </div>
+            </Sidebar>
           </div>
 
         </div>

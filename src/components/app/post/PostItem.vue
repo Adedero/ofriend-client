@@ -45,7 +45,7 @@ const deletePost = async () => {
     const urlArray = props.post.media.map(item => item.url);
     await firebase.deleteFiles(urlArray);
   }
-  const { status, data, error } = await usePost(`api/delete-post/${props.post._id}`, {}, 'DELETE');
+  const { status, data, error } = await usePost(`api/delete-post/${props.post._id}?repostedPost=${props.post.repostedPost?._id ?? ''}`, {}, 'DELETE');
   //console.log(data.value);
   if (error.value) return useToastError(toast, error.value);
   if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
