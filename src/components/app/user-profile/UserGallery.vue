@@ -73,8 +73,8 @@ onMounted(async () => await getUserMedia())
     </div>
   </div>
 
-  <div v-else>
-    <img src="../../../assets/images/no-posts.svg" alt="no posts">
+  <div v-else class="grid place-content-center">
+    <img src="../../../assets/images/no-picture.png" alt="no posts">
   </div>
 </template>
 
