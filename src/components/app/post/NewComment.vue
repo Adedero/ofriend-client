@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { onMounted, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePost } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
@@ -83,6 +83,9 @@ watchEffect(() => {
   comment.value.hasText = (comment.value.textContent !== '');
   comment.value.hasMedia = (media.value !== null);
 });
+
+onMounted(() => document.getElementById('v-reply-textarea').focus());
+
 </script>
 
 <template>
@@ -91,7 +94,7 @@ watchEffect(() => {
     <div class="flex items-end gap-1">
       <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
 
-      <Textarea v-model="comment.textContent" rows="1" auto-resize placeholder="Say something..."
+      <Textarea id="v-reply-textarea" v-model="comment.textContent" rows="1" auto-resize placeholder="Say something..."
         class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow" />
 
       <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn h-9">

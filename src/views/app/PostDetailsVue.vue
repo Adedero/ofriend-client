@@ -99,7 +99,13 @@ watch(
     newComments.value = [];
   }
 )
-watchEffect(async () => await getPost())
+watchEffect(async () => await getPost());
+
+//Comment options
+const removeComment = (id) => {
+  comments.value = comments.value.filter(comment => comment._id !== id);
+  res.value.data.post.comments--;
+}
 
 </script>
 
@@ -121,7 +127,6 @@ watchEffect(async () => await getPost())
     </div>
 
     <div class="relative">
-
       <div v-if="comments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in comments" :key="comment._id" :comment="comment"
           @on-reply-created="res.data.post.comments++" />
@@ -129,7 +134,7 @@ watchEffect(async () => await getPost())
 
       <div v-if="newComments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="res.data.post.comments++"
-          :comment="comment" />
+          :comment="comment" @on-comment-deleted="removeComment" />
       </div>
 
       <div>
@@ -137,7 +142,7 @@ watchEffect(async () => await getPost())
           class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
       </div>
 
-      <div ref="commentSection" class="sticky mt-2 -bottom-3 cs:-bottom-12 bg-white">
+      <div ref="commentSection" class="sticky mt-2 bottom-0  bg-white">
         <NewComment @on-comment-created="onCommentCreated" :post-id="res.data.post._id" />
       </div>
     </div>

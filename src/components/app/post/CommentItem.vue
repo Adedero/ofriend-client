@@ -1,12 +1,13 @@
 <script setup>
 import { computed, defineAsyncComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
 import { timeAgo } from '@/composables/utils/formats';
 import { useUserStore } from '@/stores/user';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { addToast } from '@/composables/utils/add-toast';
-import { useGet } from '@/composables/utils/use-fetch';
+import { addToast, useToastError } from '@/composables/utils/add-toast';
+import { useGet, usePost } from '@/composables/utils/use-fetch';
 
 const ReplyCommentItem = defineAsyncComponent({
   loader: () => import('@/components/app/post/ReplyCommentItem.vue')
@@ -16,11 +17,16 @@ const props = defineProps({
     type: Object
   }
 });
+
+const router = useRouter();
 const toast = useToast();
-const emit = defineEmits(['onReplyCreated']);
+const emit = defineEmits(['onReplyCreated', 'onCommentDeleted']);
 const userStore = useUserStore();
 
+const viewerIsCommenAuthor = computed(() => props.comment.author._id === userStore.user.id)
+
 const refComment = ref(props.comment);
+
 const hasMoreReplies = ref(false);
 
 const replies = ref([]);
@@ -73,6 +79,21 @@ const loadReplies = async () => {
     replyRes.value.loading = false;
   }
 }
+
+//Comment options
+const op = ref();
+const toggle = (event) => op.value.toggle(event);
+
+//Delete comment
+const deleteComment = async (id) => {
+  const { error, status, data } = await usePost(`api/delete-comment/${id}`, {}, 'DELETE');
+  if (error.value) return useToastError(toast, error.value);
+  if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
+  if (status.value !== 200) {
+    return toast.add({ severity: 'warn', summary: data.value.info, detail: data.value.message, life: 5000 });
+  }
+  emit('onCommentDeleted', id);
+}
 </script>
 
 <template>
@@ -81,6 +102,7 @@ const loadReplies = async () => {
     <div class="flex gap-1">
       <DynamicAvatar @click="$router.push(`/app/profile/${refComment.author._id}`)" shape="circle"
         :user="refComment.author" class="cursor-pointer w-8 h-8 aspect-square" />
+
       <div class="w-full">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
@@ -89,9 +111,21 @@ const loadReplies = async () => {
             <p class="text-text-light text-sm">{{ timeAgo(refComment.createdAt) }}</p>
           </div>
 
-          <div class="text-small flex items-center gap-2">
-            <CommentLikeButton :comment="refComment" />
+          <div class="flex items-center gap-1">
+            <div class="text-small flex items-center gap-2">
+              <CommentLikeButton :comment="refComment" />
+            </div>
+
+            <Button @click="toggle" v-if="viewerIsCommenAuthor" text rounded severity="secondary"
+              icon="pi pi-ellipsis-v" />
+            <OverlayPanel ref="op">
+              <div class="grid gap-2">
+                <Button v-show="refComment.hasText" label="Edit" severity="secondary" icon="pi pi-file-edit" size="small" />
+                <Button @click="deleteComment(refComment._id)" label="Delete" severity="danger" icon="pi pi-trash" text size="small" />
+              </div>
+            </OverlayPanel>
           </div>
+
         </div>
 
         <div class="whitespace-pre-wrap mt-1 text border rounded-lg p-1 md:p-2">
