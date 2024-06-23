@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import NewPostItem from '@/components/app/post/NewPostItem.vue';
 import { useGet } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
 import Toast from 'primevue/toast';
@@ -16,7 +15,7 @@ const getPosts = async () => {
   if (res.value.loading || allLoaded.value) return;
   res.value.loading = true;
   try {
-    res.value = await useGet(`api/content-reel/${posts.value.length}`);
+    res.value = await useGet(`api/content-reel/${posts.value.length}?products=false`);
     //console.log(res.value.data)
     if (!res.value || res.value.error) return router.push('/500');
     if (res.value.status === 401 && res.value.data.authMessage) return router.push({ name: 'signin' });

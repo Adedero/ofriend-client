@@ -24,6 +24,7 @@ const post = ref({
   status: '',
   hasText: false,
   hasMedia: false,
+  isProduct: false,
 });
 
 watchEffect(() => {
@@ -103,11 +104,18 @@ const createPost = async () => {
         <DynamicAvatar shape="circle" class="w-10 h-10" :user="userStore.user" />
 
         <div class="flex-grow">
-          <Textarea v-model="post.textContent" placeholder="Ready to share your knowledge?" rows="1" auto-resize
-            class="bg-soft-gray-2 focus:bg-white w-full max-h-[400px]" />
+          <Textarea v-model="post.textContent"
+            :placeholder="post.isProduct ? 'Ready to share your product?' : 'Ready to share your knowledge?'" rows="1"
+            auto-resize class="bg-soft-gray-2 focus:bg-white w-full max-h-[400px]" />
         </div>
       </div>
 
+    </div>
+
+    <div v-if="userStore.user.isOrg"
+      :class="[post.isProduct ? 'text-primary' : 'text-slate-500', 'mt-2 text-sm flex items-center gap-2 font-medium']">
+      <Checkbox v-model="post.isProduct" :binary="true" />
+      I am advertising a product
     </div>
 
     <div class="mt-3 flex items-start justify-between">

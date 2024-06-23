@@ -17,7 +17,7 @@ const getChats = async () => {
   res.value.loading = true;
   try {
     res.value = await useGet(`api/get-chats?skip=${chatsLength.value}`);
-    console.log(res.value.data);
+    //console.log(res.value.data);
     if (res.value.status !== 200) return;
     chats.value.push(...res.value.data);
   } catch (e) {
