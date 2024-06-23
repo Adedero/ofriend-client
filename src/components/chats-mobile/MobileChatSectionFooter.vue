@@ -134,7 +134,7 @@ const sendMessage = async () => {
     </div>
   </div>
 
-  <footer class=" w-full min-h-10 flex items-end gap-2 bg-primary/90 rounded-br-md">
+  <footer class=" w-full min-h-10 flex items-end gap-2 bg-primary/90">
 
     <ChatFileAttachment @on-file-send="handleFile" />
 

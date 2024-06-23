@@ -129,22 +129,13 @@ onUnmounted(() => {
 
 <template>
   <div class="relative">
-    <div
-      v-if="isRecording"
-      class="bottom-[4.5rem] left-0 cs-2:bottom-10 cs-2:right-[2rem] lg:right-[4.5rem] fixed bg-white shadow-lg border border-slate-500 rounded-full py-1 px-2 flex items-center gap-3 w-full cs-2:left-[unset] cs-2:w-[22rem] justify-between"
-    >
-      <Button
-        @click="toggleRecord"
-        severity="info"
-        rounded
-        :icon="isPaused ? 'pi pi-play' : 'pi pi-pause'"
-        class="flex-shrink-0"
-      />
+    <div v-if="isRecording"
+      class="bottom-[4.5rem] left-0 cs-2:bottom-10 cs-2:right-[2rem] lg:right-[4.5rem] fixed bg-white shadow-lg border border-slate-500 rounded-full py-1 px-2 flex items-center gap-3 w-full cs-2:left-[unset] cs-2:w-[22rem] justify-between">
+      <Button @click="toggleRecord" severity="info" rounded :icon="isPaused ? 'pi pi-play' : 'pi pi-pause'"
+        class="flex-shrink-0" />
 
-      <div
-        class="w-3 aspect-square rounded-full bg-red-500"
-        :class="{ 'animate-pulse': isRecording && !isPaused }"
-      ></div>
+      <div class="w-3 aspect-square rounded-full bg-red-500" :class="{ 'animate-pulse': isRecording && !isPaused }">
+      </div>
 
       <p>{{ Math.floor(recordingTime / 60) }}:{{ String(recordingTime % 60).padStart(2, '0') }}</p>
 
@@ -156,25 +147,14 @@ onUnmounted(() => {
         <div class="w-full border-[1.5px] border-blue-400"></div>
       </div>
 
-      <Button
-        @click="deleteRecording"
-        rounded
-        severity="danger"
-        icon="pi pi-trash"
-        class="flex-shrink-0"
-      />
+      <Button @click="deleteRecording" rounded severity="danger" icon="pi pi-trash" class="flex-shrink-0" />
 
-      <Button
-        label="Send"
-        @click="stopRecording"
-        icon="pi pi-send"
-        class="btn"
-        style="border-radius: 999px"
-      />
+      <Button label="Send" @click="stopRecording" icon="pi pi-send" class="btn" style="border-radius: 999px" />
     </div>
 
     <div>
-      <Button v-if="!isRecording" @click="startRecording" icon="pi pi-microphone" class="btn" />
+      <Button v-if="!isRecording" @click="startRecording" icon="pi pi-microphone"
+        class="border-transparent bg-transparent rounded-none" />
     </div>
   </div>
 </template>
