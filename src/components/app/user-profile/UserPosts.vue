@@ -65,12 +65,17 @@ onMounted(async () => await getUserPosts())
 <template>
   <Toast class="max-w-96" />
 
-  <div v-if="posts.length" @scroll="onScroll" class="pb-3 lg:w-full grid gap-4 h-[calc(100dvh-12rem)] overflow-y-auto">
-    <PostItem v-for="post in posts" :key="post._id" :post
-      @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--" @on-post-shared="post.reposts++" />
-    <PostDetailsSkeleton v-if="loading" />
-  </div>
-  <div v-else>
-    <img src="../../../assets/images/no-posts.svg" alt="no posts">
+  <div @scroll="onScroll" class="pb-3 lg:w-full h-[calc(100dvh-12rem)] overflow-y-auto">
+    <NewPostItem />
+
+    <div v-if="posts.length" class="grid content-start gap-4">
+      <PostItem v-for="post in posts" :key="post._id" :post
+        @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--" @on-post-shared="post.reposts++" />
+      <PostDetailsSkeleton v-if="loading" />
+    </div>
+
+    <div v-else class="grid place-content-center">
+      <img src="../../../assets/images/no-posts.svg" alt="no posts" class="w-60">
+    </div>
   </div>
 </template>
