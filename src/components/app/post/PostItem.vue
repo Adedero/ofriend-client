@@ -20,7 +20,7 @@ const EditPostItem = defineAsyncComponent({
   loader: () => import('@/components/app/post/EditPostItem.vue')
 });
 
-const emit = defineEmits(['onLikeClick', 'onPostShared', 'onPostDeleted']);
+const emit = defineEmits(['onLikeClick', 'onPostShared', 'onPostDeleted', 'onCommentCreated']);
 
 const router = useRouter();
 const toast = useToast();
@@ -127,7 +127,7 @@ const deletePost = async () => {
             <Divider />
             <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
               <LikeButton :post="post" @on-like-click="sendEmit" />
-              <CommentButton @comment-click="$router.push(`/app/post/${post._id}`)" />
+              <CommentButton @onCommentCreated="(comment) => $emit('onCommentCreated', comment)" :post />
               <ShareButton :post="post" class="cs:ml-auto" @on-post-shared="$emit('onPostShared')" />
             </div>
           </div>

@@ -59,7 +59,8 @@ const showLikers = async () => {
 
     <span class="pi pi-circle-fill" style="font-size: 0.25rem"></span>
 
-    <button>{{ formatNumber(post.comments) }} {{ post.comments == 1 ? 'Comment' : 'Comments' }}</button>
+    <button @click="$router.push(`/app/post/${post._id}`)">{{ formatNumber(post.comments) }} {{ post.comments ==
+      1 ? 'Comment' : 'Comments' }}</button>
     <span class="pi pi-circle-fill" style="font-size: 0.25rem"></span>
 
     <p class="cursor-context-menu">{{ formatNumber(post.reposts) }} {{ post.reposts == 1 ? 'Share' : 'Shares' }}</p>

@@ -108,7 +108,8 @@ watchEffect(async () => await getPost())
   <PostDetailsSkeleton v-if="res.loading" />
   <div v-else>
     <div>
-      <PostItem :post="res.data.post" @on-like-click="updateLikes" @on-post-shared="res.data.post.reposts++" />
+      <PostItem :post="res.data.post" @on-like-click="updateLikes" @on-post-shared="res.data.post.reposts++"
+        @on-comment-created="onCommentCreated" />
     </div>
 
     <div class="mt-3">
