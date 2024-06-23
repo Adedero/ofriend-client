@@ -142,7 +142,7 @@ const removeComment = (id) => {
           class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
       </div>
 
-      <div ref="commentSection" class="sticky mt-2 bottom-0  bg-white">
+      <div ref="commentSection" class="sticky mt-2 -bottom-3 cs-2:bottom-0  bg-white">
         <NewComment @on-comment-created="onCommentCreated" :post-id="res.data.post._id" />
       </div>
     </div>

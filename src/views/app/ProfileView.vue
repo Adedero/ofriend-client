@@ -105,7 +105,7 @@ watchEffect(async () => await getUserProfile(route.params.userId));
     <div class="grid gap-3 lg:grid-cols-5 mt-3">
       <div class="grid content-start gap-3 lg:col-span-2">
         <Skeleton shape="circle" width="8rem" height="8rem"
-          class="absolute translate-x-4 border-[5px] border-white -mt-20 left-0 lg:mx-auto lg:-mt-0 lg:translate-x-0" />
+          class="absolute translate-x-2 border-[5px] border-white -mt-20 left-0 lg:mx-auto lg:-mt-0 lg:translate-x-0" />
         <Skeleton width="50%" height="2rem" class="lg:hidden" />
         <Skeleton width="50%" height="2rem" class="lg:hidden" />
         <Skeleton width="100%" height="3.5rem" class="hidden lg:block" />
