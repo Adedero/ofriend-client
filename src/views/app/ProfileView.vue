@@ -100,16 +100,19 @@ watchEffect(async () => await getUserProfile(route.params.userId));
     </section>
   </div>
 
-  <div v-else>
+  <div v-else class="relative">
     <Skeleton height="12rem" width="100%" />
     <div class="grid gap-3 lg:grid-cols-5 mt-3">
       <div class="grid content-start gap-3 lg:col-span-2">
-        <Skeleton shape="circle" width="8rem" height="8rem" class="mx-auto" />
-        <Skeleton width="100%" height="4rem" />
-        <Skeleton width="100%" height="4rem" />
+        <Skeleton shape="circle" width="8rem" height="8rem"
+          class="absolute translate-x-4 border-[5px] border-white -mt-20 left-0 lg:mx-auto lg:-mt-0 lg:translate-x-0" />
+        <Skeleton width="50%" height="2rem" class="lg:hidden" />
+        <Skeleton width="50%" height="2rem" class="lg:hidden" />
+        <Skeleton width="100%" height="3.5rem" class="hidden lg:block" />
+        <Skeleton width="100%" height="3.5rem" class="hidden lg:block" />
       </div>
-      <div class="lg:col-span-3 grid grid-cols-4 gap-3">
-        <Skeleton v-for="i in 4" :key="i" height="2rem" />
+      <div class="lg:col-span-3 grid grid-cols-4 gap-3 mt-2">
+        <Skeleton v-for="i in 4" :key="i" height="1.5rem" />
         <Skeleton width="100%" height="20rem" class="col-span-4" />
       </div>
     </div>
