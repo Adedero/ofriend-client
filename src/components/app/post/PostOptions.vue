@@ -11,11 +11,15 @@ const props = defineProps({
   }
 });
 
+defineEmits(['isEditingPost', 'isDeletingPost']);
+
+
 const { data } = await useGet(`api/get-post-save-status/${props.post._id}`);
 
 const toast = useToast();
 const userStore = useUserStore();
 const isViewerAuthor = computed(() => userStore.user.id === props.post.author._id);
+
 
 //Save Post
 /* const saveRes = ref() */
@@ -60,6 +64,9 @@ const copyLink = async () => {
 <template>
   <div>
     <Toast class="max-w-96" />
+    <Button @click="copyLink" :label="isCopied ? 'Copied' : 'Copy link'" :icon="isCopied ? 'pi pi-check' : 'pi pi-link'"
+      text severity="secondary" class="text-left" />
+
     <div v-if="!post.isViewedByAuthor" class="grid">
       <Button @click="toggleFollowUser"
         :label="isFollowing ? `Unfollow ${post.author.name}` : `Follow ${post.author.name}`"
@@ -71,15 +78,16 @@ const copyLink = async () => {
         :class="{ 'text-accent': data.isSaved }" />
 
       <Button label="Report" icon="pi pi-flag" text severity="secondary" class="text-left" />
+
+      <Button :label="'Block '+ post.author.name.split(' ')[0]" icon="pi pi-ban" text severity="secondary"
+        class="text-left" />
     </div>
 
-    <Button @click="copyLink" :label="isCopied ? 'Copied' : 'Copy link'" :icon="isCopied ? 'pi pi-check' : 'pi pi-link'"
-      text severity="secondary" class="text-left" />
-
-    <div v-if="post.isViewedByAuthor && isViewerAuthor">
+    <div v-if="post.isViewedByAuthor && isViewerAuthor" class="grid">
       <Divider />
-      <Button label="Delete post" icon="pi pi-trash" text severity="danger" class="text-left" />
-    </div>
+      <Button @click="$emit('isEditingPost')" label="Edit post" icon="pi pi-file-edit" text severity="secondary" class="text-left" />
 
+      <Button @click="$emit('isDeletingPost')" label="Delete post" icon="pi pi-trash" text severity="danger" class="text-left" />
+    </div>
   </div>
 </template>

@@ -1,10 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import IndexLayout from '@/layouts/IndexLayout.vue'
-/* import OnboardingLayout from '@/layouts/OnboardingLayout.vue';
-import LegalLayout from '@/layouts/LegalLayout.vue';
-import AppLayout from '@/layouts/AppLayout.vue';
-import ChatLayout from '@/layouts/ChatLayout.vue'; */
-
 import HomeView from '@/views/index/HomeView.vue'
 
 import indexRoutes from '@/data/routes/index.routes'
@@ -98,6 +93,22 @@ const router = createRouter({
       }
     }
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const token = sessionStorage.getItem('token');
+    const user = JSON.parse(sessionStorage.getItem('user'));
+
+    if (!token || !user) {
+      next('/onboarding/signin');
+    } else {
+      next()
+    }
+  } else {
+    next();
+  }
 })
+
 
 export default router

@@ -14,7 +14,7 @@ import InputText from 'primevue/inputtext'
       <InputIcon class="pi pi-search"> </InputIcon>
       <InputText
         placeholder="Search"
-        class="border-transparent bg-soft-gray-2 focus:bg-transparent"
+        class="border-transparent bg-soft-gray-2 dark:bg-primary-lighter focus:bg-transparent"
       />
     </IconField>
   </div>

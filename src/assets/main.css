@@ -16,5 +16,5 @@ html {
 }
 
 body {
-  @apply font-['Inter_Variable'] text-text-dark;
+  @apply font-['Inter_Variable'] text-text-dark dark:text-gray-50;
 }

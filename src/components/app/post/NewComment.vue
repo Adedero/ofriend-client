@@ -94,7 +94,11 @@ watchEffect(() => {
       <Textarea v-model="comment.textContent" rows="1" auto-resize placeholder="Say something..."
         class="bg-soft-gray border-none focus:bg-white text-sm max-h-16 flex-grow" />
 
-      <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn h-9" />
+      <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn h-9">
+        <template #loadingicon>
+          <span class="pi pi-spinner pi-spin"></span>
+        </template>
+      </Button>
     </div>
   </div>
 </template>

@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/user';
 
 export const useGet = async (url, options = {}) => {
   const loading = ref(false);
@@ -7,10 +8,13 @@ export const useGet = async (url, options = {}) => {
   const status = ref(null);
 
   async function getRequest() {
+    const userStore = useUserStore();
     loading.value = true;
     try {
       const res = await fetch(`${import.meta.env.VITE_API}${url}`, {
-        credentials: 'include',
+        headers: {
+          'Authorization': 'Bearer ' + userStore.token
+        },
         ...options
       });
       data.value = await res.json();
@@ -38,14 +42,15 @@ export const usePost = async (url, postData, method = 'POST', options = {}, time
   const status = ref(null);
 
   async function postRequest() {
+    const userStore = useUserStore();
     loading.value = true;
     try {
       const res = await fetch(`${import.meta.env.VITE_API}${url}`, {
         method: method,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + userStore.token
         },
-        credentials: 'include',
         body: JSON.stringify(postData),
         signal: controller.signal,
       ...options

@@ -18,7 +18,7 @@ onMounted(() => socket.emit('online', userStore.user.id));
         <AppHomeNavbar />
       </nav>
 
-      <section class="h-full overflow-y-auto pb-12 cs-2:px-5 cs-2:col-span-6 lg:col-span-8 xl:col-span-7">
+      <section class=" h-full overflow-y-auto cs-2:px-5 cs-2:col-span-6 lg:col-span-8 xl:col-span-7">
         <RouterView />
       </section>
 

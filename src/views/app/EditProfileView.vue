@@ -8,7 +8,7 @@ const user = ref(null);
 const getFullProfile = async () => {
   try {
     const { status, data, error } = await useGet('api/get-full-profile/');
-    console.log(data.value);
+    //console.log(data.value);
     if (error.value) return router.push('/500');
     if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
     if (status.value !== 200) return router.push('/404');

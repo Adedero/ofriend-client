@@ -10,7 +10,7 @@ const userStore = useUserStore();
   <header class="flex items-center justify-between h-12">
     <div class="flex items-center gap-4">
       <div @click="$router.push({ name: 'app-home' })"
-        class="cursor-pointer w-32 h-10 bg-[url(../assets/images/logo-dark.svg)] bg-no-repeat bg-cover dark:bg-[url(../assets/images/logo-light.svg)]">
+        class="cursor-pointer w-32 h-10 bg-[url(../assets/images/logo-dark.svg)] bg-no-repeat bg-cover dark:bg-[url(../assets/images/logo-light.svg)] dark:bg-center dark:bg-contain">
       </div>
 
       <AppSearchBar />

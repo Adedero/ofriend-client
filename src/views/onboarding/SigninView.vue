@@ -29,6 +29,7 @@ const signin = async () => {
     }
     const { isVerified } = res.value.data.user;
     if (isVerified) {
+      userStore.setToken(res.value.data.token)
       userStore.setUser(res.value.data.user);
       router.push({ name: 'app-home' });
       return;

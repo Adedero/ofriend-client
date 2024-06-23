@@ -69,6 +69,35 @@ export default function useFirebaseUpload() {
   }
 
   async function deleteFiles(urlArray = []) {
+    const deletePromises = urlArray.map((url, index) => {
+      const storageRef = firebaseRef(storage, url);
+      return deleteObject(storageRef)
+        .then(() => {
+          console.log(`Deleted ${index + 1} ${index + 1 > 1 ? 'files' : 'file'}`);
+          return { index, error: null };
+        })
+        .catch((err) => {
+          console.error(`Error deleting file ${index + 1}:`, err);
+          return { index, error: err };
+        });
+    });
+
+    // Wait for all delete operations to complete
+    const results = await Promise.all(deletePromises);
+
+    // Collect all errors
+    const errors = results.filter(result => result.error !== null);
+
+    if (errors.length > 0) {
+      // Log all errors and return them
+      console.error('Some files could not be deleted:', errors);
+      return errors;
+    }
+
+    return null;
+  }
+
+  /* async function deleteFiles(urlArray = []) {
     let error = null;
     for (let i = 0; i < urlArray.length; i++) {
       const storageRef = firebaseRef(storage, urlArray[i]);
@@ -83,7 +112,7 @@ export default function useFirebaseUpload() {
           return error
       }
     } 
-  }
+  } */
 
   return { uploadSingleFile, uploadMultipleFiles, deleteFiles };
 }

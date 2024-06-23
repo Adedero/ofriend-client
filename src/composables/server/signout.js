@@ -8,6 +8,7 @@ const signout = async (router) => {
     }
     console.log(payload.message);
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     router.push({ name: 'signin' });
   } catch (error) {
     console.error(error);
