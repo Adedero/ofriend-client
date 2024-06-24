@@ -60,7 +60,7 @@ const createPost = async () => {
       post.value.media = media;
     }
     res.value = await usePost('api/create-post', post.value);
-    if (!res.value) {
+    if (res.value.error) {
       return toast.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong. Please try again later', life: 5000 });
     }
 
@@ -72,10 +72,11 @@ const createPost = async () => {
         hasText: false,
         hasMedia: false,
       }
+
       router.push({
         name: 'user-post',
         params: {
-          postId: res.value.data.postId
+          postId: res.value.data.post._id
         }
       });
       return

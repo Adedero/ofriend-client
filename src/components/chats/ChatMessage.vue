@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useUserStore } from '@/stores/user';
-import { formatTime } from '@/composables/utils/formats';
+import { useAmOrPm } from '@/composables/utils/formats';
 
 const props = defineProps({
   message: {
@@ -110,7 +110,7 @@ const saveEdit = () => {
 
         <div class="flex items-center justify-end gap-4">
           <small v-if="message.isEdited" class="opacity-60">edited</small>
-          <p class="text-[0.65rem] text-right">{{ formatTime(message.createdAt) }}</p>
+          <p class="text-[0.65rem] text-right">{{ useAmOrPm(message.createdAt) }}</p>
 
           <div v-if="user === 'sender'" class="text-accent">
             <span :class="message.isSent ? 'pi pi-check' : 'pi pi-spinner pi-spin'"

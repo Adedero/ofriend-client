@@ -6,7 +6,14 @@ import { useUserStore } from '@/stores/user';
 
 const userStore = useUserStore();
 
-onMounted(() => socket.emit('online', userStore.user.id));
+onMounted(() => {
+  socket.connect();
+
+  socket.on('connect', () => {
+    console.log('Connected to socket server');
+    socket.emit('online', userStore.user.id);
+  });
+});
 </script>
 <template>
   <main class="px-2 pt-2 pb-5 lg:px-5">

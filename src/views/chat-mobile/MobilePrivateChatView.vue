@@ -216,7 +216,7 @@ const cancelReply = () => {
 
     <Button v-show="hasScrolledTooFar" @click="scrollToBottom" :badge="unreadMessagesBadge ? unreadMessagesBadge : ''"
       icon="pi pi-arrow-down" size="small" rounded
-      class="border-none bg-slate-700 shadow-lg fixed bottom-36 left-1/2 -translate-x-1/2" />
+      class="z-20 border-none bg-slate-700 shadow-lg fixed bottom-36 left-1/2 -translate-x-1/2" />
 
     <header v-if="receiver.name">
       <ChatSectionHeader :receiver :chatId="route.params.chatId" @messagesCleared="onMessagesCleared"
