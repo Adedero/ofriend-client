@@ -67,8 +67,9 @@ const toggle = (event) => {
           class="w-full h-full object-cover">
         <video v-else :src="post.media[0].url"></video>
       </div>
+
       <div v-else class="w-24 aspect-square rounded-xl flex-shrink-0 bg-slate-300 overflow-hidden">
-        <DynamicAvatar :user="post.author" class="w-full h-full object-cover text-4xl" />
+        <DynamicAvatar :user="post.author" class="w-24 h-24 text-4xl" image-class="w-full h-full object-cover" />
       </div>
       <div>
         <h1 class="font-bold truncate-3">{{ post.hasText ? post.textContent : `${post.author.name}'s post` }}</h1>
