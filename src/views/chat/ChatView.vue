@@ -79,7 +79,7 @@ onMounted(async () => await getChats());
       </div>
 
       <div class="flex-grow flex border border-primary rounded-lg ">
-        <div class="h-full p-3 border-r border-primary w-[30%] xl:w-[25%]">
+        <div class="flex-shrink-0 h-full p-3 border-r border-primary w-[30%] xl:w-[25%]">
           <header class="pb-3 border-b border-primary flex items-center justify-between">
             <h1 class="font-bold text-lg">Messages</h1>
             <Button @click="$router.push('/app')" severity="secondary" text icon="pi pi-angle-left" label="Home"
@@ -88,7 +88,9 @@ onMounted(async () => await getChats());
 
           <div v-if="!res.loading" class="max-w-full">
             <ChatList v-if="chats.length" :chats @on-user-select="changeCurrentChatId" />
-            <div v-else>No chats</div>
+            <div v-else>
+              <img src="../../assets/images/no-chats.svg" alt="no chats">
+            </div>
           </div>
           <ChatListSkeleton v-else />
         </div>
@@ -102,8 +104,6 @@ onMounted(async () => await getChats());
             <p class="text-primary text-lg font-semibold">Ofriend Private Chat</p>
             <p class="text-slate-400">Select from one of your contacts to start chatting.</p>
           </div>
-
-          <!-- <ChatBox :currentChatId /> -->
         </div>
       </div>
     </section>

@@ -134,12 +134,12 @@ const sendMessage = async () => {
     </div>
   </div>
 
-  <footer class=" w-full min-h-10 flex items-end gap-2 bg-primary/90 rounded-br-md">
+  <footer class="w-full min-h-10 flex items-end gap-2 bg-primary/90 rounded-br-md">
 
     <ChatFileAttachment @on-file-send="handleFile" />
 
     <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
-      class="flex-grow py-1 mb-[0.4rem] pl-2  outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-28 text-white" />
+      class="flex-grow py-2 mb-[0.4rem] pl-2  outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-32 text-white overflow-y-scroll" />
 
     <Button @click="sendMessage" v-if="isTyping" icon="pi pi-send" class="border-transparent bg-transparent rounded-none" />
     <AudioRecorder v-else @on-stop="handleFile" />

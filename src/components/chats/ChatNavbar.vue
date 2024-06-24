@@ -70,7 +70,7 @@ const toggle = (event) => {
 <template>
   <div class="flex flex-col items-center h-full">
     <div class="text-center flex flex-col items-center flex-shrink-0">
-      <DynamicAvatar :user="userStore.user" shape="circle" class="text-3xl w-16 h-16 flex-shrink-0" />
+      <DynamicAvatar :user="userStore.user" shape="circle" class="text-3xl w-12 h-12 flex-shrink-0" />
 
       <div class="mt-2">
         <Button type="button" icon="pi pi-user" @click="toggle" rounded />

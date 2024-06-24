@@ -29,8 +29,9 @@ const userStore = useUserStore();
 
             <div class="w-full flex items-end justify-between">
               <h3 class="font-semibold truncate">{{ chat.friend.name }}</h3>
-              <small v-if="chat.lastMessage" class="flex-shrink-0">{{ formatTime(chat.lastMessage.createdAt, true)
-                }}</small>
+              <small v-if="chat.lastMessage" class="flex-shrink-0">
+                {{ formatTime(chat.lastMessage.createdAt, true) }}
+              </small>
             </div>
 
             <div v-if="chat.lastMessage" class="flex items-center justify-between">
@@ -38,7 +39,7 @@ const userStore = useUserStore();
                 This message was deleted.
               </p>
 
-              <div v-else class="min-w-0">
+              <div v-else class="min-w-0 grid">
                 <p v-if="chat.lastMessage.hasText" class="max-w-full truncate text-text-light text-sm">
                   <span v-show="chat.lastMessage.sender === userStore.user.id">
                     You: {{ chat.lastMessage.textContent }}

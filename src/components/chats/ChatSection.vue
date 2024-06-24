@@ -1,14 +1,18 @@
 <script setup>
-import { inject, onMounted, ref, nextTick, watch } from 'vue';
+import { computed, inject, onMounted, ref, nextTick, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import socket from '@/config/socket.config';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
 import { useUserStore } from '@/stores/user';
+import { formatChatDate } from '@/composables/utils/formats';
 
 const emit = defineEmits(['onUserMessageSend', 'chatDeleted'])
 
 const router = useRouter();
 const userStore = useUserStore();
+
+const scrollThreshold = 150
+const hasScrolledTooFar = ref(false);
 
 const chatId = inject('chatId');
 
@@ -19,6 +23,15 @@ const allLoaded = ref(false);
 const receiver = ref({});
 const messages = ref([]);
 //Get messages
+const groupedMessages = computed(() => {
+  return messages.value.reduce((acc, message) => {
+    const date = new Date(message.createdAt).toLocaleDateString();
+    acc[date] = acc[date] || [];
+    acc[date].push(message);
+    return acc;
+  }, {});
+});
+
 const getMessages = async (limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
@@ -39,6 +52,8 @@ const getMessages = async (limit) => {
       allLoaded.value = true;
     }
 
+    console.log(groupedMessages.value)
+
   } catch (error) {
     console.log(error);
     router.push('/500');
@@ -54,11 +69,16 @@ socket.on('userOnline', (id) => (receiver.value._id === id) ? receiver.value.isO
 socket.on('userOffline', (id) => (receiver.value._id === id) ? receiver.value.isOnline = false : null)
 
 
+const unreadMessagesBadge = ref(0);
 socket.on('newMessage', (message) => {
   messages.value.push(message);
   isTyping.value = false;
   setObserver();
-  //scrollToBottom();
+  if (hasScrolledTooFar.value) {
+    unreadMessagesBadge.value++;
+  } else {
+    scrollToBottom()
+  };
 });
 
 socket.on('messageRead', (userId) => {
@@ -68,7 +88,10 @@ socket.on('messageRead', (userId) => {
   })
 });
 
-socket.on('isTyping', () => isTyping.value = true);
+socket.on('isTyping', () => {
+  isTyping.value = true;
+  if (!hasScrolledTooFar.value) scrollToBottom();
+});
 
 socket.on('isNotTyping', () => isTyping.value = false);
 
@@ -108,10 +131,17 @@ watch(chatId, async () => await getMessages(15))
 const box = ref(null);
 
 const scrollToBottom = () => {
-  nextTick(() => box.value.scrollTop = box.value.scrollHeight)
+  nextTick(() => box.value.scrollTop = box.value.scrollHeight);
+  unreadMessagesBadge.value = 0;
 };
 
+
 const handleScroll = async () => {
+  if (box.value.scrollTop > (box.value.scrollHeight - box.value.clientHeight - scrollThreshold)) {
+    hasScrolledTooFar.value = false;
+  } else {
+    hasScrolledTooFar.value = true;
+  }
   const oldScrollHeight = box.value.scrollHeight;
   const oldScrollTop = box.value.scrollTop;
   if (box.value && box.value.scrollTop === 0) {
@@ -138,6 +168,7 @@ const setObserver = () => {
 onMounted(async() => {
   await getMessages(15);
   scrollToBottom();
+  box.value.style.scrollBehavior = 'smooth'
   socket.emit('joinRoom', chatId.value);
   emitOpenMessage();
 });
@@ -178,20 +209,35 @@ const cancelReply = () => {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col">
+  <div class="w-full h-full flex flex-col relative">
+    <Button v-show="hasScrolledTooFar" @click="scrollToBottom" :badge="unreadMessagesBadge ? unreadMessagesBadge : ''"
+      icon="pi pi-arrow-down" size="small" rounded
+      class="z-10 border-none w-8 h-8 bg-slate-700 shadow-lg fixed bottom-24 left-[65%]" />
+
     <header v-if="receiver.name">
       <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')" />
     </header>
 
-    <main ref="box" @scroll="handleScroll" class="flex-grow overflow-y-auto flex flex-col gap-2 p-3">
-      <div v-if="loading" class="grid place-content-center">
+    <main ref="box" @scroll="handleScroll" class="flex-grow overflow-y-auto">
+      <div v-show="loading" class="grid place-content-center">
         <span class="pi pi-spinner pi-spin text-accent" style="font-size: 1.2rem"></span>
       </div>
-      <ChatMessage v-for="message in messages" :key="message._id" :message @onDelete="deleteMessage"
-        @onEdit="editMessage" @onReply="replyMessage" :receiver />
-      <div v-if="isTyping" class="bg-accent/20 p-3 rounded-lg rounded-bl-none w-fit">
+
+      <section v-for="msgs, date in groupedMessages" :key="date" class="relative flex flex-col gap-2 p-3">
+        <div class="w-full grid place-content-center sticky top-0">
+          <p v-show="hasScrolledTooFar" class="bg-slate-700 bg-opacity-80 text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+            {{ formatChatDate(date) }}
+          </p>
+        </div>
+
+        <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage" @onEdit="editMessage"
+          @onReply="replyMessage" :receiver />
+      </section>
+
+      <div v-show="isTyping" class="bg-accent/20 p-3 ml-3 mb-3 rounded-lg rounded-bl-none w-fit">
         <div class="loader"></div>
       </div>
+
     </main>
 
     <footer class="grid items-end">
@@ -211,7 +257,7 @@ const cancelReply = () => {
     var(--_g) 0% 50%,
     var(--_g) 50% 50%,
     var(--_g) 100% 50%;
-  background-size: calc(100%/3) 50%;
+  background-size: calc(100%/5) 50%;
   animation: l3 1s infinite linear;
 }
 

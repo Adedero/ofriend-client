@@ -6,18 +6,19 @@ import { addToast } from '@/composables/utils/add-toast';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
+import socket from '@/config/socket.config';
 
 const emit = defineEmits(['onCommentCreated']);
 const router = useRouter();
 const toast = useToast();
 const props = defineProps({
-  postId: {
-    type: String,
-    required: true
-  }
+  postId: { type: String, required: true },
+  postAuthorId: { type: String, required: true }
 });
+
 const comment = ref({
   post: props.postId,
+  postAuthor: props.type.authorId,
   textContent: '',
   hasText: false,
   hasMedia: false
@@ -68,6 +69,7 @@ const postComment = async () => {
       };
       media.value = null;
       isCommentCreated.value = true;
+      socket.emit('comment-created', res.value.data.comment);
       return
     }
     addToast(res.value, toast, false);

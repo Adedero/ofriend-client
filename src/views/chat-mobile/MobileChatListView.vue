@@ -82,7 +82,9 @@ onMounted(async () => await getChats());
   <main class="p-2 ">
     <div v-if="!res.loading" class="max-w-full">
       <ChatList v-if="chats.length" :chats @on-user-select="changeCurrentChatId" />
-      <div v-else>No chats</div>
+      <div v-else>
+        <img src="../../assets/images/no-chats.svg" alt="no chats">
+      </div>
     </div>
     <ChatListSkeleton v-else />
   </main>

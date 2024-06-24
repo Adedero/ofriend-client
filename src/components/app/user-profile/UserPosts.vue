@@ -7,10 +7,8 @@ import { watch } from 'vue';
 
 const isNewUser = ref(false);
 const props = defineProps({
-  userId: {
-    type: String,
-    required: true
-  }
+  userId: { type: String, required: true },
+  isViewingSelf: { type: Boolean, required: true }
 });
 
 const toast = useToast();
@@ -63,12 +61,11 @@ onMounted(async () => await getUserPosts())
 </script>
 
 <template>
-  <Toast class="max-w-96" />
-
   <div @scroll="onScroll" class="pb-3 lg:w-full h-[calc(100dvh-12rem)] overflow-y-auto">
-    <NewPostItem />
+    <Toast class="max-w-96" />
+    <NewPostItem v-if="isViewingSelf" />
 
-    <div v-if="posts.length" class="grid content-start gap-4">
+    <div v-if="posts.length" class="mt-3 grid content-start gap-4">
       <PostItem v-for="post in posts" :key="post._id" :post
         @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--" @on-post-shared="post.reposts++" />
       <PostDetailsSkeleton v-if="loading" />

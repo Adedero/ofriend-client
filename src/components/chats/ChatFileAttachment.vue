@@ -88,7 +88,7 @@ const reset = () => {
     </Dialog>
 
     <Message v-if="error.isError" class="absolute -top-[4.5rem] w-96 text-sm" severity="error">{{ error.msg }}</Message>
-    <label class="hover:bg-primary-lighter rounded-md cursor-pointer flex flex-col items-center p-3" for="attachment">
+    <label class="rounded-md cursor-pointer flex flex-col items-center p-3" for="attachment">
       <span class="text-white pi pi-paperclip" style="font-size: 0.8rem"></span>
     </label>
     <input @input="setFiles" @cancel="reset" id="attachment" type="file" class="hidden" />

@@ -22,6 +22,41 @@ export function formatDate(value) {
     return `${day} ${month}, ${year}`;
 }
 
+export function formatChatDate(date) {
+  const now = new Date();
+  const inputDate = new Date(date);
+  
+  // Calculate the difference in days
+  /* const oneDay = 24 * 60 * 60 * 1000;
+  const timeDiff = now - inputDate;
+  const dayDiff = Math.floor(timeDiff / oneDay); */
+
+  // Check if it's today
+  if (now.toDateString() === inputDate.toDateString()) {
+    return 'Today';
+  }
+
+  // Check if it's yesterday
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (yesterday.toDateString() === inputDate.toDateString()) {
+    return 'Yesterday';
+  }
+
+  // Check if it's within the same year
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const day = inputDate.getDate();
+  const month = monthNames[inputDate.getMonth()];
+  const year = inputDate.getFullYear();
+
+  if (year === now.getFullYear()) {
+    return `${day} ${month}`;
+  } else {
+    return `${day} ${month}, ${year}`;
+  }
+}
+
 export function formatTime(value, shortMonth = false) {
   const date = new Date(value);
   const now = new Date();
@@ -29,15 +64,33 @@ export function formatTime(value, shortMonth = false) {
   const oneDay = 24 * 60 * 60 * 1000; // milliseconds in one day
 
   const monthNamesFull = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
-
   const monthNamesShort = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
-
   const monthNames = shortMonth ? monthNamesShort : monthNamesFull;
 
   // Extract hours and minutes
@@ -49,7 +102,7 @@ export function formatTime(value, shortMonth = false) {
 
   // Format hours to 12-hour format
   hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
+  hours = hours ? hours : 12;  // the hour '0' should be '12'
 
   // Format minutes to always be two digits
   minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -58,14 +111,20 @@ export function formatTime(value, shortMonth = false) {
   const formattedTime = `${hours}:${minutes}${ampm}`;
 
   if (timeDiff < oneDay) {
-    // If the time is less than a day old, show the time
-    return formattedTime;
+    // If the time is less than a day old
+    if (timeDiff < 0) {
+      // Yesterday
+      return 'Yesterday';
+    } else {
+      // Show the time
+      return formattedTime;
+    }
   } else {
     // If the time is more than a day old, show the date
     const day = date.getDate();
     const month = monthNames[date.getMonth()];
     const year = date.getFullYear();
-    
+
     // If the date is from the previous year, include the year
     if (year < now.getFullYear()) {
       return `${day} ${month} ${year}`;

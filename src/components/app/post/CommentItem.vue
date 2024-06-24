@@ -205,7 +205,7 @@ const deleteComment = async () => {
 
     <!-- Reply box -->
     <div v-if="refComment.isReplying" class="mt-3 ml-8">
-      <NewReply :post-id="refComment.post" :comment-id="refComment._id" @on-reply-created="onReplyCreated" />
+      <NewReply :post-id="refComment.post" :comment-id="refComment._id" :comment-author-id="refComment.author._id" @on-reply-created="onReplyCreated" />
     </div>
   </div>
 </template>

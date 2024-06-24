@@ -18,10 +18,12 @@ const props = defineProps({
   commentId: {
     type: String,
     required: true
-  }
+  },
+  commentAuthorId: { type: String, required: true }
 });
 const comment = ref({
   post: props.postId,
+  commentAuthor: props.commentAuthorId,
   textContent: '',
   isReply: true,
   parentComment: props.commentId,
