@@ -68,11 +68,11 @@ const resendOTP = async () => {
 
 
 onMounted(async () => {
-  /*res.value = await useGet('auth/check-auth');
+  res.value = await useGet('auth/check-auth');
   if (res.value.error || !res.value.data.isAuthenticated) {
     router.push({ name: 'signin' });
     return;
-  }*/
+  }
   timer.value = setInterval(() => {
     if (seconds.value === 0) {
       clearInterval(timer.value);
