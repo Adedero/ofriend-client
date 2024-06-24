@@ -27,10 +27,11 @@ const signin = async () => {
     if (res.value.error || res.value.status !== 200) {
       return
     }
+    userStore.setToken(res.value.data.token)
+    userStore.setUser(res.value.data.user);
+    
     const { isVerified } = res.value.data.user;
     if (isVerified) {
-      userStore.setToken(res.value.data.token)
-      userStore.setUser(res.value.data.user);
       router.push({ name: 'app-home' });
       return;
     }
