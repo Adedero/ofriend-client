@@ -40,6 +40,7 @@ const loading = ref(false);
 
 const saveEdit = async () => {
   if (!text.value && !media.value.length) return;
+  if (text.value === props.post.textContent) return;
   editedPost.value = {
     hasText: text.value.length > 0,
     textContent: text.value,
