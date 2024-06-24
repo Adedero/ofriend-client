@@ -22,7 +22,7 @@ const clearEditor = () => {
     <Button @click="visible = true" label="Share" severity="secondary" rounded text
       class="text cs:text-sm">
       <template #icon>
-        <svg fill="#000000" width="1.3rem" height="1.3rem" viewBox="0 0 24 24" id="repost-round" data-name="Flat Line"
+        <svg fill="#000000" width="1.2rem" height="1.2rem" viewBox="0 0 24 24" id="repost-round" data-name="Flat Line"
           xmlns="http://www.w3.org/2000/svg" class="icon flat-line mr-1">
           <path id="primary" d="M6,14V9A6,6,0,0,1,16.89,5.54"
             style="fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">

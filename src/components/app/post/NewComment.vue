@@ -18,7 +18,7 @@ const props = defineProps({
 
 const comment = ref({
   post: props.postId,
-  postAuthor: props.type.authorId,
+  postAuthor: props.postAuthorId,
   textContent: '',
   hasText: false,
   hasMedia: false
