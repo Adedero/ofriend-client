@@ -32,13 +32,14 @@ onMounted(async () => await getFullProfile());
     <div v-if="user" class="mt-3 flex flex-col gap-6">
       <NameChange :user />
       <EmailChange :user />
-      <BusinessDetailsChange :user />
+      <BusinessDetailsChange v-if="user.isOrg" :user />
       <BirthdayChange v-if="!user.isOrg" :user />
       <GenderChange v-if="!user.isOrg" :user />
       <CountryChange :user />
       <AddressChange :user />
       <Divider />
-      <BlockedUsers />
+      <BlockedUsers :user />
+      <SubscriptionList />
       <Divider />
       <PasswordChange :user />
       <Divider />

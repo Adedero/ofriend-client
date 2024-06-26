@@ -4,14 +4,13 @@ import { useGet, usePost } from '@/composables/utils/use-fetch';
 import { useUserStore } from '@/stores/user';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { useToastError } from '@/composables/utils/add-toast';
 
 const props = defineProps({
-  post: {
-    type: Object
-  }
+  post: { type: Object }
 });
 
-defineEmits(['isEditingPost', 'isDeletingPost']);
+const emit = defineEmits(['userBlocked', 'isEditingPost', 'isDeletingPost']);
 
 
 const { data } = await useGet(`api/get-post-save-status/${props.post._id}`);
@@ -59,6 +58,27 @@ const copyLink = async () => {
     isCopied.value = false;
   }, 2000);
 }
+
+//Block user
+const blockLoading = ref(false);
+const blockUser = async () => {
+  if (userStore.user.id.toString() === props.post.author._id.toString()) return;
+
+  blockLoading.value = true;
+  try {
+    const { data, error } = await usePost(`api/block-user/${ props.post.author._id }`);
+    //console.log(data.value);
+    if (error.value) useToastError(toast, error.value);
+
+    if (!data.value.success) return toast.add({ severity: 'error', summary: data.value.info ?? 'Failed', detail: data.value.message, life: 5000 });
+    emit('userBlocked', props.post.author._id.toString());
+  } catch (err) {
+    console.error(err);
+    useToastError(toast, err);
+  } finally {
+    blockLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -77,9 +97,9 @@ const copyLink = async () => {
         :icon="data.isSaved ? 'pi pi-bookmark pi-fill' : 'pi pi-bookmark'" text severity="secondary" class="text-left"
         :class="{ 'text-accent': data.isSaved }" />
 
-      <Button label="Report" icon="pi pi-flag" text severity="secondary" class="text-left" />
+      <!-- <Button label="Report" icon="pi pi-flag" text severity="secondary" class="text-left" /> -->
 
-      <Button :label="'Block '+ post.author.name.split(' ')[0]" icon="pi pi-ban" text severity="secondary"
+      <Button @click="blockUser" :loading="blockLoading" :label="'Block '+ post.author.name.split(' ')[0]" icon="pi pi-ban" text severity="secondary"
         class="text-left" />
     </div>
 

@@ -52,6 +52,10 @@ const handleCommentCreated = (post) => {
   post.addedComments ? post.addedComments++ : post.addedComments = 1;
 }
 
+const removePostsByBlockedUser = (userId) => {
+  posts.value = posts.value.filter(post => post.author._id.toString() !== userId);
+}
+
 
 onMounted( async () => await getPosts())
 </script>
@@ -64,7 +68,7 @@ onMounted( async () => await getPosts())
     <div id="posts-container" class="reel mt-5 grid gap-10">
       <div v-for="post in posts" :key="post._id">
         <PostItem :post @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--"
-          @on-post-shared="post.reposts++" @on-post-deleted="deletePost" @on-comment-created="handleCommentCreated(post)" />
+          @on-post-shared="post.reposts++" @on-post-deleted="deletePost" @on-comment-created="handleCommentCreated(post)" @userBlocked="removePostsByBlockedUser" />
 
         <div v-if="post.isCommentAdded" class="text-sm flex items-center gap-2 mt-2">
           <p><b>You</b> added {{ post.addedComments < 2 ? 'a comment' : post.addedComments + ' comments' }}.</p>

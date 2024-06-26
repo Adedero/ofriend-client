@@ -10,9 +10,10 @@ const { data } = await useGet('api/followers-and-following');
 
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-if="data.followers && data.followers.length">
-          <div v-for="follower in data.followers" :key="follower._id" class="grid grid-cols-7 xl:grid-cols-10 items-center">
+          <div v-for="follower in data.followers" :key="follower._id"
+            class="grid grid-cols-7 xl:grid-cols-10 items-center">
 
-            <DynamicAvatar :user="follower.follower" shape="circle" class="w-10 h-10 col-span-2" />
+            <DynamicAvatar :user="follower.follower" shape="circle" class="w-10 h-10 col-span-7 lg:col-span-2" />
             <div class="hidden overflow-x-hidden lg:block col-span-5 xl:col-span-8">
               <p class="font-medium">{{ follower.follower.name }}</p>
               <p class="text-xs max-w-full truncate">{{ follower.follower.bio }}</p>
@@ -43,9 +44,11 @@ const { data } = await useGet('api/followers-and-following');
 
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-if="data.following && data.following.length">
-          <div v-for="follower in data.following" :key="follower._id" class="grid grid-cols-7 xl:grid-cols-10 items-center">
+          <div v-for="follower in data.following" :key="follower._id"
+            class="grid grid-cols-7 xl:grid-cols-10 items-center">
 
-            <DynamicAvatar :user="follower.user" shape="circle" size="large" class="h-10 w-10 col-span-2" />
+            <DynamicAvatar :user="follower.user" shape="circle" size="large"
+              class="h-10 w-10 col-span-7 lg:col-span-2" />
             <div class="hidden overflow-x-hidden lg:block col-span-5 xl:col-span-8">
               <p class="font-medium">{{ follower.user.name }}</p>
               <p class="text-xs  truncate">{{ follower.user.bio }}</p>

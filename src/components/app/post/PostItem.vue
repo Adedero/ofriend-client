@@ -20,7 +20,7 @@ const EditPostItem = defineAsyncComponent({
   loader: () => import('@/components/app/post/EditPostItem.vue')
 });
 
-const emit = defineEmits(['onLikeClick', 'onPostShared', 'onPostDeleted', 'onCommentCreated']);
+const emit = defineEmits(['onLikeClick', 'onPostShared', 'onPostDeleted', 'onCommentCreated', 'userBlocked']);
 
 const router = useRouter();
 const toast = useToast();
@@ -71,71 +71,71 @@ const deletePost = async () => {
       </div>
     </Dialog>
 
-      <Panel toggleable>
-        <template #header>
-          <div @click="$router.push(`/app/profile/${post.author._id}`)"
-            class="cursor-pointer flex align-items-center gap-2">
-            <DynamicAvatar size="large" shape="circle" :user="post.author" class="w-12 h-12" />
-            <div class="grid">
-              <p>
-                <span class="font-bold">{{ post.author.name }}</span>
-                <span v-if="post.isReposting" class="italic font-medium"> shared a post</span>
-              </p>
-              <p class="flex items-center gap-1">
-                <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
-                <span v-show="post.isEdited" class="block w-1 aspect-square bg-slate-500 rounded-full"></span>
-                <small v-show="post.isEdited" class="text-slate-500">edited</small>
-              </p>
+    <Panel toggleable>
+      <template #header>
+        <div @click="$router.push(`/app/profile/${post.author._id}`)"
+          class="cursor-pointer flex align-items-center gap-2">
+          <DynamicAvatar size="large" shape="circle" :user="post.author" class="w-12 h-12" />
+          <div class="grid">
+            <p>
+              <span class="font-bold">{{ post.author.name }}</span>
+              <span v-if="post.isReposting" class="italic font-medium"> shared a post</span>
+            </p>
+            <p class="flex items-center gap-1">
+              <small class="text-slate-500">{{ timeAgo(post.createdAt) }}</small>
+              <span v-show="post.isEdited" class="block w-1 aspect-square bg-slate-500 rounded-full"></span>
+              <small v-show="post.isEdited" class="text-slate-500">edited</small>
+            </p>
 
-            </div>
           </div>
-        </template>
-
-        <template #icons>
-          <button class="p-panel-header-icon p-link mr-2" @click="toggle">
-            <span class="pi pi-ellipsis-v"></span>
-          </button>
-          <OverlayPanel ref="menu">
-            <Suspense>
-              <template #default>
-                <PostOptions :post @isEditingPost="visible = true" @isDeletingPost="showConfirm = true" />
-              </template>
-              <template #fallback>
-                <div class="w-40 h-20 grid place-content-center">
-                  <span class="pi pi-spinner pi-spin text-accent" style="font-size: 1.2rem"></span>
-                </div>
-              </template>
-            </Suspense>
-          </OverlayPanel>
-        </template>
-
-        <div v-if="post.hasText">
-          <PostTextContent :text="post.textContent" />
         </div>
+      </template>
 
-        <div v-if="post.hasMedia" class="mt-5">
-          <PostMedia :media="post.media" preview />
-        </div>
+      <template #icons>
+        <button class="p-panel-header-icon p-link mr-2" @click="toggle">
+          <span class="pi pi-ellipsis-v"></span>
+        </button>
+        <OverlayPanel ref="menu">
+          <Suspense>
+            <template #default>
+              <PostOptions :post @isEditingPost="visible = true" @isDeletingPost="showConfirm = true" @userBlocked="(userId) => $emit('userBlocked', userId)" />
+            </template>
+            <template #fallback>
+              <div class="w-40 h-20 grid place-content-center">
+                <span class="pi pi-spinner pi-spin text-accent" style="font-size: 1.2rem"></span>
+              </div>
+            </template>
+          </Suspense>
+        </OverlayPanel>
+      </template>
 
-        <div v-if="post.isReposting" class="mt-5 px-2">
-          <RePost :post="post.repostedPost" />
-        </div>
+      <div v-if="post.hasText">
+        <PostTextContent :text="post.textContent" />
+      </div>
 
-        <template #footer>
-          <div class="text-sm">
-            <PostStats :post="post" />
-            <Divider />
-            <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
-              <LikeButton :post="post" @on-like-click="sendEmit" />
-              <CommentButton @onCommentCreated="(comment) => $emit('onCommentCreated', comment)" :post />
-              <ShareButton :post="post" class="cs:ml-auto" @on-post-shared="$emit('onPostShared')" />
-            </div>
+      <div v-if="post.hasMedia" class="mt-5">
+        <PostMedia :media="post.media" preview />
+      </div>
+
+      <div v-if="post.isReposting" class="mt-5 px-2">
+        <RePost :post="post.repostedPost" />
+      </div>
+
+      <template #footer>
+        <div class="text-sm">
+          <PostStats :post="post" />
+          <Divider />
+          <div class="flex items-center gap-1 justify-between cs:justify-normal cs:gap-3">
+            <LikeButton :post="post" @on-like-click="sendEmit" />
+            <CommentButton @onCommentCreated="(comment) => $emit('onCommentCreated', comment)" :post />
+            <ShareButton :post="post" class="cs:ml-auto" @on-post-shared="$emit('onPostShared')" />
           </div>
-        </template>
-      </Panel>
+        </div>
+      </template>
+    </Panel>
 
-      <Sidebar v-model:visible="visible" header="Edit post" position="bottom" class="h-auto">
-        <EditPostItem v-if="visible" :post @onPostEdited="visible = false" />
-      </Sidebar>
+    <Sidebar v-model:visible="visible" header="Edit post" position="bottom" class="h-auto">
+      <EditPostItem v-if="visible" :post @onPostEdited="visible = false" />
+    </Sidebar>
   </div>
 </template>
