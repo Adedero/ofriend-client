@@ -9,6 +9,7 @@ import { usePost } from '@/composables/utils/use-fetch';
 import { addToast } from '@/composables/utils/add-toast';
 import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
 import { useUserStore } from '@/stores/user';
+import socket from '@/config/socket.config';
 
 const router = useRouter();
 const toast = useToast();
@@ -65,6 +66,10 @@ const createPost = async () => {
     }
 
     if (res.value.data.success) {
+      //Emit socket to send notifications to subscribers
+      
+      socket.emit('post-created', userStore.user, res.value.data.post._id);
+
       files.value = [];
       post.value = {
         textContent: '',

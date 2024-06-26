@@ -52,7 +52,7 @@ const getMessages = async (limit) => {
       allLoaded.value = true;
     }
 
-    console.log(groupedMessages.value)
+    //console.log(groupedMessages.value)
 
   } catch (error) {
     console.log(error);
@@ -224,7 +224,8 @@ const cancelReply = () => {
       </div>
 
       <section v-for="msgs, date in groupedMessages" :key="date" class="relative flex flex-col gap-2 p-3">
-        <div class="w-full grid place-content-center sticky top-0">
+        <Divider />
+        <div class="w-full grid place-content-center sticky top-0"> 
           <p v-show="hasScrolledTooFar" class="bg-slate-700 bg-opacity-80 text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
           </p>

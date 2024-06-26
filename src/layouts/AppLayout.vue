@@ -3,10 +3,16 @@ import { onMounted } from "vue";
 import { RouterView } from 'vue-router'
 import socket from '@/config/socket.config';
 import { useUserStore } from '@/stores/user';
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
+import { initializePushNotifications } from "@/services/push-notification";
 
 const userStore = useUserStore();
+const toast = useToast();
 
-onMounted(() => {
+onMounted(async () => {
+  await initializePushNotifications(toast);
+  
   socket.connect();
 
   socket.on('connect', () => {
@@ -17,6 +23,7 @@ onMounted(() => {
 </script>
 <template>
   <main class="px-2 pt-2 pb-5 lg:px-5">
+    <Toast class="max-w-96" />
     <AppHeader />
 
     <section class="relative h-[calc(100dvh-5.5rem)] pt-5 cs-2:grid cs-2:grid-cols-8 lg:grid-cols-12 xl:grid-cols-11">

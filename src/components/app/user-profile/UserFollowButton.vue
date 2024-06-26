@@ -3,6 +3,9 @@ import { ref } from 'vue';
 import { usePost } from '@/composables/utils/use-fetch';
 import { useToastError } from '@/composables/utils/add-toast';
 import { useToast } from 'primevue/usetoast';
+import Toast from 'primevue/toast';
+import socket from '@/config/socket.config';
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps({
   user: {
@@ -13,6 +16,7 @@ const props = defineProps({
 
 const emit = defineEmits(['onFollowToggle']);
 
+const userStore = useUserStore();
 const toast = useToast();
 
 const isFollowing = ref(props.user.viewerFollowsUser);
@@ -28,7 +32,10 @@ const toggleFollowUser = async () => {
       return;
     }
     isFollowing.value = followStatus.value.isFollowing;
-    emit('onFollowToggle', followStatus.value.isFollowing) 
+    emit('onFollowToggle', followStatus.value.isFollowing);
+    if (isFollowing.value) {
+      socket.emit('user-followed', { userId: props.user._id, follower: userStore.user});
+    } 
   } catch (error) {
     useToastError(toast, error)
   } finally {
@@ -58,6 +65,7 @@ const items = ref([
 
 <template>
   <div>
+    <Toast class="max-w-96" />
     <Button @click="onFollowClick" :loading :label="isFollowing ? 'Following' : 'Follow'" icon="pi pi-user-plus" size="small"
       class="h-10 text-sm lg:text-base mt-2 bg-accent border-0 hover:bg-sky-500" />
     <Menu :model="items" :popup="true" ref="op" />

@@ -30,8 +30,9 @@ const setImageUrl = (data) => user.value.imageUrl = data;
 //Update banner image Url
 const setBannerImageUrl = (data) => user.value.bannerImageUrl = data;
 
-const setFollowerCount = (data) => {
+const handleFollowToggle = (data) => {
   data ? user.value.followers++ : user.value.followers--
+  user.value.viewerFollowsUser = data;
 }
 
 watchEffect(async () => await getUserProfile(route.params.userId));
@@ -44,8 +45,9 @@ watchEffect(async () => await getUserProfile(route.params.userId));
     <div id="banner" class="relative">
       <ProfileBanner :isViewingSelf="user.isViewingSelf" :bannerImageUrl="user.bannerImageUrl ?? ''"
         @onBannerImageChange="setBannerImageUrl" />
-      <div v-if="!user.isViewingSelf" class="grid justify-end absolute z-10 right-0">
-        <UserFollowButton :user @onFollowToggle="setFollowerCount" />
+      <div v-if="!user.isViewingSelf" class="flex items-center gap-2 justify-end absolute z-10 right-0">
+        <UserFollowButton :user @onFollowToggle="handleFollowToggle" />
+        <UserSubscribeButton v-show="user.viewerFollowsUser" :user />
       </div>
     </div>
 
