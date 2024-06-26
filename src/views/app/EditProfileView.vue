@@ -39,7 +39,7 @@ onMounted(async () => await getFullProfile());
       <AddressChange :user />
       <Divider />
       <BlockedUsers :user />
-      <SubscriptionList />
+      <SubscriptionList :user />
       <Divider />
       <PasswordChange :user />
       <Divider />

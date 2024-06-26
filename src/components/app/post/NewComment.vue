@@ -65,7 +65,8 @@ const postComment = async () => {
         post: props.postId,
         textContent: '',
         hasText: false,
-        hasMedia: false
+        hasMedia: false,
+        postAuthor: props.postAuthorId,
       };
       media.value = null;
       isCommentCreated.value = true;

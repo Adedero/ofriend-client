@@ -37,14 +37,10 @@ const onScroll = async (event) => {
   const container = event.target;
   const { scrollHeight, scrollTop, clientHeight } = container;
   if (scrollTop + clientHeight >= scrollHeight - 20) {
-    const scrollPositionFromBottom = scrollHeight - scrollTop;
-
     await getPosts();
-
-    const newScrollHeight = container.scrollHeight;
-    container.scrollTop = newScrollHeight - scrollPositionFromBottom;
   }
 };
+
 
 const handleCommentCreated = (post) => {
   post.isCommentAdded = true;

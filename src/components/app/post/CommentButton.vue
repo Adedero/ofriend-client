@@ -22,6 +22,6 @@ const handleCommentCreated = (comment) => {
     class="text cs:text-sm"></Button>
 
   <Sidebar v-model:visible="visible" header="Leave a comment" position="bottom" class="h-auto">
-    <NewComment @on-comment-created="handleCommentCreated" :post-id="post._id" />
+    <NewComment @on-comment-created="handleCommentCreated" :post-author-id="post.author._id" :post-id="post._id" />
   </Sidebar>
 </template>

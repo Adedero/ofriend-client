@@ -113,15 +113,16 @@ const deleteComment = async () => {
     }
   }
   
-  const { loading, error, status, data } = await usePost(`api/delete-comment/${refComment.value._id}/${refComment.value.post}?parent=${refComment.value.parentComment}`, {}, 'DELETE');
+  const { error, status, data } = await usePost(`api/delete-comment/${refComment.value._id}/${refComment.value.post}?parent=${refComment.value.parentComment}`, {}, 'DELETE');
 
-  deleteLoading.value = loading.value;
+  deleteLoading.value = false;
   
   if (error.value) return useToastError(toast, error.value);
   if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
   if (status.value !== 200) {
     return toast.add({ severity: 'warn', summary: data.value.info, detail: data.value.message, life: 5000 });
   }
+
   emit('onCommentDeleted', refComment.value._id);
 }
 </script>

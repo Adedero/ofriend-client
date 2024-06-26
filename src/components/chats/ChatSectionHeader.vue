@@ -7,7 +7,9 @@ const props = defineProps({
   receiver: { type: Object, required: true }, chatId: { type: String, required: true }
 });
 
-const emit = defineEmits(['messagesCleared', 'chatDeleted']);
+const isBlocked = ref(props.receiver.isBlocked);
+
+const emit = defineEmits(['messagesCleared', 'chatDeleted', 'userBlocked']);
 
 const res = ref({});
 const error = ref({
@@ -39,9 +41,35 @@ const deleteConversation = async () => {
   emit('chatDeleted')
 }
 
+//block user
+const blockUser = async () => {
+  error.value = { isErr: false, msg: '' };
+  res.value = await usePost(`api/block-user/${props.receiver._id}`);
+  if (res.value.error || res.value.status !== 200) {
+    error.value.isErr = true;
+    error.value.msg = 'Connection failed. Try again later.'
+    return
+  }
+  isBlocked.value = true;
+  emit('userBlocked')
+}
+
 
 const menu = ref();
-const items = ref([
+const items = ref(
+  isBlocked.value ? [
+  {
+    label: 'Clear messages',
+    icon: 'pi pi-delete-left',
+    command: () => clearMessages()
+  },
+  {
+    label: 'Delete Conversation',
+    icon: 'pi pi-trash',
+    command: () => deleteConversation()
+  }
+] :
+[
   {
     label: 'Clear messages',
     icon: 'pi pi-delete-left',
@@ -52,11 +80,13 @@ const items = ref([
     icon: 'pi pi-trash',
     command: () => deleteConversation()
   },
-  {
-    label: 'Block',
-    icon: 'pi pi-ban'
-  }
-]);
+      {
+        label: 'Block',
+        icon: 'pi pi-ban',
+        command: () => blockUser()
+      }
+]) 
+
 
 const toggle = (event) => {
   menu.value.toggle(event);

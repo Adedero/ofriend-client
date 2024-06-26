@@ -25,12 +25,12 @@ const getBlockedUsers = async () => {
 }
 
 const unblockLoading = ref(false);
-const unblockUser = async (id) => {
+const unblockUser = async (blockId, userId) => {
   unblockLoading.value = true;
   try {
-    const { data } = await usePost(`api/unblock-user/${id}`);
+    const { data } = await usePost(`api/unblock-user/${blockId}`);
     if (data.value.success) {
-      blockedUsers.value = blockedUsers.value.filter(user => user.id !== id);
+      blockedUsers.value = blockedUsers.value.filter(user => user.id !== userId);
     }
   } catch (err) {
     console.log(err);
@@ -69,7 +69,7 @@ const handleScroll = async (event) => {
             <DynamicAvatar shape="circle" :user class="w-[3.4rem] h-[3.4rem] flex-shrink-0" />
             <p>{{ user.name }}</p>
           </div>
-          <Button :loading="unblockLoading" @click="unblockUser(user.id)" label="Unblock" icon="pi pi-times" class="btn" />
+          <Button :loading="unblockLoading" @click="unblockUser(user.blockId, user.id)" label="Unblock" icon="pi pi-times" class="btn" />
           <Divider />
         </div>
       </div>

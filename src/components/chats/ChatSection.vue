@@ -45,7 +45,7 @@ const getMessages = async (limit) => {
     if (status.value !== 200) {
       return;
     }
-    //console.log(data.value);
+    console.log(data.value);
     messages.value.unshift(...data.value.messages);
     receiver.value = data.value.receiver;
     if (data.value.messages.length === 0) {
@@ -77,7 +77,7 @@ socket.on('newMessage', (message) => {
   if (hasScrolledTooFar.value) {
     unreadMessagesBadge.value++;
   } else {
-    scrollToBottom()
+    scrollToBottom(true)
   };
 });
 
@@ -90,7 +90,7 @@ socket.on('messageRead', (userId) => {
 
 socket.on('isTyping', () => {
   isTyping.value = true;
-  if (!hasScrolledTooFar.value) scrollToBottom();
+  if (!hasScrolledTooFar.value) scrollToBottom(true);
 });
 
 socket.on('isNotTyping', () => isTyping.value = false);
@@ -116,7 +116,7 @@ const onMessageSend = (message) => emit('onUserMessageSend', message);
 
 const addOptimisticMessage = (data) => {
   messages.value.push(data);
-  scrollToBottom();
+  scrollToBottom(true);
 }
 
 const updateOptimisticMessage = (tempId, id) => {
@@ -130,7 +130,9 @@ watch(chatId, async () => await getMessages(15))
 
 const box = ref(null);
 
-const scrollToBottom = () => {
+const scrollToBottom = (smooth = false) => {
+  if (smooth) box.value.style.scrollBehavior = 'smooth';
+
   nextTick(() => box.value.scrollTop = box.value.scrollHeight);
   unreadMessagesBadge.value = 0;
 };
@@ -168,7 +170,6 @@ const setObserver = () => {
 onMounted(async() => {
   await getMessages(15);
   scrollToBottom();
-  box.value.style.scrollBehavior = 'smooth'
   socket.emit('joinRoom', chatId.value);
   emitOpenMessage();
 });
@@ -206,6 +207,17 @@ const cancelReply = () => {
   quotedMessage.value = {};
 }
 
+const unblockLoading = ref(false);
+const unblockUser = async () => {
+  if (!receiver.value.blockId) return;
+  unblockLoading.value = true;
+  const { data } = await usePost(`api/unblock-user/${receiver.value.blockId}`);
+  if (data.value.success) {
+    receiver.value.isBlocked = false;
+  }
+  unblockLoading.value = false;
+}
+
 </script>
 
 <template>
@@ -215,7 +227,7 @@ const cancelReply = () => {
       class="z-10 border-none w-8 h-8 bg-slate-700 shadow-lg fixed bottom-24 left-[65%]" />
 
     <header v-if="receiver.name">
-      <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')" />
+      <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')" @userBlocked="receiver.isBlocked = true" />
     </header>
 
     <main ref="box" @scroll="handleScroll" class="flex-grow overflow-y-auto">
@@ -225,8 +237,12 @@ const cancelReply = () => {
 
       <section v-for="msgs, date in groupedMessages" :key="date" class="relative flex flex-col gap-2 p-3">
         <Divider />
-        <div class="w-full grid place-content-center sticky top-0"> 
-          <p v-show="hasScrolledTooFar" class="bg-slate-700 bg-opacity-80 text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+        <p class="translate-y-9 mx-auto bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+          {{ formatChatDate(date) }}
+        </p>
+        <div class="w-full grid place-content-center sticky top-0">
+          <p v-show="hasScrolledTooFar"
+            class="bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
           </p>
         </div>
@@ -241,9 +257,24 @@ const cancelReply = () => {
 
     </main>
 
-    <footer class="grid items-end">
+    <footer v-if="!receiver.isBlocked && !receiver.hasBlocked" class="grid items-end">
       <ChatSectionFooter @onOptimisticMessage="addOptimisticMessage" @updateOptimisticMessage="updateOptimisticMessage"
         @onMessageSend="onMessageSend" @cancelReply="cancelReply" :isReplying :quotedMessage :receiver />
+    </footer>
+
+    <footer v-else class="p-2 bg-primary text-white">
+      <div v-show="receiver.isBlocked" class="grid gap-2 place-content-center text-center">
+        <p class="font-medium text-sm">You blocked {{ receiver.name }}</p>
+        <Button @click="unblockUser" :loading="unblockLoading" label="Unblock" icon="pi pi-user-plus" size="small"
+          severity="secondary"
+          class="bg-accent border-transparent text-primary hover:bg-accent/80 text-sm mx-auto w-fit" />
+      </div>
+
+      <div v-show="!receiver.isBlocked && receiver.hasBlocked"
+        class="text-center flex items-center gap-1 justify-center">
+        <span class="pi pi-ban"></span>
+        <p class="font-medium text-sm">{{ receiver.name }} blocked you.</p>
+      </div>
     </footer>
   </div>
 </template>

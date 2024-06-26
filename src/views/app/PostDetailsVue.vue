@@ -106,8 +106,9 @@ watchEffect(async () => await getPost());
 
 //Comment options
 const removeComment = (id) => {
-  comments.value = comments.value.filter(comment => comment._id !== id);
-  newComments.value = comments.value.filter(comment => comment._id !== id);
+  console.log(id)
+  comments.value = comments.value.filter(comment => comment._id.toString() !== id.toString());
+  newComments.value = comments.value.filter(comment => comment._id.toString() !== id.toString());
   res.value.data.post.comments--;
 }
 
@@ -133,7 +134,7 @@ const removeComment = (id) => {
     <div class="relative">
       <div v-if="comments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in comments" :key="comment._id" :comment="comment"
-          @on-reply-created="res.data.post.comments++" />
+          @on-reply-created="res.data.post.comments++" @on-comment-deleted="removeComment" />
       </div>
 
       <div v-if="newComments.length" class="mt-5 grid gap-5">
@@ -147,7 +148,8 @@ const removeComment = (id) => {
       </div>
 
       <div ref="commentSection" class="sticky mt-2 -bottom-3 cs-2:bottom-0  bg-white">
-        <NewComment @on-comment-created="onCommentCreated" :post-id="res.data.post._id" :post-author-id="res.data.post.author._id" />
+        <NewComment @on-comment-created="onCommentCreated" :post-id="res.data.post._id"
+          :post-author-id="res.data.post.author._id" />
       </div>
     </div>
   </div>
