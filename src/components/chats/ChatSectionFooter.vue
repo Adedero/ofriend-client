@@ -89,7 +89,7 @@ const sendMessage = async () => {
     quotedMessage: props.quotedMessage
   }
 
-  const payload = { message: emittedMessage, senderName: userStore.user.name, receiverId: props.receiver._id}
+  const payload = { message: emittedMessage, senderName: userStore.user.name, receiverId: props.receiver._id }
   socket.emit('sendMessage', payload);
   emit('updateOptimisticMessage', message.value.tempId, data.value.newMessage._id);
   emit('onMessageSend', emittedMessage)
