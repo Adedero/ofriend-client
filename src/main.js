@@ -26,3 +26,7 @@ app.use(ConfirmationService);
 app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
 app.mount('#app');
+
+window.addEventListener('vite:preloadError', () => {
+    window.reload()
+});

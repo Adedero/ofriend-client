@@ -6,8 +6,11 @@ const socket = io(URL, {
     closeOnBeforeunload: true,
 });
 
-socket.on('error', (error) => {
-    console.log('Error establishing socket connection: ', error)
+socket.on('connect_error', () => {
+    console.log('Error establishing socket connection');
+    setTimeout(() => {
+    socket.connect();
+  }, 1000);
 })
 
 export default socket;
