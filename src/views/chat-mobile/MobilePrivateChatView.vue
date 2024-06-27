@@ -135,6 +135,7 @@ const updateOptimisticMessage = (tempId, id) => {
 const box = ref(null);
 
 const scrollToBottom = (smooth = false) => {
+  if (!box.value) return;
   if (smooth) box.value.style.scrollBehavior = 'smooth';
   nextTick(() => box.value.scrollTop = box.value.scrollHeight);
   unreadMessagesBadge.value = 0;
