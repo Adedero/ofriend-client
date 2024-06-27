@@ -5,8 +5,8 @@ const socket = io(URL, {
     autoConnect: false,
 });
 
-socket.on('connect_error', () => {
-    console.log('Error establishing socket connection');
+socket.on('connect_error', (error) => {
+    console.log('Error establishing socket connection: ', error);
     setTimeout(() => {
     socket.connect();
   }, 1000);
