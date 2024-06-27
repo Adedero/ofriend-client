@@ -227,7 +227,8 @@ const unblockUser = async () => {
       class="z-10 border-none w-8 h-8 bg-slate-700 shadow-lg fixed bottom-24 left-[65%]" />
 
     <header v-if="receiver.name">
-      <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')" @userBlocked="receiver.isBlocked = true" />
+      <ChatSectionHeader :receiver :chatId @messagesCleared="onMessagesCleared" @chatDeleted="$emit('chatDeleted')"
+        @userBlocked="receiver.isBlocked = true" />
     </header>
 
     <main ref="box" @scroll="handleScroll" class="flex-grow overflow-y-auto">
@@ -236,19 +237,25 @@ const unblockUser = async () => {
       </div>
 
       <section v-for="msgs, date in groupedMessages" :key="date" class="relative flex flex-col gap-2 p-3">
-        <Divider />
-        <p class="translate-y-9 mx-auto bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
-          {{ formatChatDate(date) }}
-        </p>
+        <div class="flex items-center gap-2 translate-y-9">
+          <Divider />
+          <p class="flex-shrink-0 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+            {{ formatChatDate(date) }}
+          </p>
+          <Divider />
+        </div>
+
+
         <div class="w-full grid place-content-center sticky top-0">
-          <p v-show="hasScrolledTooFar"
-            class="bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+          <p v-show="hasScrolledTooFar" class="bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
           </p>
         </div>
 
-        <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage" @onEdit="editMessage"
-          @onReply="replyMessage" :receiver />
+        <div class="flex flex-col gap-2 mt-5">
+          <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
+            @onEdit="editMessage" @onReply="replyMessage" :receiver />
+        </div>
       </section>
 
       <div v-show="isTyping" class="bg-accent/20 p-3 ml-3 mb-3 rounded-lg rounded-bl-none w-fit">

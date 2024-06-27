@@ -256,7 +256,7 @@ const unblockUser = async () => {
           </p>
         </div>
 
-        <div class="flex flex-col gap-2 mt-5">
+        <div class="flex flex-col gap-2 mt-10">
           <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
             @onEdit="editMessage" @onReply="replyMessage" :receiver />
         </div>
