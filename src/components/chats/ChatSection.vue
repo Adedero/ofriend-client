@@ -34,11 +34,11 @@ const groupedMessages = computed(() => {
   }, {});
 });
 
-const getMessages = async (limit) => {
+const getMessages = async (id, limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
   try {
-    const { status, data, error } = await useGet(`api/get-messages/${chatId.value}?skip=${messages.value.length}&limit=${limit}`);
+    const { status, data, error } = await useGet(`api/get-messages/${id}?skip=${messages.value.length}&limit=${limit}`);
     if (error.value) {
       console.log(error.value);
       router.push('/500');
@@ -128,7 +128,7 @@ const updateOptimisticMessage = (tempId, id) => {
 }
 
 watch(chatId, () => socket.emit('joinRoom', chatId.value));
-watch(chatId, async () => await getMessages(15))
+watch(chatId, async () => await getMessages(chatId.value, 15))
 
 const box = ref(null);
 
@@ -149,7 +149,7 @@ const handleScroll = async () => {
   const oldScrollHeight = box.value.scrollHeight;
   const oldScrollTop = box.value.scrollTop;
   if (box.value && box.value.scrollTop === 0) {
-    await getMessages(10);
+    await getMessages(chatId.value, 10);
     box.value.scrollTop = box.value.scrollHeight - oldScrollHeight + oldScrollTop;
   }
 }
@@ -170,7 +170,7 @@ const setObserver = () => {
 //watch(() => messages.value.length, () => setObserver());
 
 onMounted(async() => {
-  await getMessages(15);
+  await getMessages(15, chatId.value);
   scrollToBottom();
   emitOpenMessage();
 });
