@@ -170,7 +170,7 @@ const setObserver = () => {
 //watch(() => messages.value.length, () => setObserver());
 
 onMounted(async() => {
-  await getMessages(15, chatId.value);
+  await getMessages(chatId.value, 15);
   scrollToBottom();
   emitOpenMessage();
 });
