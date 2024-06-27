@@ -15,7 +15,7 @@ const { data } = await useGet('api/followers-and-following');
 
             <DynamicAvatar :user="follower.follower" shape="circle" class="w-10 h-10 col-span-7 lg:col-span-2" />
             <div class="hidden overflow-x-hidden lg:block col-span-5 xl:col-span-8">
-              <p class="font-medium">{{ follower.follower.name }}</p>
+              <p class="font-medium text-sm">{{ follower.follower.name }}</p>
               <p class="text-xs max-w-full truncate">{{ follower.follower.bio }}</p>
             </div>
           </div>
@@ -50,7 +50,7 @@ const { data } = await useGet('api/followers-and-following');
             <DynamicAvatar :user="follower.user" shape="circle" size="large"
               class="h-10 w-10 col-span-7 lg:col-span-2" />
             <div class="hidden overflow-x-hidden lg:block col-span-5 xl:col-span-8">
-              <p class="font-medium">{{ follower.user.name }}</p>
+              <p class="font-medium text-sm">{{ follower.user.name }}</p>
               <p class="text-xs  truncate">{{ follower.user.bio }}</p>
             </div>
           </div>

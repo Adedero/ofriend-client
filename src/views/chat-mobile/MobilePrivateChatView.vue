@@ -240,10 +240,15 @@ const unblockUser = async () => {
       </div>
 
 
-      <section v-for="msgs, date in groupedMessages" :key="date" class="relative flex flex-col gap-2">
-        <p class="translate-y-9 mx-auto bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
-          {{ formatChatDate(date) }}
-        </p>
+      <section v-for="msgs, date in groupedMessages" :key="date" class="relative">
+        <div class="flex items-center gap-2 translate-y-8">
+          <Divider />
+          <p class="flex-shrink-0 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+            {{ formatChatDate(date) }}
+          </p>
+          <Divider />
+        </div>
+
 
         <div class="w-full grid place-content-center sticky top-0">
           <p v-show="hasScrolledTooFar" class="bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
@@ -251,8 +256,10 @@ const unblockUser = async () => {
           </p>
         </div>
 
-        <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage" @onEdit="editMessage"
-          @onReply="replyMessage" :receiver />
+        <div class="flex flex-col gap-2 mt-5">
+          <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
+            @onEdit="editMessage" @onReply="replyMessage" :receiver />
+        </div>
       </section>
 
 
