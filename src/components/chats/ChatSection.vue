@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, onMounted, ref, nextTick, watch } from 'vue';
+import { computed, inject, onMounted, ref, nextTick, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import socket from '@/config/socket.config';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
@@ -15,6 +15,8 @@ const scrollThreshold = 150
 const hasScrolledTooFar = ref(false);
 
 const chatId = inject('chatId');
+
+watchEffect(() => socket.emit('joinRoom', chatId.value))
 
 const isTyping = ref(false);
 
@@ -170,7 +172,6 @@ const setObserver = () => {
 onMounted(async() => {
   await getMessages(15);
   scrollToBottom();
-  socket.emit('joinRoom', chatId.value);
   emitOpenMessage();
 });
 

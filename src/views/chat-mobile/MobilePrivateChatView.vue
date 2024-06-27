@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, provide, ref, nextTick } from 'vue';
+import { computed, onMounted, provide, ref, nextTick, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import socket from '@/config/socket.config';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
@@ -21,6 +21,8 @@ const userStore = useUserStore();
 
 provide('chatId', route.params.chatId);
 //const chatId = inject('chatId');
+
+watchEffect(() => socket.emit('joinRoom', route.params.chatId));
 
 const isTyping = ref(false);
 
@@ -173,7 +175,6 @@ const setObserver = () => {
 onMounted(async () => {
   await getMessages(15);
   scrollToBottom();
-  socket.emit('joinRoom', route.params.chatId);
   emitOpenMessage();
 });
 
@@ -246,6 +247,7 @@ const unblockUser = async () => {
           <Divider />
           <p class="flex-shrink-0 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
+            {{ date }}
           </p>
           <Divider />
         </div>
