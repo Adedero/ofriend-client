@@ -48,7 +48,7 @@ const getMessages = async (limit) => {
     console.log(data.value);
     messages.value.unshift(...data.value.messages);
     receiver.value = data.value.receiver;
-    if (data.value.messages.length === 0) {
+    if (data.value.messages.length < limit) {
       allLoaded.value = true;
     }
 
@@ -147,7 +147,7 @@ const handleScroll = async () => {
   const oldScrollHeight = box.value.scrollHeight;
   const oldScrollTop = box.value.scrollTop;
   if (box.value && box.value.scrollTop === 0) {
-    await getMessages(8);
+    await getMessages(10);
     box.value.scrollTop = box.value.scrollHeight - oldScrollHeight + oldScrollTop;
   }
 }
@@ -252,7 +252,7 @@ const unblockUser = async () => {
           </p>
         </div>
 
-        <div class="flex flex-col gap-2 mt-5">
+        <div class="flex flex-col gap-2 mt-10">
           <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
             @onEdit="editMessage" @onReply="replyMessage" :receiver />
         </div>

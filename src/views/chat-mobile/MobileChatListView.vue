@@ -53,6 +53,7 @@ const changeCurrentChatId = (id) => {
 //Socket operations
 //Update the unreadMessages count if a new message comes in a chat that isn't the current one
 socket.on('newMessageNotification', (message) => {
+  console.log(message)
   const chatIdStr = message.chat.toString();
   const chat = chats.value.find(chat => chat.id === chatIdStr);
   if (!chat) return;

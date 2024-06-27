@@ -141,7 +141,7 @@ const sendMessage = async () => {
     <ChatFileAttachment @on-file-send="handleFile" />
 
     <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
-      class="flex-grow py-2 mb-[0.4rem] pl-2  outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-32 text-white overflow-y-scroll" />
+      class="flex-grow py-2 mb-[0.4rem] pl-2  outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-32 text-white overflow-y-auto" />
 
     <Button @click="sendMessage" v-if="isTyping" icon="pi pi-send" class="border-transparent bg-transparent rounded-none" />
     <AudioRecorder v-else @on-stop="handleFile" />
