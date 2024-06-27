@@ -53,7 +53,7 @@ const getMessages = async (limit) => {
     if (status.value !== 200) {
       return;
     }
-    console.log(data.value);
+    //console.log(data.value);
     messages.value.unshift(...data.value.messages);
     receiver.value = data.value.receiver;
     if (data.value.messages.length < limit) {
