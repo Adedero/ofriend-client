@@ -47,6 +47,7 @@ const sendMail = async () => {
   mailResponse.value.loading = true;
   try {
     mailResponse.value = await usePost(`auth/send-mail/${user.value.email}`);
+    console.log(mailResponse.value)
     if (mailResponse.value.data.success) {
       router.push({  name: 'otp' });
       return;

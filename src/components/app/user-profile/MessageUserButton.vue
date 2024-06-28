@@ -46,7 +46,9 @@ const sendMessage = async () => {
     return router.push({ name: 'signin' });
   }
   loading.value = false;
-  socket.emit('sendMessage', data.value.newMessage);
+  
+  const payload = { message: data.value.newMessage, senderName: userStore.user.name, receiverId: props.user._id }
+  socket.emit('sendMessage', payload);
   text.value = '';
   isError.value = false;
   visible.value = false;

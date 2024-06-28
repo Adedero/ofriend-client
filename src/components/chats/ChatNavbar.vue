@@ -55,7 +55,7 @@ const items = ref([
         icon: 'pi pi-calendar-clock'
       },
       {
-        label: userStore.user.bio.slice(0, 20) +'...',
+        label: userStore.user.bio ? userStore.user.bio.slice(0, 20) + '...' : '',
         icon: 'pi pi-info-circle'
       }
     ]

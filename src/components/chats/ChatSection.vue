@@ -34,6 +34,9 @@ const groupedMessages = computed(() => {
   }, {});
 });
 
+const chatMessages = ref({});
+const chatReceivers  = ref({});
+
 const getMessages = async (id, limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
@@ -49,7 +52,13 @@ const getMessages = async (id, limit) => {
     }
     console.log(data.value);
     messages.value.unshift(...data.value.messages);
+
     receiver.value = data.value.receiver;
+
+    //Caching
+    chatMessages.value[id] = messages.value;
+    chatReceivers.value[id] = receiver.value;
+
     if (data.value.messages.length < limit) {
       allLoaded.value = true;
     }
@@ -63,6 +72,22 @@ const getMessages = async (id, limit) => {
     loading.value = false;
   }
 }
+
+watch(chatId, async () => {
+  allLoaded.value = false;
+  const existingChat = chatMessages.value[chatId.value];
+  const existingReceiver = chatReceivers.value[chatId.value];
+
+  if (existingChat && existingReceiver) {
+    receiver.value = chatReceivers.value[chatId.value];
+    messages.value = chatMessages.value[chatId.value];
+  } else {
+    receiver.value = {};
+    messages.value = [];
+    await getMessages(chatId.value, 15);
+  }
+  socket.emit('joinRoom', chatId.value);
+});
 
 //Methods from the options in the header
 const onMessagesCleared = () => messages.value = [];
@@ -127,8 +152,7 @@ const updateOptimisticMessage = (tempId, id) => {
   msg._id = id;
 }
 
-watch(chatId, () => socket.emit('joinRoom', chatId.value));
-watch(chatId, async () => await getMessages(chatId.value, 15))
+
 
 const box = ref(null);
 
