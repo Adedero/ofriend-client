@@ -100,8 +100,8 @@ const saveEdit = () => {
       <div v-else>
         <QuotedChat v-if="message.isReplying" :message="message.quotedMessage" :parentMessage="message" :receiver />
 
-        <div v-if="message.hasText" class="whitespace-pre-wrap">
-          {{ message.textContent }}
+        <div v-if="message.hasText" class="whitespace-pre-wrap" v-html="message.textContent">
+          
         </div>
 
         <div v-if="message.hasFile">

@@ -253,7 +253,7 @@ const unblockUser = async () => {
 
 
         <div class="w-full grid place-content-center sticky top-0">
-          <p v-show="hasScrolledTooFar" class="bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+          <p v-show="hasScrolledTooFar" class="z-30 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
           </p>
         </div>

@@ -37,6 +37,7 @@ function isScrollable(el) {
 const handleInput = (event) => {
   if (props.autoResize && props.maxRows) {
     const el = event.target;
+
     if (isScrollable(el) && props.maxRows > el.rows) {
       el.rows += 1;
     }

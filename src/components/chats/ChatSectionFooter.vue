@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user';
 import socket from '@/config/socket.config';
 import { usePost } from '@/composables/utils/use-fetch';
 import { useRouter } from 'vue-router';
+import generateHTML from '@/composables/utils/generate-html';
 
 const router = useRouter();
 
@@ -76,6 +77,7 @@ const sendMessage = async () => {
     message.value.file = data;
   }
 
+  message.value.textContent = generateHTML(message.value.textContent);
   const { status, data, error } = await usePost('api/send-message', message.value);
   if (error.value) {
     message.value.hasError = true;
