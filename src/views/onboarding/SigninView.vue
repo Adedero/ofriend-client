@@ -1,8 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import { usePost } from '@/composables/utils/use-fetch';
-import { addToast } from '@/composables/utils/add-toast';
+import { usePost } from '@/composables/server/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import { useUserStore } from '@/stores/user';
@@ -11,13 +10,39 @@ const router = useRouter();
 const toast = useToast();
 const userStore = useUserStore();
 
-const res = ref({});
+const isLoading = ref(false);
+
 const user = ref({});
-const isSubmissionValid = computed(() => user.value.email && user.value.password);
 
 const isUnverified = ref(false);
 
+const isSubmissionValid = computed(() => user.value.email && user.value.password);
+
 const signin = async () => {
+  isLoading.value = true;
+  const { loading } = await usePost('auth/sign-in', { body: user.value, router, toast, sendToken: false }, (data) => {
+    userStore.setToken(data.token);
+    userStore.setUser(data.user);
+    const { isVerified } = data.user;
+    if (isVerified) {
+      router.push({ name: 'app-home' });
+      return;
+    }
+    isUnverified.value = true;
+  });
+  isLoading.value = loading.value;
+}
+
+//If user is unverified, send an authentication email
+const isMailing = ref(false);
+
+const sendMail = async () => {
+  const { loading } = await usePost(`auth/send-mail/${user.value.email}`, { router, toast }, (data) => {
+    if (data.success) router.push({ name: 'otp' }); 
+  });
+  isMailing.value = loading.value;
+}
+/* const signin = async () => {
   res.value.loading = true;
   try {
     res.value = await usePost('auth/sign-in', user.value);
@@ -56,7 +81,7 @@ const sendMail = async () => {
   } catch (error) {
     console.log(error);
   }
-}
+} */
 
 </script>
 
@@ -78,7 +103,7 @@ const sendMail = async () => {
 
         <div class="flex gap-2 justify-center md:justify-normal">
           <Button type="button" label="Cancel" severity="secondary" @click="isUnverified = false"></Button>
-          <Button type="button" label="Proceed" class="btn" @click="sendMail" :loading="mailResponse.loading"></Button>
+          <Button type="button" label="Proceed" class="btn" @click="sendMail" :loading="isMailing"></Button>
         </div>
       </div>
     </div>
@@ -101,7 +126,7 @@ const sendMail = async () => {
       <RouterLink to="/recovery/forgot-password" class="justify-self-end -mt-3 text-stone-400 hover:underline hover:text-accent text-right">Forgot password?
       </RouterLink>
 
-      <Button @click="signin" :loading="res.loading" :disabled="!isSubmissionValid" label="Sign in" icon="pi pi-sign-in"
+      <Button @click="signin" :loading="isLoading" :disabled="!isSubmissionValid" label="Sign in" icon="pi pi-sign-in"
         icon-pos="right" class="btn" />
     </div>
   </section>

@@ -247,7 +247,6 @@ const unblockUser = async () => {
           <Divider />
           <p class="flex-shrink-0 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
-            {{ date }}
           </p>
           <Divider />
         </div>

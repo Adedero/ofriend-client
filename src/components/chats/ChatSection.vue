@@ -50,7 +50,7 @@ const getMessages = async (id, limit) => {
     if (status.value !== 200) {
       return;
     }
-    console.log(data.value);
+    //console.log(data.value);
     messages.value.unshift(...data.value.messages);
 
     receiver.value = data.value.receiver;
@@ -74,18 +74,23 @@ const getMessages = async (id, limit) => {
 }
 
 watch(chatId, async () => {
+  //Might give issues
   allLoaded.value = false;
-  const existingChat = chatMessages.value[chatId.value];
+  /* const existingChat = chatMessages.value[chatId.value];
   const existingReceiver = chatReceivers.value[chatId.value];
 
   if (existingChat && existingReceiver) {
-    receiver.value = chatReceivers.value[chatId.value];
-    messages.value = chatMessages.value[chatId.value];
+    receiver.value = existingReceiver;
+    messages.value = existingChat;
   } else {
     receiver.value = {};
     messages.value = [];
     await getMessages(chatId.value, 15);
-  }
+  } */
+  receiver.value = {};
+  messages.value = [];
+  await getMessages(chatId.value, 15);
+  scrollToBottom();
   socket.emit('joinRoom', chatId.value);
 });
 
