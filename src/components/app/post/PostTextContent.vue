@@ -1,12 +1,3 @@
-<template>
-  <div>
-    <div ref="textContainer" class="whitespace-pre-wrap" :class="{ reduced: isTruncated }">{{ text }}</div>
-    <Button v-if="showButton" @click="toggleText" size="small" severity="info" text class="mt-2">{{
-      buttonText
-    }}</Button>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 
@@ -62,6 +53,17 @@ function checkIfTextExceedsLines() {
   }
 }
 </script>
+
+<template>
+  <div>
+    <div ref="textContainer" v-html="text" class="whitespace-pre-wrap" :class="{ reduced: isTruncated }"></div>
+
+    <Button v-if="showButton" @click="toggleText" size="small" severity="info" text class="mt-2">{{
+      buttonText
+    }}</Button>
+  </div>
+</template>
+
 
 <style scoped>
 .reduced {

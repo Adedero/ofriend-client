@@ -71,14 +71,14 @@ const deletePost = async () => {
       </div>
     </Dialog>
 
-    <Panel toggleable>
+    <Panel toggleable class="dark:bg-primary-lighter">
       <template #header>
         <div @click="$router.push(`/app/profile/${post.author._id}`)"
           class="cursor-pointer flex align-items-center gap-2">
           <DynamicAvatar size="large" shape="circle" :user="post.author" class="w-12 h-12" />
           <div class="grid">
             <p>
-              <span class="font-bold">{{ post.author.name }}</span>
+              <span class="font-bold dark:text-white">{{ post.author.name }}</span>
               <span v-if="post.isReposting" class="italic font-medium"> shared a post</span>
             </p>
             <p class="flex items-center gap-1">

@@ -1,25 +1,33 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import visibilityOptions from '@/data/visibilty';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
-import { usePost } from '@/composables/utils/use-fetch';
+import { usePost } from '@/composables/server/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { addToast, useToastError } from '@/composables/utils/add-toast';
+import { generateHTML, revertHTML } from '@/composables/utils/html-parse';
 
 
 const props = defineProps({ post: { type: Object, required: true } });
+
 const emit = defineEmits(['onPostEdited']);
 
 const router = useRouter();
+const route = useRoute();
+
+const firebase = useFirebaseUpload();
+const toast = useToast();
+
 
 const editedPost = ref(null);
 
-const toast = useToast();
+const text = ref(revertHTML(props.post.textContent) || '');
 
-const text = ref(props.post.textContent || '');
 const status = ref(visibilityOptions.find(opt => opt.name === props.post.status));
+
+const filteredMentions = ref([]);
+
 const media = ref(props.post.media || []);
 const addedMedia = ref([]);
 const hasNewMedia = computed(() => addedMedia.value.length > 0);
@@ -35,57 +43,77 @@ const handleCancelUpload = () => {
   addedMedia.value = [];
 }
 
-const res = ref({});
+
 const loading = ref(false);
 
 const saveEdit = async () => {
-  if (!text.value && !media.value.length) return;
+  if (!text.value.length && !media.value.length) return;
+
   if (text.value === props.post.textContent) return;
+
   editedPost.value = {
     hasText: text.value.length > 0,
-    textContent: text.value,
     media: media.value,
     status: status.value.name.toUpperCase(),
-    isEdited: true
+    isEdited: true,
   }
 
   loading.value = true;
+
   if (hasNewMedia.value) {
-    try {
-      const files = await Promise.all(addedMedia.value.map(async (file) => {
-        const [url] = await useFirebaseUpload().uploadSingleFile('POSTS', file);
-        return {
-          url: url,
-          type: file.type
-        }
-      }));
-
-      editedPost.value.media.push(...files);
-
-    } catch (error) {
-      useToastError(toast, error)
-      console.error(error);
+    const [fileArray, error] = await firebase.uploadMultipleFiles('POSTS', addedMedia.value);
+    if (error) {
+      toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload files. Please, check your network connection and try again later.' });
       loading.value = false;
+      return;
     }
+    editedPost.value.media.push(...fileArray);
   }
-  //console.log(editedPost.value)
-  editedPost.value.hasMedia = editedPost.value.media.length > 0;
   
-  res.value = await usePost(`api/edit-post/${props.post._id}`, { edit: editedPost.value }, 'PUT');
-  loading.value = false;
-  addToast(res.value, toast);
+  editedPost.value.hasMedia = editedPost.value.media.length > 0;
+  editedPost.value.textContent = handleHTMLGeneration(text.value);
+  editedPost.value.mentions - filteredMentions.value;
 
-  if (res.value.status !== 200) {
-    //Do something
-  }
+  usePost(`api/edit-post/${props.post._id}`, { method: 'PUT', body: { edit: editedPost.value }, router, toast }, () => {
+    loading.value = false;
+    emit('onPostEdited');
+    text.value = revertHTML(props.post.textContent) || '';
+    status.value = visibilityOptions.find(opt => opt.name === props.post.status);
+    media.value = props.post.media || [];
+    addedMedia.value = [];
+    filteredMentions.value = [];
+    if (route.name === 'user-post') window.location.reload();
+    else router.push(`/app/post/${props.post._id}`);
+  });  
+}
 
-  router.push(`/app/post/${props.post._id}`);
-  emit('onPostEdited');
-  text.value = props.post.textContent || '';
-  status.value = visibilityOptions.find(opt => opt.name === props.post.status);
-  media.value = props.post.media || [];
-  addedMedia.value = [];
+function handleHTMLGeneration(input) {
+  const outputHTML = generateHTML(input);
 
+  //if (!props.post.mentions.length) return outputHTML;
+
+  const par = document.createElement('p');
+  par.style.display = 'none';
+  par.innerHTML = outputHTML;
+  document.body.appendChild(par);
+
+  const tags = par.querySelectorAll('.mention-link');
+  tags.forEach(tag => {
+    const username = tag.innerText.split('@')[1];
+
+    const user = props.post.mentions.find(u => u.name.split(' ').join('') === username);
+
+    if (user) {
+      tag.innerText = `@${user.name}`;
+      tag.href = `/app/profile/${user.id}`;
+
+      filteredMentions.value.push({ id: user.id, name: user.name });
+    }
+  });
+
+  document.body.removeChild(par);
+
+  return par.innerHTML;
 }
 </script>
 
@@ -133,14 +161,16 @@ const saveEdit = async () => {
         :mediaLength="media.length" />
 
       <div class="flex items-center justify-end gap-2">
-        <p class="text-[0.8rem] font-medium">Who can see this?</p>
+        <p class="text-xs md:text-[0.8rem] font-medium">Who can see this?</p>
         <Dropdown v-model="status" :options="visibilityOptions" option-label="desc"
           input-class="text-[0.8rem] h-7 flex items-center px-1" />
       </div>
     </div>
 
     <div class="flex flex-col cs-2:flex-row cs-2:items-end gap-3 mt-2">
+      <!-- <div v-html="text" contenteditable></div> -->
       <Textarea v-if="post.hasText" v-model.trim="text" rows="1" auto-resize class="textarea max-h-80 flex-grow" />
+
       <Button :loading @click="saveEdit" label="Save" icon="pi pi-check" class="btn h-10 flex-shrink-0 w-fit self-end" />
     </div>
   </div>

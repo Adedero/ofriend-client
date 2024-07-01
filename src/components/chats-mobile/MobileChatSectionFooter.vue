@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/user';
 import socket from '@/config/socket.config';
 import { usePost } from '@/composables/utils/use-fetch';
 import { useRouter } from 'vue-router';
-import generateHTML from '@/composables/utils/generate-html';
+import generateHTML from '@/composables/utils/html-parse';
 
 const router = useRouter();
 
@@ -128,7 +128,7 @@ const sendMessage = async () => {
             class="w-full h-full rounded grid place-content-center bg-primary text-white">
             <span class="pi pi-headphones" style="font-size: 1.2rem"></span>
           </div>
-          
+
           <div v-if="quotedMessage.file.type.includes('audio') || quotedMessage.file.type.includes('application')"
             class="w-full h-full rounded grid place-content-center bg-primary text-white">
             {{ quotedMessage.file.extension ? quotedMessage.file.extension.toUpperCase() : '?' }}
@@ -145,7 +145,8 @@ const sendMessage = async () => {
     <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
       class="flex-grow py-1 mb-[0.4rem] pl-2 outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-28 text-white overflow-y-auto" />
 
-    <Button @click="sendMessage" v-if="isTyping" icon="pi pi-send" class="border-transparent bg-transparent rounded-none" />
+    <Button @click="sendMessage" v-if="isTyping" icon="pi pi-send"
+      class="border-transparent bg-transparent rounded-none" />
     <AudioRecorder v-else @on-stop="handleFile" />
   </footer>
 </template>

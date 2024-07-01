@@ -1,7 +1,8 @@
-import { ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 
-export const useGet = async (url, options = {
+export const useGet = async (url, config = {
+  skip: false,
   router: null,
   toast: null,
   toastLife: 5000,
@@ -15,14 +16,14 @@ export const useGet = async (url, options = {
   const error = ref(null);
   const data = ref(null);
   const status = ref(null);
+  const response = ref(null);
 
-  async function getRequest(api) {
+  const _fetch = async function getRequest(api) {
     const userStore = useUserStore();
-
     const token = userStore.token;
 
-    if (options.sendToken) {
-      if(!token) return options.router.push({ name: 'signin' });
+    if (config.sendToken && !token) {
+      return config.router.push({ name: 'signin' });
     }
 
     if (loading.value) return;
@@ -30,91 +31,129 @@ export const useGet = async (url, options = {
     loading.value = true;
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API}${api}`, {
+      response.value = await fetch(`${import.meta.env.VITE_API}${api}`, {
         headers: {
-          'Authorization': 'Bearer ' + token,
+          'Authorization': `Bearer ${token}`,
           'Content-type': 'application/json'
         },
       });
 
-      const payload = await res.json();
+      const payload = await response.value.json();
 
       if (!payload) {
-        options.router.push('/500');
+        config.router.push('/500');
         return;
       }
-      //console.log(payload);
 
       data.value = payload;
-      status.value = res.status;
+      status.value = response.value.status;
       error.value = null;
 
-      if (res.status === 401 || payload.authMessage) {
-        options.router.push({ name: 'signin' });
+      if (status.value === 401 || payload.authMessage) {
+        config.router.push({ name: 'signin' });
         return;
       }
 
-      if (res.status === 403) {
-        options.router.push('/403');
+      if (status.value === 403) {
+        config.router.push('/403');
         return;
       }
 
-      if (res.status === 404) {
-        options.router.push('/404');
+      if (status.value === 404) {
+        config.router.push('/404');
         return;
       }
 
-      if (res.status !== 200) {
-        options.toast.add({
+      if (status.value !== 200) {
+        config.toast.add({
           severity: 'warn',
           summary: payload.info ? payload.info : 'Failed',
           detail: payload.message ? payload.message : 'The request could not be completed. Please, try again later.',
-          life: options.toastLife || 5000
+          life: config.toastLife || 5000
         });
         return;
       }
 
-      if (options.toastOnSuccess) {
-        options.toast.add({ 
+      if (config.toastOnSuccess) {
+        config.toast.add({
           severity: 'success',
-          summary: data.value.info || options.successSummary,
-          detail:  data.value.message || options.successDetail,
-          life: options.toastLife || 5000
-        })
+          summary: data.value.info || config.successSummary,
+          detail: data.value.message || config.successDetail,
+          life: config.toastLife || 5000
+        });
       }
 
       if (typeof done === 'function') {
         done(data.value);
       }
 
-    } catch (error) {
-      console.error(error);
-      error.value = error.message;
+    } catch (err) {
+      console.error(err);
+      error.value = err.message;
 
-      options.toast.add({ 
+      config.toast.add({
         severity: 'error',
         summary: 'Error',
-        detail: error.message,
-        life: options.toastLife || 5000
+        detail: err.message,
+        life: config.toastLife || 5000
       });
     } finally {
       loading.value = false;
     }
   }
 
-  await getRequest(url);
-
-  const retry = async () => getRequest(url);
+  if (!config.skip) {
+    await _fetch(url);
+  }
 
   watch(() => url, async (newValue) => {
-    if (options.refetch) await getRequest(newValue);
+    if (config.refetch) await _fetch(newValue);
   });
 
-  return { loading, status, data, error, retry }
-}
+  return { response, loading, status, data, error, _fetch };
+};
 
 
-export const usePost = async (url, options = {
+//Fetching with cache
+const cacheMap = reactive(new Map());
+
+export const useCachedGet = async (url, config = {}, done) => {
+  const info = await useGet(url, { skip: true, ...config });
+
+  const key = url.split('/')[1];
+
+  const update = () => cacheMap.set(key, info.data.value);
+  const clear = () => cacheMap.set(key, undefined);
+
+  const cachedFetch = async () => {
+    try {
+      await info._fetch(url);
+
+      if (typeof done === 'function') {
+        done(info.data.value);
+      }
+
+      update();
+    } catch (err) {
+      clear();
+    }
+  };
+
+  const cachedData = computed(() => cacheMap.get(key));
+
+  if (cachedData.value == null) {
+    cachedFetch();
+  } else {
+    info.loading.value = false;
+  }
+
+  return { ...info, _fetch: cachedFetch, cachedData, clear };
+};
+
+
+//POST, PUT, PATCH AND DELETE requests
+export const usePost = async (url, config = {
+  skip: false,
   body: null,
   method: 'POST',
   router: null,
@@ -131,12 +170,12 @@ export const usePost = async (url, options = {
   const data = ref(null);
   const status = ref(null);
 
-  async function postRequest(api) {
+  const _fetch = async function postRequest(api) {
     const userStore = useUserStore();
     const token = userStore.token;
 
-    if (options.sendToken) {
-      if(!token) return options.router.push({ name: 'signin' });
+    if (config.sendToken) {
+      if(!token) return config.router.push({ name: 'signin' });
     }
 
     if (loading.value) return;
@@ -145,18 +184,18 @@ export const usePost = async (url, options = {
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API}${api}`, {
-        method: options.method ? options.method : 'POST',
+        method: config.method ? config.method : 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
-        body: JSON.stringify(options.body),
+        body: JSON.stringify(config.body),
       });
 
       const payload = await res.json();
 
       if (!payload) {
-        options.router.push('/500');
+        config.router.push('/500');
         return;
       }
       //console.log(payload);
@@ -166,36 +205,36 @@ export const usePost = async (url, options = {
       error.value = null;
 
       if (res.status === 401 || payload.authMessage) {
-        options.router.push({ name: 'signin' });
+        config.router.push({ name: 'signin' });
         return;
       }
 
       if (res.status === 403) {
-        options.router.push('/403');
+        config.router.push('/403');
         return;
       }
 
       if (res.status === 404) {
-        options.router.push('/404');
+        config.router.push('/404');
         return;
       }
 
       if (res.status !== 200) {
-        options.toast.add({
+        config.toast.add({
           severity: 'warn',
           summary: payload.info ? payload.info : 'Failed',
           detail: payload.message ? payload.message : 'The request could not be completed. Please, try again later.',
-          life: options.toastLife || 5000
+          life: config.toastLife || 5000
         });
         return;
       }
 
-      if (options.toastOnSuccess) {
-        options.toast.add({ 
+      if (config.toastOnSuccess) {
+        config.toast.add({ 
           severity: 'success',
-          summary: data.value.info || options.successSummary,
-          detail:  data.value.message || options.successDetail,
-          life: options.toastLife || 5000
+          summary: data.value.info || config.successSummary,
+          detail:  data.value.message || config.successDetail,
+          life: config.toastLife || 5000
         })
       }
 
@@ -206,24 +245,22 @@ export const usePost = async (url, options = {
     } catch (error) {
       console.error(error);
       error.value = error.message;
-      options.toast.add({ 
+      config.toast.add({ 
         severity: 'error',
         summary: 'Error',
         detail: error.message,
-        life: options.toastLife || 5000
+        life: config.toastLife || 5000
       });
     } finally {
       loading.value = false;
     }
   }
 
-  await postRequest(url);
-
-  const retry = async () => postRequest(url);
+  await _fetch(url);
 
   watch(() => url, async (newValue) => {
-    if (options.refetch === true) await postRequest(newValue);
+    if (config.refetch === true) await _fetch(newValue);
   });
 
-  return { loading, status, data, error, retry }
+  return { loading, status, data, error, _fetch }
 }

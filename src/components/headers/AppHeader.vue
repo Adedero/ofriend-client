@@ -18,11 +18,11 @@ const userStore = useUserStore();
 
     <div class="flex items-center gap-3">
       <div class="hidden icons cs-2:flex items-center gap-2">
-        <RouterLink :to="`/app/profile/${userStore.user.id}`" class="p-2 rounded-full bg-soft-gray-2 grid place-content-center">
+        <RouterLink :to="`/app/profile/${userStore.user.id}`" class="p-2 rounded-full bg-soft-gray-2 dark:bg-primary-lighter grid place-content-center">
           <span class="pi pi-user"></span>
         </RouterLink>
 
-        <RouterLink to="/app/notifications" class="p-2 rounded-full bg-soft-gray-2 grid place-content-center">
+        <RouterLink to="/app/notifications" class="p-2 rounded-full bg-soft-gray-2 dark:bg-primary-lighter grid place-content-center">
           <span class="pi pi-bell"></span>
         </RouterLink>
 

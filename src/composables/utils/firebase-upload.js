@@ -27,46 +27,31 @@ export default function useFirebaseUpload() {
 
   //Upload Multiple Files
   async function uploadMultipleFiles(dir = '', files = []) {
-    let urlArray = [];
-    let error = null;
     try {
-      await Promise.all(files.map( async (file, i) => {
-        const timestamp = Date.now();
-        const randomString = Math.random().toString(36).substring(2, 8);
-        const fileName = `${timestamp}-${randomString}${file.name}`;
-        const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
+        const fileArray = await Promise.all(files.map(async (file, i) => {
+            const timestamp = Date.now();
+            const randomString = Math.random().toString(36).substring(2, 8);
+            const fileName = `${timestamp}-${randomString}${file.name}`;
+            const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
 
-        const snapshot = await uploadBytes(storageRef, file);
-        console.log(`Uploaded ${i + 1} ${ i + 1 > 1 ? 'files': 'file' }`);
-        const url = await getDownloadURL(snapshot.ref);
-        urlArray.push(url);
-      }));
-      return [urlArray, null]
+            const snapshot = await uploadBytes(storageRef, file);
+            console.log(`Uploaded ${i + 1} ${i + 1 > 1 ? 'files' : 'file'}`);
+            const url = await getDownloadURL(snapshot.ref);
+            return {
+                url,
+                type: file.type,
+                extension: file.name.split('.').pop(),
+                name: file.name
+            };
+        }));
+
+        return [fileArray, null];
     } catch (err) {
         console.error(err);
-        error = err;
-        return [null, error]
+        return [null, err];
     }
-   
-    /* for (let i = 0; i < files.length; i++) {
-      const timestamp = Date.now();
-      const randomString = Math.random().toString(36).substring(2, 8);
-      const fileName = `${timestamp}-${randomString}${files[i].name}`;
-
-      const storageRef = firebaseRef(storage, `gs://ofriend-31059.appspot.com/${dir}/${fileName}`);
-      try {
-          const snapshot = await uploadBytes(storageRef, files[i]);
-          console.log(`Uploaded ${i + 1} ${ i + 1 > 1 ? 'files': 'file' }`);
-          const url = await getDownloadURL(snapshot.ref);
-          urlArray.push(url);
-          return [urlArray, null]
-      } catch (err) {
-          console.error(err);
-          error = err;
-          return [null, error]
-      }
-    } */
   }
+
   async function deleteSingleFile(url) {
     const storageRef = firebaseRef(storage, url);
     try {

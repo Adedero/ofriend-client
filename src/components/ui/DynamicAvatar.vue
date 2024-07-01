@@ -13,5 +13,5 @@ const hasImageUrl = computed(() => props.user.imageUrl)
   
   <img v-if="hasImageUrl" :src="user.imageUrl" alt="user profile picture" class="rounded-full object-cover">
 
-  <Avatar v-else :label="user.name[0]" :size="size" :shape="shape" class="bg-accent/30" />
+  <Avatar v-else :label="user.name[0]" :size="size" :shape="shape" class="bg-accent/30 dark:bg-accent dark:text-primary" />
 </template>
