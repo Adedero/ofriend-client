@@ -64,7 +64,7 @@ const handleCommentCreated = (post) => {
         </div>
       </div>
 
-      <PostDetailsSkeleton v-if="res.loading" />
+      <PostDetailsSkeleton v-if="isLoading" />
     </div>
   </main>
 </template>
