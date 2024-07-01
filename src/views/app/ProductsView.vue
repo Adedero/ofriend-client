@@ -11,8 +11,6 @@ const allLoaded = ref(false);
 const isLoading = ref(false);
 const limit = 10;
 
-const res = ref({});
-
 const { data: posts } = await useGet(`api/content-reel/0/${limit}?products=true`, { router, toast });
 
 async function loadMorePosts() {
@@ -64,7 +62,6 @@ const handleCommentCreated = (post) => {
         </div>
       </div>
 
-      <PostDetailsSkeleton v-if="isLoading" />
     </div>
   </main>
 </template>
