@@ -49,7 +49,7 @@ export const useGet = async (url, config = {
       status.value = response.value.status;
       error.value = null;
 
-      if (status.value === 401 || payload.authMessage) {
+      if (status.value === 401 && payload.authMessage) {
         config.router.push({ name: 'signin' });
         return;
       }
@@ -204,7 +204,7 @@ export const usePost = async (url, config = {
       status.value = res.status;
       error.value = null;
 
-      if (res.status === 401 || payload.authMessage) {
+      if (res.status === 401 && payload.authMessage) {
         config.router.push({ name: 'signin' });
         return;
       }

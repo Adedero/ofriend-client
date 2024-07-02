@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/user';
 import socket from '@/config/socket.config';
 import { usePost } from '@/composables/utils/use-fetch';
 import { useRouter } from 'vue-router';
-import generateHTML from '@/composables/utils/html-parse';
+import { generateHTML } from '@/composables/utils/html-parse';
 
 const router = useRouter();
 
