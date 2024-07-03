@@ -1,14 +1,17 @@
 <script setup>
 import { computed, inject, onMounted, ref, nextTick, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import socket from '@/config/socket.config';
-import { useGet, usePost } from '@/composables/utils/use-fetch';
+import { useGet, usePost } from '@/composables/server/use-fetch';
 import { useUserStore } from '@/stores/user';
 import { formatChatDate } from '@/composables/utils/formats';
 
 const emit = defineEmits(['onUserMessageSend', 'chatDeleted'])
 
 const router = useRouter();
+const toast = useToast();
 const userStore = useUserStore();
 
 const scrollThreshold = 150
@@ -40,37 +43,17 @@ const chatReceivers  = ref({});
 const getMessages = async (id, limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
-  try {
-    const { status, data, error } = await useGet(`api/get-messages/${id}?skip=${messages.value.length}&limit=${limit}`);
-    if (error.value) {
-      console.log(error.value);
-      router.push('/500');
-      return
-    }
-    if (status.value !== 200) {
-      return;
-    }
-    //console.log(data.value);
-    messages.value.unshift(...data.value.messages);
+  await useGet(`api/get-messages/${id}?skip=${messages.value.length}&limit=${limit}`, { router, toast }, (data) => {
 
-    receiver.value = data.value.receiver;
-
-    //Caching
+    loading.value = false;
+    messages.value.unshift(...data.messages);
     chatMessages.value[id] = messages.value;
     chatReceivers.value[id] = receiver.value;
 
-    if (data.value.messages.length < limit) {
+    if (data.messages.length < limit) {
       allLoaded.value = true;
     }
-
-    //console.log(groupedMessages.value)
-
-  } catch (error) {
-    console.log(error);
-    router.push('/500');
-  } finally {
-    loading.value = false;
-  }
+  });
 }
 
 watch(chatId, async () => {
@@ -158,7 +141,6 @@ const updateOptimisticMessage = (tempId, id) => {
 }
 
 
-
 const box = ref(null);
 
 const scrollToBottom = (smooth = false) => {
@@ -208,8 +190,9 @@ onMounted(async() => {
 //Handle message actions
 const deleteMessage = async (message) => {
   if (!message._id) return;
-  const {status} = await usePost(`api/delete-message/${message._id}`, { url: message.file.url }, 'PUT');
-  if (status.value !== 200) return;
+  await usePost(`api/delete-message/${message._id}`, 
+    { body: { url: message.file.url }, method: 'PUT', router, toast }
+  );
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.isDeleted = true;
   socket.emit('deleteMessage', chatId.value, message._id);
@@ -217,12 +200,19 @@ const deleteMessage = async (message) => {
 
 const editMessage = async (message, text) => {
   if (!message._id) return;
-  const { status } = await usePost(`api/edit-message/${message._id}`, { edit: text }, 'PUT');
-  if (status.value !== 200) return;
+  await usePost(`api/edit-message/${message._id}`,
+    { body: { edit: text }, method: 'PUT', router, toast });
+
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.textContent = text;
   socket.emit('editMessage', chatId.value, message._id, text);
 
+}
+
+//Remove deleted messages from view
+const removeDeletedMessage = (message) => {
+  usePost(`api/remove-deleted-message-from-view/${message._id}`, { method: 'PUT', router, toast });
+  messages.value = messages.value.filter(msg => msg._id !== message._id );
 }
 
 const isReplying = ref(false);
@@ -238,20 +228,21 @@ const cancelReply = () => {
 }
 
 const unblockLoading = ref(false);
-const unblockUser = async () => {
+const unblockUser = () => {
   if (!receiver.value.blockId) return;
-  unblockLoading.value = true;
-  const { data } = await usePost(`api/unblock-user/${receiver.value.blockId}`);
-  if (data.value.success) {
-    receiver.value.isBlocked = false;
-  }
-  unblockLoading.value = false;
-}
 
+  unblockLoading.value = true;
+  usePost(`api/unblock-user/${receiver.value.blockId}`, { router, toast }, () => {
+    unblockLoading.value = false;
+    receiver.value.isBlocked = false;
+  });
+}
 </script>
 
 <template>
   <div class="w-full h-full flex flex-col relative">
+    <Toast class="max-w-96" />
+
     <Button v-show="hasScrolledTooFar" @click="scrollToBottom" :badge="unreadMessagesBadge ? unreadMessagesBadge : ''"
       icon="pi pi-arrow-down" size="small" rounded
       class="z-10 border-none w-8 h-8 bg-slate-700 shadow-lg fixed bottom-24 left-[65%]" />
@@ -284,7 +275,7 @@ const unblockUser = async () => {
 
         <div class="flex flex-col gap-2 mt-10">
           <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
-            @onEdit="editMessage" @onReply="replyMessage" :receiver />
+            @onEdit="editMessage" @onReply="replyMessage" @removeDeletedMessage="removeDeletedMessage" :receiver />
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { revertHTML } from '@/composables/utils/html-parse';
 
 const props = defineProps({
   message: {
@@ -56,7 +57,7 @@ const scrollToMessage = (id) => {
 
       <div v-else>
         <div v-if="message.hasText">
-          <p class="text-xs max-w-full clamped whitespace-pre-wrap">{{ message.textContent }}</p>
+          <p class="text-xs max-w-full clamped whitespace-pre-wrap">{{ revertHTML(message.textContent) }}</p>
         </div>
 
         <div v-if="message.hasFile" class="flex gap-1">

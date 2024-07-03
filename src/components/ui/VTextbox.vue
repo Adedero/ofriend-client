@@ -26,19 +26,23 @@ const text = ref(props.modelValue);
 // Watch for changes in modelValue
 watch(() => props.modelValue, (newValue) => {
   text.value = newValue;
+  if (newValue === '') {
+    resetTextareaRows();
+  }
 });
 
-
-// Function to check if an element is scrollable
-/* function isScrollable(el) {
-  return el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
-} */
+// Function to reset textarea rows
+const resetTextareaRows = () => {
+  const textarea = document.getElementById(props.inputId);
+  if (textarea) {
+    textarea.rows = props.rows;
+  }
+};
 
 const handleInput = (event) => {
-
-
   if (props.autoResize && props.maxRows) {
     const el = event.target;
+
     // Reset the rows to the initial value to get accurate scrollHeight
     el.rows = props.rows;
 
@@ -60,7 +64,6 @@ const handleInput = (event) => {
     :style="inputStyle">
   </textarea>
 </template>
-
 
 <style scoped>
 .v-textbox {

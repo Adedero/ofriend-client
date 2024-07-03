@@ -1,36 +1,30 @@
 <script setup>
-import { computed, defineAsyncComponent, ref, onMounted, provide } from 'vue';
-import { useGet } from "@/composables/utils/use-fetch.js";
+import { computed, ref, onMounted, provide } from 'vue';
+import { useGet } from "@/composables/server/use-fetch.js";
 import ChatListSkeleton from '@/components/skeletons/ChatListSkeleton.vue';
 import socket from '@/config/socket.config';
 import { useRouter } from 'vue-router';
-
-const ChatList = defineAsyncComponent({
-  loader: () => import('@/components/chats/ChatList.vue'),
-  loadingComponent: ChatListSkeleton
-})
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 
 const router = useRouter();
+const toast = useToast();
 
-const res = ref({});
 const chats = ref([]);
 const chatsLength = computed(() => chats.value.length);
-
-const getChats = async () => {
-  res.value.loading = true;
-  try {
-    res.value = await useGet(`api/get-chats?skip=${chatsLength.value}`);
-    //console.log(res.value.data);
-    if (res.value.status !== 200) return;
-    chats.value.push(...res.value.data);
-  } catch (e) {
-    console.log(e);
-    res.value.error = e.message;
-  }
-}
-
 const currentChatId = ref(null);
 provide('chatId', currentChatId);
+
+const loading = ref(false);
+
+const getChats = () => {
+  loading.value = true;
+  useGet(`api/get-chats?skip=${chatsLength.value}`, { router, toast }, (data) => {
+    chats.value.push(...data);
+    loading.value = false;
+  })
+}
+
 
 //const onChatDeleted = () => chats.value = chats.value.filter(chat => chat.id.toString() !== currentChatId.value.toString())
 
@@ -75,13 +69,14 @@ socket.on('newMessageNotification', (message) => {
   chat.lastMessage = message;
 }
  */
-onMounted(async () => await getChats());
+onMounted(() => getChats());
 
 </script>
 
 <template>
   <main class="p-2 ">
-    <div v-if="!res.loading" class="max-w-full">
+    <Toast class="max-w-96" />
+    <div v-if="!loading" class="max-w-full">
       <ChatList v-if="chats.length" :chats @on-user-select="changeCurrentChatId" />
       <div v-else>
         <img src="../../assets/images/no-chats.svg" alt="no chats">

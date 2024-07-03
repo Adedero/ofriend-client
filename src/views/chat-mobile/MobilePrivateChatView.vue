@@ -1,8 +1,10 @@
 <script setup>
 import { computed, onMounted, provide, ref, nextTick, watchEffect } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 import socket from '@/config/socket.config';
-import { useGet, usePost } from '@/composables/utils/use-fetch';
+import { useGet, usePost } from '@/composables/server/use-fetch';
 import { useUserStore } from '@/stores/user';
 import { formatChatDate } from '@/composables/utils/formats';
 
@@ -16,6 +18,7 @@ const unreadMessagesBadge = ref(0);
 
 const router = useRouter();
 const route = useRoute();
+const toast = useToast();
 const userStore = useUserStore();
 
 
@@ -182,8 +185,9 @@ onMounted(async () => {
 //Handle message actions
 const deleteMessage = async (message) => {
   if (!message._id) return;
-  const { status } = await usePost(`api/delete-message/${message._id}`, { url: message.file.url }, 'PUT');
-  if (status.value !== 200) return;
+  await usePost(`api/delete-message/${message._id}`,
+    { body: { url: message.file.url }, method: 'PUT', router, toast }
+  );
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.isDeleted = true;
   socket.emit('deleteMessage', route.params.chatId, message._id);
@@ -191,13 +195,21 @@ const deleteMessage = async (message) => {
 
 const editMessage = async (message, text) => {
   if (!message._id) return;
-  const { status } = await usePost(`api/edit-message/${message._id}`, { edit: text }, 'PUT');
-  if (status.value !== 200) return;
+  await usePost(`api/edit-message/${message._id}`,
+    { body: { edit: text }, method: 'PUT', router, toast });
+
   const msg = messages.value.find(msg => msg._id === message._id);
   msg.textContent = text;
   socket.emit('editMessage', route.params.chatId, message._id, text);
 
 }
+
+//Remove deleted messages from view
+const removeDeletedMessage = (message) => {
+  usePost(`api/remove-deleted-message-from-view/${message._id}`, { method: 'PUT', router, toast });
+  messages.value = messages.value.filter(msg => msg._id !== message._id);
+}
+
 
 const isReplying = ref(false);
 const quotedMessage = ref({});
@@ -212,20 +224,21 @@ const cancelReply = () => {
 }
 
 const unblockLoading = ref(false);
-const unblockUser = async () => {
+const unblockUser = () => {
   if (!receiver.value.blockId) return;
+
   unblockLoading.value = true;
-  const { data } = await usePost(`api/unblock-user/${receiver.value.blockId}`);
-  if (data.value.success) {
+  usePost(`api/unblock-user/${receiver.value.blockId}`, { router, toast }, () => {
+    unblockLoading.value = false;
     receiver.value.isBlocked = false;
-  }
-  unblockLoading.value = false;
+  });
 }
 
 </script>
 
 <template>
   <div class="w-full h-full flex flex-col">
+    <Toast class="max-w-96" />
 
     <Button v-show="hasScrolledTooFar" @click="scrollToBottom" :badge="unreadMessagesBadge ? unreadMessagesBadge : ''"
       icon="pi pi-arrow-down" size="small" rounded
@@ -253,14 +266,15 @@ const unblockUser = async () => {
 
 
         <div class="w-full grid place-content-center sticky top-0">
-          <p v-show="hasScrolledTooFar" class="z-30 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
+          <p v-show="hasScrolledTooFar"
+            class="z-30 bg-accent text-white text-sm font-medium px-2 py-1 rounded-md w-fit">
             {{ formatChatDate(date) }}
           </p>
         </div>
 
         <div class="flex flex-col gap-2 mt-10">
           <ChatMessage v-for="message in msgs" :key="message._id" :message @onDelete="deleteMessage"
-            @onEdit="editMessage" @onReply="replyMessage" :receiver />
+            @onEdit="editMessage" @onReply="replyMessage" @removeDeletedMessage="removeDeletedMessage" :receiver />
         </div>
       </section>
 
@@ -271,9 +285,8 @@ const unblockUser = async () => {
     </main>
 
     <footer v-if="!receiver.isBlocked && !receiver.hasBlocked" class="grid items-end">
-      <MobileChatSectionFooter @onOptimisticMessage="addOptimisticMessage"
-        @updateOptimisticMessage="updateOptimisticMessage" @onMessageSend="onMessageSend" @cancelReply="cancelReply"
-        :isReplying :quotedMessage :receiver />
+      <ChatSectionFooter @onOptimisticMessage="addOptimisticMessage" @updateOptimisticMessage="updateOptimisticMessage"
+        @onMessageSend="onMessageSend" @cancelReply="cancelReply" :isReplying :quotedMessage :receiver />
     </footer>
 
     <footer v-else class="p-2 bg-primary text-white">

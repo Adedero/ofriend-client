@@ -1,11 +1,11 @@
 <script setup>
-import { computed, inject, ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
 import { useUserStore } from '@/stores/user';
 import socket from '@/config/socket.config';
 import { usePost } from '@/composables/utils/use-fetch';
 import { useRouter } from 'vue-router';
-import { generateHTML } from '@/composables/utils/html-parse';
+import { generateHTML, revertHTML } from '@/composables/utils/html-parse';
 
 const router = useRouter();
 
@@ -13,6 +13,9 @@ const emit = defineEmits(['onOptimisticMessage', 'updateOptimisticMessage', 'can
 const props = defineProps({
   isReplying: { type: Boolean }, quotedMessage: { type: Object }, receiver: { type: Object }
 });
+
+watch(() => props.isReplying, () => props.isReplying && document.getElementById('textbox').focus());
+
 
 
 const firebase = useFirebaseUpload();
@@ -93,6 +96,7 @@ const sendMessage = async () => {
   }
   const payload = { message: emittedMessage, senderName: userStore.user.name, receiverId: props.receiver._id }
   socket.emit('sendMessage', payload);
+  
   emit('updateOptimisticMessage', message.value.tempId, data.value.newMessage._id);
   emit('onMessageSend', emittedMessage)
   message.value = {};
@@ -113,7 +117,7 @@ const sendMessage = async () => {
       </div>
 
       <div v-if="quotedMessage.hasText" class="w-full">
-        <p class="text-xs truncate max-w-40">{{ quotedMessage.textContent }}</p>
+        <p class="text-xs truncate max-w-40">{{ revertHTML(quotedMessage.textContent) }}</p>
       </div>
 
       <div v-if="quotedMessage.hasFile" class="flex gap-1">
@@ -142,11 +146,19 @@ const sendMessage = async () => {
 
     <ChatFileAttachment @on-file-send="handleFile" />
 
-    <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
-      class="flex-grow py-1 mb-[0.4rem] pl-2 outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-28 text-white overflow-y-auto" />
+    <!-- <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
+      class="flex-grow py-1 mb-[0.4rem] pl-2 outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-28 text-white overflow-y-auto" /> -->
+
+    <VTextbox input-id="textbox" v-model="text" placeholder="Type a message" rows="1" auto-resize :max-rows="5" />
 
     <Button @click="sendMessage" v-if="isTyping" icon="pi pi-send"
       class="border-transparent bg-transparent rounded-none" />
     <AudioRecorder v-else @on-stop="handleFile" />
   </footer>
 </template>
+
+<style scoped>
+.v-textbox {
+  @apply bg-transparent border-transparent focus:bg-transparent focus:border-transparent text-white
+}
+</style>
