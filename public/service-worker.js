@@ -1,9 +1,7 @@
-import { stripHtml } from "string-strip-html";
-
 self.addEventListener('push', (event) => {
   const data = event.data.json();
   const title = data.title;
-  const body = stripHtml(data.body).result;
+  const body = data.body;
   const url = data.url
   const notificationOptions = {
     body,
