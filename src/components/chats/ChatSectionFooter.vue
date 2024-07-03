@@ -142,7 +142,7 @@ const sendMessage = async () => {
 
     <ChatFileAttachment @on-file-send="handleFile" />
 
-   <!--  <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
+    <!--  <Textarea v-model="text" placeholder="Type a message" rows="1" auto-resize
       class="flex-grow py-2 mb-[0.4rem] pl-2  outline-none border-none bg-transparent focus:border-none cs:text-sm max-h-32 text-white overflow-y-auto" /> -->
 
     <VTextbox v-model="text" placeholder="Type a message" rows="1" auto-resize :max-rows="5" />
