@@ -127,7 +127,7 @@ function handleHTMLGeneration(input) {
       </div>
 
       <div class="flex items-start gap-2 justify-between">
-        <DynamicAvatar shape="circle" class="w-10 h-10" :user="userStore.user" />
+        <DynamicAvatar shape="circle" class="w-10 h-10 flex-shrink-0" :user="userStore.user" />
 
         <!-- <div class="flex-grow">
           <Textarea v-model="post.textContent"

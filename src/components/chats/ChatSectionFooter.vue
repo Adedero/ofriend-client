@@ -66,6 +66,7 @@ const sendMessage = async () => {
     quotedMessage: props.quotedMessage,
     createdAt: Date.now(),
     tempId: `message-${Date.now()}`,
+    isVisibleTo: [userStore.user.id, props.receiver._id]
   }
 
   emit('onOptimisticMessage', message.value);
@@ -90,8 +91,11 @@ const sendMessage = async () => {
   const { error, _fetch } = await usePost('api/send-message', { body: message.value , router, toast }, (data) => {
 
     const emittedMessage = { ...data.newMessage, quotedMessage: props.quotedMessage };
-    const payload = { message: emittedMessage, senderName: userStore.user.name, receiverId: props.receiver._id }
+
+    const payload = { message: emittedMessage, senderName: userStore.user.name, receiverId: props.receiver._id };
+
     socket.emit('sendMessage', payload);
+
     emit('updateOptimisticMessage', message.value.tempId, data.newMessage._id);
     emit('onMessageSend', emittedMessage)
     message.value = {};

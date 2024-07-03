@@ -12,6 +12,9 @@ import BadgeDirective from 'primevue/badgedirective';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 
+import socket from '@/config/socket.config';
+import { useUserStore } from '@/stores/user';
+
 
 import App from './App.vue'
 import router from './router'
@@ -27,6 +30,15 @@ app.directive('tooltip', Tooltip);
 app.directive('badge', BadgeDirective);
 app.mount('#app');
 
+
+
+const userStore = useUserStore();
+
 window.addEventListener('vite:preloadError', () => {
     window.reload()
+});
+
+window.addEventListener('beforeunload', () => {
+    socket.emit('offline', userStore.user.id);
+    socket.disconnect();
 });

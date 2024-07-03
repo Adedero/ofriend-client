@@ -37,9 +37,6 @@ const groupedMessages = computed(() => {
   }, {});
 });
 
-const chatMessages = ref({});
-const chatReceivers  = ref({});
-
 const getMessages = async (id, limit) => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
@@ -47,8 +44,7 @@ const getMessages = async (id, limit) => {
 
     loading.value = false;
     messages.value.unshift(...data.messages);
-    chatMessages.value[id] = messages.value;
-    chatReceivers.value[id] = receiver.value;
+    receiver.value = data.receiver;
 
     if (data.messages.length < limit) {
       allLoaded.value = true;
@@ -59,17 +55,6 @@ const getMessages = async (id, limit) => {
 watch(chatId, async () => {
   //Might give issues
   allLoaded.value = false;
-  /* const existingChat = chatMessages.value[chatId.value];
-  const existingReceiver = chatReceivers.value[chatId.value];
-
-  if (existingChat && existingReceiver) {
-    receiver.value = existingReceiver;
-    messages.value = existingChat;
-  } else {
-    receiver.value = {};
-    messages.value = [];
-    await getMessages(chatId.value, 15);
-  } */
   receiver.value = {};
   messages.value = [];
   await getMessages(chatId.value, 15);

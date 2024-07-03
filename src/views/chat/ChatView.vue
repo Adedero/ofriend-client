@@ -6,9 +6,11 @@ import socket from '@/config/socket.config';
 import { useRouter } from 'vue-router';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
+import { useUserStore } from '@/stores/user';
 
 const router = useRouter();
 const toast = useToast();
+const userStore = useUserStore();
 
 const chats = ref([]);
 const chatsLength = computed(() => chats.value.length);
@@ -63,6 +65,12 @@ const updateLastMessageOfViewer = (message) => {
 
 onMounted(() => {
   getChats();
+  !socket.connected && socket.connect();
+
+  socket.on('connect', () => {
+    console.log('Connected to socket server');
+    socket.emit('online', userStore.user.id);
+  });
 });
 
 </script>
