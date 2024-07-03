@@ -1,50 +1,37 @@
 <script setup>
 import { ref } from "vue";
-import { usePost } from '@/composables/utils/use-fetch';
+import { useRouter } from "vue-router";
+import { usePost } from '@/composables/server/use-fetch';
 import { timeAgo } from '@/composables/utils/formats';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 
+const router = useRouter();
 const toast = useToast();
 
 const props = defineProps({
-  post: {
-    type: Object,
-    required: true
-  },
-  saveDate: {
-    type: String,
-    required: true
-  }
+  post: { type: Object, required: true },
+  saveDate: { type: String, required: true }
 });
 
 const emit = defineEmits(['onPostUnsaved']);
 
 const unsaveLoading = ref(false);
-const unsavePost = async () => {
+
+const unsavePost = () => {
   unsaveLoading.value = true;
-  try {
-    const { data, error } = await usePost(`api/toggle-post-save/${props.post._id}`,{},'PUT');
-    if (error.value) {
-      toast.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong. Please, try again later.' });
-      return;
-    }
-    if (data.value.success) {
-      emit('onPostUnsaved', props.post._id);
-      return;
-    }
-  } catch (error) {
-    console.error(error);
-    toast.add({ severity: 'error', summary: 'Error', detail: error.message });
-  } finally {
+  usePost(`api/toggle-post-save/${props.post._id}`, { method: 'PUT', router, toast }, () => {
+    emit('onPostUnsaved', props.post._id);
     unsaveLoading.value = false;
-  }
+  });
 }
 
 const isCopied = ref(false);
+
 const copyLink = async () => {
   await navigator.clipboard.writeText(`${import.meta.env.VITE_BASE_URL}app/post/${props.post._id}`);
   isCopied.value = true;
+  
   setTimeout(() => {
     isCopied.value = false;
   }, 2000);
@@ -59,6 +46,7 @@ const toggle = (event) => {
 <template>
   <div class="flex items-center h-fit gap-3 w-full">
     <Toast class="max-w-96" />
+
     <div @click="$router.push({ name: 'user-post', params: { postId: post._id }})"
       class="flex items-center gap-3 flex-grow cursor-pointer">
       <div v-if="post.hasMedia"
@@ -69,10 +57,12 @@ const toggle = (event) => {
       </div>
 
       <div v-else class="w-24 aspect-square rounded-xl flex-shrink-0 bg-slate-300 overflow-hidden">
-        <DynamicAvatar :user="post.author" class="w-24 h-24 text-4xl" image-class="w-full h-full object-cover" />
+        <DynamicAvatar :user="post.author" class="rounded-xl w-24 h-24 text-4xl"
+          image-class="w-full h-full object-cover" />
       </div>
       <div>
-        <h1 class="font-bold truncate-3">{{ post.hasText ? post.textContent : `${post.author.name}'s post` }}</h1>
+        <h1 v-if="post.hasText" v-html="post.textContent" class="font-bold truncate-3"></h1>
+        <h1 v-else class="font-bold truncate-3">{{ `${post.author.name}'s post` }}</h1>
         <p class="text-sm md:text-base">{{ post.author.name }}</p>
         <p class="text-sm text-slate-500">Saved {{ timeAgo(saveDate) }}</p>
       </div>

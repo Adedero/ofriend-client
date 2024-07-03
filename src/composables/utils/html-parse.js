@@ -1,5 +1,23 @@
 import DOMPurify from 'dompurify';
 
+export const showLinks = (text) => {
+  const urlRegex = /((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([/?].*)?)/gi;
+   const rawHTML = `<div>${
+    text
+      .replace(urlRegex, (match) => {
+        const href = match.startsWith('http://') || match.startsWith('https://') || match.startsWith('ftp://') ? match : `http://${match}`;
+        return `<a href="${href}" target="_blank" class="matched-link text-[blue] hover:underline">${match}</a>`;
+      })
+  }</div>`;
+
+  const sanitized = DOMPurify.sanitize(rawHTML, {
+    ALLOWED_TAGS: ['a', 'span', 'br', 'p', 'div'],
+    ALLOWED_ATTR: ['class', 'href', 'target']
+  });
+
+  return sanitized;
+}
+
 export const generateHTML = (text) => {
   const urlRegex = /((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([/?].*)?)/gi;
   

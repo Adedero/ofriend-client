@@ -72,7 +72,7 @@ const saveEdit = async () => {
   
   editedPost.value.hasMedia = editedPost.value.media.length > 0;
   editedPost.value.textContent = handleHTMLGeneration(text.value);
-  editedPost.value.mentions - filteredMentions.value;
+  editedPost.value.mentions = filteredMentions.value;
 
   usePost(`api/edit-post/${props.post._id}`, { method: 'PUT', body: { edit: editedPost.value }, router, toast }, () => {
     loading.value = false;

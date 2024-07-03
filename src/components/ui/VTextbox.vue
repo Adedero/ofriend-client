@@ -30,20 +30,23 @@ watch(() => props.modelValue, (newValue) => {
 
 
 // Function to check if an element is scrollable
-function isScrollable(el) {
+/* function isScrollable(el) {
   return el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight;
-}
+} */
 
 const handleInput = (event) => {
+
+
   if (props.autoResize && props.maxRows) {
     const el = event.target;
+    // Reset the rows to the initial value to get accurate scrollHeight
+    el.rows = props.rows;
 
-    if (isScrollable(el) && props.maxRows > el.rows) {
-      el.rows += 1;
-    }
-    if (!el.value) {
-      el.rows = props.rows;
-    }
+    // Calculate the new height based on scrollHeight
+    const newRows = Math.min(Math.ceil(el.scrollHeight / 40), props.maxRows); // 24 is a typical line height in px
+
+    // Set the new rows value
+    el.rows = newRows;
   }
 
   text.value = event.target.value;

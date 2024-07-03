@@ -1,5 +1,6 @@
 <script setup>
 import { formatTime } from '@/composables/utils/formats';
+import { revertHTML } from '@/composables/utils/html-parse';
 import { useUserStore } from '@/stores/user';
 defineProps({
   chats: {
@@ -40,13 +41,13 @@ const userStore = useUserStore();
               </p>
 
               <div v-else class="min-w-0 grid">
-                <p v-if="chat.lastMessage.hasText" class="max-w-full truncate text-text-light text-sm">
+                <p v-if="chat.lastMessage.hasText" class="max-w-full truncate text-text-light text-sm flex gap-1">
                   <span v-show="chat.lastMessage.sender === userStore.user.id">
-                    You: {{ chat.lastMessage.textContent }}
+                    You: {{ revertHTML(chat.lastMessage.textContent) }}
                   </span>
 
-                  <span v-show="chat.lastMessage.sender !== userStore.user.id">
-                    {{ chat.lastMessage.textContent }}
+                  <span v-show="chat.lastMessage.sender !== userStore.user.id" class="truncate text-text-light text-sm">
+                    {{ revertHTML(chat.lastMessage.textContent) }}
                   </span>
                 </p>
 

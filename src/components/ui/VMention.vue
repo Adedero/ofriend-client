@@ -21,9 +21,11 @@ const limit = 20;
 const allLoaded = ref(false);
 
 const getUsers = () => {
-  if (!searchText.value || (searchText.value === initial.value)) return;
+  if (!searchText.value) return;
   if (isLoading.value || allLoaded.value) return;
   isLoading.value = true;
+
+  if (searchText.value === !initial.value) users.value = [];
 
   useGet(`api/get-mentions/${searchText.value}?skip=${users.value.length}&limit=${limit}`,
     { router, toast },
@@ -31,7 +33,6 @@ const getUsers = () => {
     users.value.push(...data);
     if (data.length < limit) allLoaded.value = true;
     isLoading.value = false;
-    //initial.value = searchText.value;
     searchText.value = '';
   });
 }

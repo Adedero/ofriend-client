@@ -15,7 +15,7 @@ self.addEventListener('push', (event) => {
 });
 
 self.addEventListener('notificationclick', (event) => {
-  window.location.href = event.data.url;
+  console.log(event);
 });
 
 self.addEventListener('pushsubscriptionchange', (event) => {
