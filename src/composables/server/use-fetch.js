@@ -10,7 +10,8 @@ export const useGet = async (url, config = {
   toastOnSuccess: false,
   successSummary: 'Successful',
   successDetail: 'Your request was completed successfully.',
-  sendToken: true
+  sendToken: true,
+  timeout: 8000,
 }, done) => {
   const loading = ref(false);
   const error = ref(null);
@@ -22,6 +23,9 @@ export const useGet = async (url, config = {
     const userStore = useUserStore();
     const token = userStore.token;
 
+    const abortController = new AbortController();
+    let timer = null;
+
     if (config.sendToken && !token) {
       return config.router.push({ name: 'signin' });
     }
@@ -30,12 +34,17 @@ export const useGet = async (url, config = {
 
     loading.value = true;
 
+    timer = setTimeout(() => {
+      abortController.abort();
+    }, config.timeout || 1000 * 8);
+
     try {
       response.value = await fetch(`${import.meta.env.VITE_API}${api}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-type': 'application/json'
         },
+        signal: abortController.signal
       });
 
       const payload = await response.value.json();
@@ -91,14 +100,29 @@ export const useGet = async (url, config = {
       console.error(err);
       error.value = err.message;
 
+      if (err instanceof DOMException && err.name === 'AbortError') {
+          config.toast.add({
+          severity: 'warn',
+          summary: 'Timeout',
+          detail: 'That took too long. Please, check your internet connection and try again',
+          life: config.toastLife || 5000
+        });
+        
+        return;
+      }
+
       config.toast.add({
         severity: 'error',
         summary: 'Error',
         detail: err.message,
         life: config.toastLife || 5000
       });
+      
     } finally {
       loading.value = false;
+      if (timer) {
+        clearTimeout(timer);
+      }
     }
   }
 
@@ -163,7 +187,8 @@ export const usePost = async (url, config = {
   sendToken: true,
   toastOnSuccess: false,
   successSummary: 'Successful',
-  successDetail: 'Your request was completed successfully.'
+  successDetail: 'Your request was completed successfully.',
+  timeout: 8000
 }, done) => {
   const loading = ref(false);
   const error = ref(null);
@@ -173,6 +198,8 @@ export const usePost = async (url, config = {
   const _fetch = async function postRequest(api) {
     const userStore = useUserStore();
     const token = userStore.token;
+    const abortController = new AbortController();
+    let timer = null;
 
     if (config.sendToken) {
       if(!token) return config.router.push({ name: 'signin' });
@@ -182,6 +209,10 @@ export const usePost = async (url, config = {
 
     loading.value = true;
 
+    timer = setTimeout(() => {
+      abortController.abort();
+    }, config.timeout || 1000 * 8);
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API}${api}`, {
         method: config.method ? config.method : 'POST',
@@ -189,6 +220,7 @@ export const usePost = async (url, config = {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
+        signal: abortController.signal,
         body: JSON.stringify(config.body),
       });
 
@@ -242,17 +274,32 @@ export const usePost = async (url, config = {
         done(data.value);
       }
 
-    } catch (error) {
-      console.error(error);
-      error.value = error.message;
+    } catch (err) {
+      console.error(err);
+      error.value = err.message;
+      if (err instanceof DOMException && err.name === 'AbortError') {
+          config.toast.add({
+          severity: 'warn',
+          summary: 'Timeout',
+          detail: 'That took too long. Please, check your internet connection and try again',
+          life: config.toastLife || 5000
+        });
+        
+        return;
+      }
+
       config.toast.add({ 
         severity: 'error',
         summary: 'Error',
-        detail: error.message,
+        detail: err.message,
         life: config.toastLife || 5000
       });
+
     } finally {
       loading.value = false;
+      if (timer) {
+        clearTimeout(timer);
+      }
     }
   }
 
