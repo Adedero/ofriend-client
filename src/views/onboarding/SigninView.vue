@@ -36,11 +36,13 @@ const signin = async () => {
 //If user is unverified, send an authentication email
 const isMailing = ref(false);
 
-const sendMail = async () => {
-  const { loading } = await usePost(`auth/send-mail/${user.value.email}`, { router, toast }, (data) => {
+const sendMail = () => {
+  isMailing.value = true;
+  usePost(`auth/send-mail/${user.value.email}`, { router, toast }, (data) => {
+    isMailing.value = false;
     if (data.success) router.push({ name: 'otp' }); 
   });
-  isMailing.value = loading.value;
+  
 }
 /* const signin = async () => {
   res.value.loading = true;
