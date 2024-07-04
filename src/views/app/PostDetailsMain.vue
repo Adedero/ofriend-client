@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineAsyncComponent, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, provide, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useGet } from '@/composables/server/use-fetch';
@@ -14,9 +14,11 @@ const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
+const { loading, data } = await useGet(`api/get-post/${route.params.postId}`, { router, toast });
 
+const providedPost = computed(() => data.value ? data.value.post : null);
 
-const { loading, data } = await useGet(`api/get-post/${route.params.postId}`, { router, toast })
+provide('providedPost', providedPost)
 
 
 const comments = ref([]);
@@ -52,6 +54,7 @@ const loadComments = () => {
   isLoading.value = true;
 
   useGet(`api/get-comments/${route.params.postId}?skip=${SKIP.value}&limit=${LIMIT}`, { router, toast }, (payload) => {
+    isLoading.value = false;
     newComments.value = [];
     comments.value.push(...payload.comments);
     if (payload.comments.length < LIMIT) {
@@ -108,12 +111,13 @@ const removeComment = (id) => {
 
       <div v-if="comments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in comments" :key="comment._id" :comment="comment"
-          @on-reply-created="data.post.comments++" @on-comment-deleted="removeComment" />
+          @on-reply-created="data.post.comments++" @on-comment-deleted="removeComment"
+          @on-reply-deleted="data.post.comments--" />
       </div>
       
       <div v-if="newComments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="data.post.comments++"
-          :comment="comment" @on-comment-deleted="removeComment" />
+          :comment="comment" @on-comment-deleted="removeComment" @on-reply-deleted="data.post.comments--" />
       </div>
 
       <div>

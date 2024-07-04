@@ -27,9 +27,9 @@ export const generateHTML = (text) => {
     text
       .replace(urlRegex, (match) => {
         const href = match.startsWith('http://') || match.startsWith('https://') || match.startsWith('ftp://') ? match : `http://${match}`;
-        return `<a href="${href}" target="_blank" class="matched-link text-[blue] hover:underline">${match}</a>`;
+        return `<a href="${href}" target="_blank" class="matched-link text-blue-500 hover:underline">${match}</a>`;
       })
-      .replace(mentionRegex, '<a href="$1" class="mention-link p-1 bg-blue-50/30 hover:bg-blue-50 text-[blue]">$1</a>')
+      .replace(mentionRegex, '<a href="$1" class="mention-link p-1 bg-blue-50/30 hover:bg-blue-50 text-primary-lighter font-semibold">$1</a>')
   }</div>`;
 
   const sanitized = DOMPurify.sanitize(rawHTML, {

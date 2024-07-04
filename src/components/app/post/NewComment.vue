@@ -97,8 +97,8 @@ onMounted(() => document.getElementById('v-reply-textarea').focus());
   <Toast class="max-w-96" />
   <div class="p-1">
     <div class="flex items-end gap-1">
-      <div class="flex flex-col gap-1">
-        <VMention @on-mention="handleMention" popup-class="bottom-24 left-0" button-class="h-full w-full" />
+      <div class="flex flex-col md:flex-row gap-1">
+        <VMention @on-mention="handleMention" class="md:order-2" popup-class="bottom-24 left-0" button-class="h-full w-full" />
 
         <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
       </div>

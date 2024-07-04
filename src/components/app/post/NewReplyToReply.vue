@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject, onMounted, ref, watchEffect } from 'vue';
+import { computed, inject, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { usePost } from '@/composables/server/use-fetch';
 import { useToastError } from '@/composables/utils/add-toast';
@@ -19,31 +19,13 @@ const userStore = useUserStore();
 const props = defineProps({
   postId: { type: String, required: true },
   parentComment: { type: Object, required: true },
-
-  parentReply: { type: Object },
-  isReplyingToReply: { type: Boolean, default: false }
 });
 
 const post = inject('providedPost');
 
-const isReplyingToOwnComment = computed(() => userStore.user.id === props.parentComment.author._id);
-const isReplyingToOwnReply = computed(() => {
-  if (props.isReplyingToReply) {
-    return userStore.user.id === props.parentReply.author._id
-  }
-  return false;
-});
+const isReplyingToOwnComment = computed(() => userStore.user.id === props.parentComment.author._id)
 
-
-const text = ref('');
-
-watchEffect(() => {
-  if (props.isReplyingToReply) {
-    isReplyingToOwnReply.value ? text.value = '' : text.value = `@${props.parentReply.author.name.split(' ').join('')} `
-  } else {
-    isReplyingToOwnComment.value ? text.value = '' : text.value = `@${props.parentComment.author.name.split(' ').join('')} `
-  }
-})
+const text = ref(isReplyingToOwnComment.value ? '' : `@${props.parentComment.author.name.split(' ').join('')} `);
 
 const mentions = ref([]);
 const filteredMentions = ref([]);
@@ -105,11 +87,7 @@ const postReply = async () => {
   });
 }
 
-onMounted(() => { 
-  const textbox = document.getElementById('reply-textarea');
-  textbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  textbox.focus();
-});
+onMounted(() => document.getElementById('reply-textarea').focus());
 </script>
 
 <template>
