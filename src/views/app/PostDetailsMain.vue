@@ -35,7 +35,7 @@ const onCommentCreated = (comment) => {
     }
   }
   data.value.post.comments++;
-  newComments.value.unshift(comment);
+  newComments.value.push(comment);
 }
 
 
@@ -100,20 +100,20 @@ const removeComment = (id) => {
     <div class="mt-3">
       <p class="text-lg font-semibold">{{ data.post.comments }} {{ data.post.comments === 1 ? 'Comment' :
         'Comments' }}</p>
-      <Button v-show="data.post.comments > 0 && comments.length === 0" @click="loadComments"
-        :loading="isLoading" label="View comments" text
-        class="mt-1 border border-primary text-primary px-1 py-1 text-sm" />
+      <Button v-show="data.post.comments > 0 && comments.length === 0" @click="loadComments" :loading="isLoading"
+        label="View comments" text class="mt-1 border border-primary text-primary px-1 py-1 text-sm" />
     </div>
 
     <div class="relative">
-      <div v-if="newComments.length" class="mt-5 grid gap-5">
-        <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="data.post.comments++"
-          :comment="comment" @on-comment-deleted="removeComment" />
-      </div>
-      
+
       <div v-if="comments.length" class="mt-5 grid gap-5">
         <CommentItem v-for="comment in comments" :key="comment._id" :comment="comment"
           @on-reply-created="data.post.comments++" @on-comment-deleted="removeComment" />
+      </div>
+      
+      <div v-if="newComments.length" class="mt-5 grid gap-5">
+        <CommentItem v-for="comment in newComments" :key="comment._id" @on-reply-created="data.post.comments++"
+          :comment="comment" @on-comment-deleted="removeComment" />
       </div>
 
       <div>

@@ -9,6 +9,7 @@ import { useToast } from 'primevue/usetoast';
 import { addToast, useToastError } from '@/composables/utils/add-toast';
 import { useGet, usePost } from '@/composables/utils/use-fetch';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
+import { revertHTML } from '@/composables/utils/html-parse';
 
 const ReplyCommentItem = defineAsyncComponent({
   loader: () => import('@/components/app/post/ReplyCommentItem.vue')
@@ -87,7 +88,10 @@ const toggle = (event) => op.value.toggle(event);
 
 //editing a comment
 const visible = ref(false);
-const textToEdit = ref(props.comment.textContent || '');
+const textToEdit = ref(revertHTML(props.comment.textContent) || '');
+
+const mentions = ref(props.comment.mentions);
+const filteredMentions = ref([]);
 
 const editRes = ref({});
 const saveEdit = async () => {
@@ -156,15 +160,14 @@ const deleteComment = async () => {
                 <Button @click="visible = true" v-show="refComment.hasText" label="Edit" severity="secondary"
                   icon="pi pi-file-edit" size="small" />
 
-                <Button @click="deleteComment" :loading="deleteLoading" label="Delete" severity="danger" icon="pi pi-trash" text
-                  size="small" />
+                <Button @click="deleteComment" :loading="deleteLoading" label="Delete" severity="danger"
+                  icon="pi pi-trash" text size="small" />
               </div>
             </OverlayPanel>
 
             <Sidebar v-model:visible="visible" header="Edit comment" position="bottom" class="h-auto">
               <div class="flex flex-col cs-2:flex-row cs-2:items-end gap-3 mt-2">
-                <Textarea v-model.trim="textToEdit" rows="1" auto-resize
-                  class="textarea max-h-80 flex-grow" />
+                <VTextbox v-model="textToEdit" rows="1" auto-resize :max-rows="5" />
 
                 <Button :loading="editRes.loading" @click="saveEdit" label="Save" icon="pi pi-check"
                   class="btn h-10 flex-shrink-0 w-fit self-end" />
@@ -175,7 +178,8 @@ const deleteComment = async () => {
         </div>
 
         <div class="whitespace-pre-wrap mt-1 text border rounded-lg p-1 md:p-2">
-          <p v-if="refComment.hasText">{{ refComment.textContent }}</p>
+          <p v-if="refComment.hasText" v-html="refComment.textContent" class="whitespace-pre-wrap"></p>
+
           <div v-if="refComment.hasMedia" class="mt-3">
             <CommentMedia :media="refComment.media" />
           </div>
@@ -206,7 +210,8 @@ const deleteComment = async () => {
 
     <!-- Reply box -->
     <div v-if="refComment.isReplying" class="mt-3 ml-8">
-      <NewReply :post-id="refComment.post" :comment-id="refComment._id" :comment-author-id="refComment.author._id" @on-reply-created="onReplyCreated" />
+      <NewReply :post-id="refComment.post" :comment-id="refComment._id" :comment-author-id="refComment.author._id"
+        @on-reply-created="onReplyCreated" />
     </div>
   </div>
 </template>

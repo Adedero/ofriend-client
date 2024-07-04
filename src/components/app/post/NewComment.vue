@@ -33,7 +33,6 @@ const setMedia = (file) => {
 
 const isCommentCreated = ref(false);
 
-const res = ref({});
 const loading = ref(false);
 
 const postComment = async () => {
@@ -69,6 +68,8 @@ const postComment = async () => {
 
     emit('onCommentCreated', data.comment);
 
+    text.value = ''
+
     comment.value = {
       post: props.postId,
       textContent: '',
@@ -96,16 +97,16 @@ onMounted(() => document.getElementById('v-reply-textarea').focus());
   <Toast class="max-w-96" />
   <div class="p-1">
     <div class="flex items-end gap-1">
-      <div class="flex gap-2">
-        <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
+      <div class="flex flex-col gap-1">
+        <VMention @on-mention="handleMention" popup-class="bottom-24 left-0" button-class="h-full w-full" />
 
-        <VMention @on-mention="handleMention" popup-class="bottom-12 left-0" />
+        <CommentMediaAttachment :isCommentCreated @on-file-upload="setMedia" @on-cancel-upload="media = null" />
       </div>
 
       <VTextbox input-id="v-reply-textarea" v-model="text" rows="1" auto-resize :max-rows="5"
         placeholder="Say something..." />
 
-      <Button @click="postComment" :loading="res.loading" icon="pi pi-send" class="btn">
+      <Button @click="postComment" :loading icon="pi pi-send" class="btn">
         <template #loadingicon>
           <span class="pi pi-spinner pi-spin"></span>
         </template>
