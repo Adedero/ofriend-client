@@ -7,6 +7,12 @@ import { useGet } from '@/composables/server/use-fetch';
 
 const emit = defineEmits(['onMention']);
 
+defineProps({
+  popupClass: { type: String },
+  buttonClass: { type: String },
+  buttonSize: { type: String, default: 'small' }
+})
+
 const router = useRouter();
 const toast = useToast();
 
@@ -59,10 +65,11 @@ const handleUserClick = (user) => {
   <div>
     <Toast class="max-w-96" />
     <Button @click="visible = !visible" severity="secondary" :icon="visible ? 'pi pi-times' : 'pi pi-at'"
-      size="small" />
+      :size="buttonSize" :class="buttonClass" />
 
-    <div v-if="visible" @scroll="getMoreUsers"
-      class="top-12 right-0 min-w-60 max-w-72 max-h-80 p-2 rounded-lg z-20 bg-white border shadow-md border-slate-400 absolute overflow-y-auto">
+    <div v-if="visible" @scroll="getMoreUsers" :class="[
+        popupClass,
+        'w-72 max-h-80 p-2 rounded-lg z-20 bg-white border shadow-md border-slate-400 absolute overflow-y-auto']">
 
       <div v-if="isLoading" class="w-full grid gap-2">
         <div v-for="i in 3" :key="i" class="w-full flex items-center gap-2">
@@ -75,7 +82,8 @@ const handleUserClick = (user) => {
         <div>
           <IconField iconPosition="left">
             <InputIcon class="pi pi-search"> </InputIcon>
-            <InputText type="search" v-model.trim="searchText" @search="getUsers" placeholder="Search to mention" />
+            <InputText type="search" v-model.trim="searchText" @search="getUsers" placeholder="Search to mention"
+              class="w-full" />
           </IconField>
         </div>
 
@@ -88,7 +96,7 @@ const handleUserClick = (user) => {
         </div>
 
         <div v-else>No results</div>
-        
+
       </div>
     </div>
   </div>

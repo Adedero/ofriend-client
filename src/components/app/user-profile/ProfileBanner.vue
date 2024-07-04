@@ -53,7 +53,7 @@ const updateBannerImage = async () => {
   loading.value = true;
   try {
     if (props.bannerImageUrl) {
-      const error = await firebaseUpload.deleteFiles([props.bannerImageUrl]);
+      const error = await firebaseUpload.deleteMultipleFiles([props.bannerImageUrl]);
       if (error) return useToastError(toast, error);
     }
 

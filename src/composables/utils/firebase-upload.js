@@ -63,7 +63,7 @@ export default function useFirebaseUpload() {
     }
   }
 
-  async function deleteFiles(urlArray = []) {
+  async function deleteMultipleFiles(urlArray = []) {
     const deletePromises = urlArray.map((url, index) => {
       const storageRef = firebaseRef(storage, url);
       return deleteObject(storageRef)
@@ -92,7 +92,7 @@ export default function useFirebaseUpload() {
     return null;
   }
 
-  /* async function deleteFiles(urlArray = []) {
+  /* async function deleteMultipleFiles(urlArray = []) {
     let error = null;
     for (let i = 0; i < urlArray.length; i++) {
       const storageRef = firebaseRef(storage, urlArray[i]);
@@ -109,5 +109,5 @@ export default function useFirebaseUpload() {
     } 
   } */
 
-  return { uploadSingleFile, uploadMultipleFiles, deleteSingleFile, deleteFiles };
+  return { uploadSingleFile, uploadMultipleFiles, deleteSingleFile, deleteMultipleFiles };
 }

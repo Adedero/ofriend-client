@@ -1,12 +1,14 @@
 <script setup>
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import visibilityOptions from '@/data/visibilty';
-import { usePost } from '@/composables/utils/use-fetch';
-import { addToast } from '@/composables/utils/add-toast';
+import { usePost } from '@/composables/server/use-fetch';
 import { useUserStore } from '@/stores/user.js';
+import filterMentions from '@/composables/utils/filter-mentions';
 
+const router = useRouter();
 const userStore = useUserStore();
 
 const toast = useToast();
@@ -31,41 +33,39 @@ const copyPostLink = async () => {
   }, 2000);
 }
 
-const post = ref({
-  textContent: '',
-  status: '',
-  hasText: false,
-  isReposting: true,
-  repostedPost: props.postId
-});
+const text = ref('');
+const mentions = ref([]);
+const filteredMentions = ref([]);
 
-watchEffect(() => {
-  post.value.status = status.value.name;
-  post.value.hasText = !!post.value.textContent;
-});
+const handleMention = (user) => {
+  mentions.value.push({ id: user._id, name: user.name });
+  text.value = text.value.concat(`@${user.name.split(' ').join('')} `);
+  document.getElementById('text-box').focus();
+}
 
-const res = ref({});
-const createPost = async () => {
-  res.value.loading = true;
-  try {
-    res.value = await usePost('api/create-post', post.value);
-    if (!res.value) {
-      return toast.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong. Please try again later', life: 5000 });
-    }
+const post = ref({});
 
-    if (res.value.data.success) {
-      post.value.textContent = ''
-      toast.add({ severity: 'success', summary: 'Post shared', life: 5000 });
-      emit('onPostShared');
-      return;
-    }
-    addToast(res.value, toast, false);    
-  } catch (error) {
-    console.log(error);
-    toast.add({ severity: 'error', summary: 'Error', detail: 'An error occurred. Please try again later.', life: 5000 });
-  } finally {
-    res.value.loading = false;
+const loading = ref(false);
+const createPost = () => {
+  if (!text.value) return;
+
+  post.value = {
+    hasText: !!text.value,
+    status: status.value.name,
+    isReposting: true,
+    repostedPost: props.postId
   }
+
+  loading.value = true;
+
+  post.value.textContent = filterMentions(text.value, mentions.value, filteredMentions.value);
+  post.value.mentions = filteredMentions.value;
+
+  usePost('api/create-post', { body: post.value, router, toast }, () => {
+    loading.value = false;
+    text.value = '';
+    emit('onPostShared')
+  });
 }
 </script>
 
@@ -82,19 +82,26 @@ const createPost = async () => {
       <div class="flex items-center gap-2 justify-between">
         <DynamicAvatar :user="userStore.user" shape="circle" size="large" class="h-12 aspect-square" />
         <div class="flex-grow">
-          <Textarea v-model="post.textContent" placeholder="Say something about this." rows="1" auto-resize
-            class="bg-soft-gray-2 focus:bg-white w-full max-h-[100px]" />
+          <VTextbox input-id="text-box" v-model="text" placeholder="Say something about this." rows="1" auto-resize
+            :max-rows="5" />
+          <!-- <Textarea v-model="post.textContent" class="bg-soft-gray-2 focus:bg-white w-full max-h-[100px]" /> -->
         </div>
       </div>
     </div>
 
     <div class="mt-3 flex items-start justify-between">
       <div>
-        <Button @click="copyPostLink" :label="isCopied ? 'Copied' : 'Copy link'" :icon="isCopied ? 'pi pi-check' : 'pi pi-link'" severity="secondary" />
+        <Button @click="copyPostLink" :label="isCopied ? 'Copied' : 'Copy link'"
+          :icon="isCopied ? 'pi pi-check' : 'pi pi-link'" severity="secondary" />
       </div>
 
-      <Button @click="createPost" :loading="res.loading" label="Post" icon="pi pi-angle-double-right" icon-pos="right"
-        size="small" class="bg-primary border-primary hover:bg-primary-lighter transition-colors" />
+      <div class="flex gap-5">
+        <VMention @on-mention="handleMention" popup-class="bottom-20 right-8" button-size="" />
+
+        <Button @click="createPost" :loading="loading" label="Post" icon="pi pi-angle-double-right" icon-pos="right"
+          size="small" class="bg-primary border-primary hover:bg-primary-lighter transition-colors" />
+      </div>
+
     </div>
   </div>
 </template>

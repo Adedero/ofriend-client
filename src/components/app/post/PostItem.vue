@@ -43,7 +43,7 @@ const deletePost = async () => {
 
   if (props.post.hasMedia) {
     const urlArray = props.post.media.map(item => item.url);
-    await firebase.deleteFiles(urlArray);
+    await firebase.deleteMultipleFiles(urlArray);
   }
   const { status, data, error } = await usePost(`api/delete-post/${props.post._id}?repostedPost=${props.post.repostedPost?._id ?? ''}`, {}, 'DELETE');
   //console.log(data.value);

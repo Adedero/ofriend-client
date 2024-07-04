@@ -46,7 +46,7 @@ const uploadPhoto = async () => {
   loading.value = true;
   try {
     if (props.user.imageUrl) {
-      const error = await firebaseUpload.deleteFiles([props.user.imageUrl]);
+      const error = await firebaseUpload.deleteMultipleFiles([props.user.imageUrl]);
       if (error) return useToastError(toast, error);
     }
 

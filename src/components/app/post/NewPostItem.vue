@@ -9,7 +9,7 @@ import { usePost } from '@/composables/server/use-fetch';
 import DynamicAvatar from '@/components/ui/DynamicAvatar.vue';
 import { useUserStore } from '@/stores/user';
 import socket from '@/config/socket.config';
-import { generateHTML } from '@/composables/utils/html-parse';
+import filterMentions from '@/composables/utils/filter-mentions';
 
 const router = useRouter();
 const toast = useToast();
@@ -35,7 +35,6 @@ const filteredMentions = ref([]);
 
 watchEffect(() => {
   post.value.status = status.value.name;
-  //post.value.hasText = post.value.textContent.length > 0;
   post.value.hasText = text.value.length > 0;
   post.value.hasMedia = files.value.length > 0;
 });
@@ -69,7 +68,7 @@ const createPost = async () => {
 
   //post.value.textContent = text.value;
 
-  post.value.textContent = handleHTMLGeneration(text.value);
+  post.value.textContent = filterMentions(text.value, mentions.value, filteredMentions.value);
   post.value.mentions = filteredMentions.value;
 
   usePost('api/create-post', { body: post.value, toast, router }, (data) => {
@@ -88,32 +87,6 @@ const createPost = async () => {
   });
 }
 
-function handleHTMLGeneration(input) {
-  const outputHTML = generateHTML(input);
-
-  const par = document.createElement('p');
-  par.style.display = 'none';
-  par.innerHTML = outputHTML;
-  document.body.appendChild(par);
-
-  const tags = par.querySelectorAll('.mention-link');
-  tags.forEach(tag => {
-    const username = tag.innerText.split('@')[1];
-
-    const user = mentions.value.find(u => u.name.split(' ').join('') === username);
-
-    if (user) {
-      tag.innerText = `@${user.name}`;
-      tag.href = `/app/profile/${user.id}`;
-
-      filteredMentions.value.push({ id: user.id, name: user.name });
-    }
-  });
-
-  document.body.removeChild(par);
-
-  return par.innerHTML;
-}
 </script>
 
 <template>
@@ -128,13 +101,7 @@ function handleHTMLGeneration(input) {
 
       <div class="flex items-start gap-2 justify-between">
         <DynamicAvatar shape="circle" class="w-10 h-10 flex-shrink-0" :user="userStore.user" />
-
-        <!-- <div class="flex-grow">
-          <Textarea v-model="post.textContent"
-            :placeholder="post.isProduct ? 'Ready to share your product?' : 'Ready to share your knowledge?'" rows="1"
-            auto-resize class="bg-soft-gray-2 focus:bg-white w-full overflow-y-scroll" />
-        </div> -->
-
+        
         <VTextbox v-model="text" fluid rows="1" input-id="text-box" auto-resize :max-rows="15"
           :placeholder="post.isProduct ? 'Ready to share your product?' : 'Ready to share your knowledge?'" />
 
@@ -153,7 +120,7 @@ function handleHTMLGeneration(input) {
       </div>
 
       <div class="flex items-center gap-3 relative">
-        <VMention @on-mention="handleMention" />
+        <VMention @on-mention="handleMention" popup-class="top-12 right-0" />
 
         <Button @click="createPost" :loading="isPosting" label="Post" icon="pi pi-angle-double-right" icon-pos="right"
           size="small" class="bg-primary border-primary hover:bg-primary-lighter transition-colors" />

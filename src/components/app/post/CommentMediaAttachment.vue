@@ -2,10 +2,8 @@
 import { computed, ref, watchEffect } from 'vue'
 const emit = defineEmits(['onFileUpload', 'onCancelUpload']);
 const props = defineProps({
-  isCommentCreated: {
-    type: Boolean,
-    default: false
-  }
+  isCommentCreated: { type: Boolean, default: false },
+  buttonClass: { type: String }
 })
 const formats = '.jpg,.jpeg,.png,.gif,.3gp,.mp4,.mpeg'
 
@@ -43,7 +41,7 @@ watchEffect(() => {
 
     <label
       for="media"
-      class="cursor-pointer p-3 h-9 grid place-content-center text-slate-500 bg-soft-gray rounded-md"
+      :class="[buttonClass, 'cursor-pointer p-3 grid place-content-center text-slate-500 bg-soft-gray rounded-md']"
     >
       <span class="pi pi-images" style="font-size: 1.2rem"></span>
     </label>

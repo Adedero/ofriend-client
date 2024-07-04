@@ -6,7 +6,8 @@ import useFirebaseUpload from '@/composables/utils/firebase-upload';
 import { usePost } from '@/composables/server/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { generateHTML, revertHTML } from '@/composables/utils/html-parse';
+import { revertHTML } from '@/composables/utils/html-parse';
+import filterMentions from '@/composables/utils/filter-mentions';
 
 
 const props = defineProps({ post: { type: Object, required: true } });
@@ -26,15 +27,23 @@ const text = ref(revertHTML(props.post.textContent) || '');
 
 const status = ref(visibilityOptions.find(opt => opt.name === props.post.status));
 
+const mentions = ref(props.post.mentions || []);
 const filteredMentions = ref([]);
 
 const media = ref(props.post.media || []);
 const addedMedia = ref([]);
+
+const removedMedia = ref([]);
+
 const hasNewMedia = computed(() => addedMedia.value.length > 0);
 
 const handleFileUpload = (data) => addedMedia.value.push(...data);
 
-const removeMedia = (id) => media.value = media.value.filter(item => item._id !== id);
+const removeMedia = (id) => {
+  const removedItem = media.value.find(item => item._id === id);
+  removedMedia.value.push(removedItem);
+  media.value = media.value.filter(item => item._id !== id);
+}
 
 const removeAddedMedia = (id) => addedMedia.value = addedMedia.value.filter(item => item._id !== id);
 
@@ -60,6 +69,12 @@ const saveEdit = async () => {
 
   loading.value = true;
 
+  /* if (removedMedia.value.length) {
+    const urlArray = removedMedia.value.map(item => item.url);
+    await firebase.deleteMultipleFiles(urlArray);
+    removedMedia.value = [];
+  }
+
   if (hasNewMedia.value) {
     const [fileArray, error] = await firebase.uploadMultipleFiles('POSTS', addedMedia.value);
     if (error) {
@@ -68,10 +83,34 @@ const saveEdit = async () => {
       return;
     }
     editedPost.value.media.push(...fileArray);
+  } */
+
+  const deleteFiles = removedMedia.value.length
+    ? firebase.deleteMultipleFiles(removedMedia.value.map(item => item.url))
+    : Promise.resolve();
+
+  const uploadFiles = hasNewMedia.value
+    ? firebase.uploadMultipleFiles('POSTS', addedMedia.value)
+    : Promise.resolve([[], null]);
+
+  // Execute both operations in parallel
+  const [, [fileArray, uploadError]] = await Promise.all([deleteFiles, uploadFiles]);
+
+  // Handle the delete operation result (optional)
+  if (removedMedia.value.length) {
+    removedMedia.value = [];
   }
+
+  // Handle the upload operation result
+  if (uploadError) toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload files. Please, check your network connection and try again later.' });
+
+  if (hasNewMedia.value) {
+    editedPost.value.media.push(...fileArray);
+  }
+
   
   editedPost.value.hasMedia = editedPost.value.media.length > 0;
-  editedPost.value.textContent = handleHTMLGeneration(text.value);
+  editedPost.value.textContent = filterMentions(text.value, mentions.value, filteredMentions.value);
   editedPost.value.mentions = filteredMentions.value;
 
   usePost(`api/edit-post/${props.post._id}`, { method: 'PUT', body: { edit: editedPost.value }, router, toast }, () => {
@@ -87,40 +126,20 @@ const saveEdit = async () => {
   });  
 }
 
-function handleHTMLGeneration(input) {
-  const outputHTML = generateHTML(input);
-
-  //if (!props.post.mentions.length) return outputHTML;
-
-  const par = document.createElement('p');
-  par.style.display = 'none';
-  par.innerHTML = outputHTML;
-  document.body.appendChild(par);
-
-  const tags = par.querySelectorAll('.mention-link');
-  tags.forEach(tag => {
-    const username = tag.innerText.split('@')[1];
-
-    const user = props.post.mentions.find(u => u.name.split(' ').join('') === username);
-
-    if (user) {
-      tag.innerText = `@${user.name}`;
-      tag.href = `/app/profile/${user.id}`;
-
-      filteredMentions.value.push({ id: user.id, name: user.name });
-    }
-  });
-
-  document.body.removeChild(par);
-
-  return par.innerHTML;
+const handleMention = (user) => {
+  mentions.value.push({ id: user._id, name: user.name });
+  text.value = text.value.concat(`@${user.name.split(' ').join('')} `);
+  document.getElementById('text-box').focus();
 }
+
+
 </script>
 
 <template>
   <div>
     <Toast class="max-w-96" />
-    <div v-if="media.length || addedMedia.length" class="w-full rounded-md border overflow-x-auto h-40 mb-2 flex items-center gap-3">
+    <div v-if="media.length || addedMedia.length"
+      class="w-full rounded-md border overflow-x-auto h-40 mb-2 flex items-center gap-3">
       <div v-for="item in media" :key="item._id" @mouseover="item.isHovering = true" @mouseout="item.isHovering = false"
         @click="removeMedia(item._id)"
         class="hover:brightness-50 transition cursor-pointer relative flex-shrink-0 h-36 aspect-square overflow-hidden">
@@ -138,8 +157,8 @@ function handleHTMLGeneration(input) {
           style="font-size: 2.5rem; font-weight: light"></span>
       </div>
 
-      <div v-for="item in addedMedia" :key="item._id" @mouseover="item.isHovering = true" @mouseout="item.isHovering = false"
-        @click="removeAddedMedia(item._id)"
+      <div v-for="item in addedMedia" :key="item._id" @mouseover="item.isHovering = true"
+        @mouseout="item.isHovering = false" @click="removeAddedMedia(item._id)"
         class="hover:brightness-50 transition cursor-pointer relative flex-shrink-0 h-36 aspect-square overflow-hidden">
 
         <img v-if="item.type.includes('image')" :src="item.url" alt="image" class="w-full h-full object-cover">
@@ -168,10 +187,16 @@ function handleHTMLGeneration(input) {
     </div>
 
     <div class="flex flex-col cs-2:flex-row cs-2:items-end gap-3 mt-2">
-      <!-- <div v-html="text" contenteditable></div> -->
-      <Textarea v-if="post.hasText" v-model.trim="text" rows="1" auto-resize class="textarea max-h-80 flex-grow" />
+      <!-- <Textarea v-if="post.hasText" v-model.trim="text" rows="1" auto-resize class="textarea max-h-80 flex-grow" /> -->
 
-      <Button :loading @click="saveEdit" label="Save" icon="pi pi-check" class="btn h-10 flex-shrink-0 w-fit self-end" />
+      <VTextbox input-id="text-box" v-if="post.hasText" v-model="text" rows="1" auto-resize :max-rows="5" />
+
+      <div class="flex gap-2 justify-between flex-shrink-0">
+        <VMention @on-mention="handleMention" popup-class="bottom-16 right-5" button-class="h-10" />
+
+        <Button :loading @click="saveEdit" label="Save" icon="pi pi-check" class="btn h-10" />
+      </div>
+
     </div>
   </div>
 </template>
