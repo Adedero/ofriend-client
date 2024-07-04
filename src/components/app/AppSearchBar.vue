@@ -24,12 +24,17 @@ watchEffect(() => {
       <span class="pi pi-search" style="font-size: 1.1rem"></span>
     </button>
 
-    <div v-show="showInput" class="fixed top-[0.65rem] left-10 md:hidden">
-      <IconField iconPosition="left">
-        <InputIcon class="pi pi-search"> </InputIcon>
-        <InputText v-model.trim="text" placeholder="Search" type="search"
-          class="border-transparent bg-soft-gray-2 dark:bg-primary-lighter focus:bg-white" />
-      </IconField>
+    <div v-show="showInput" class="fixed bg-accent p-2 left-0 top-0 w-dvw md:hidden">
+      <div class="w-full flex gap-2 relative">
+        <IconField iconPosition="left" class="w-full">
+          <InputIcon class="pi pi-search"> </InputIcon>
+          <InputText v-model.trim="text" placeholder="Search" type="search"
+            class="w-full border-transparent bg-soft-gray-2 dark:bg-primary-lighter focus:bg-white" />
+        </IconField>
+
+        <Button v-show="showInput && !text" @click="showInput = false" icon="pi pi-times" size="small" class="btn absolute h-8 w-8 top-[0.3rem] right-[0.3rem]" />
+      </div>
+      
     </div>
 
 
