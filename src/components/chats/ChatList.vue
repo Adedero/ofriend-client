@@ -2,15 +2,22 @@
 import { formatTime } from '@/composables/utils/formats';
 import { revertHTML } from '@/composables/utils/html-parse';
 import { useUserStore } from '@/stores/user';
-defineProps({
+import { computed, ref } from 'vue';
+
+const props = defineProps({
   chats: {
     type: Array,
     required: true
   }
 })
 defineEmits(['onUserSelect']);
-
 const userStore = useUserStore();
+
+
+const text = ref('');
+
+const filteredChats = computed(() => props.chats.filter(chat => chat.friend.name.toLowerCase().includes(text.value.toLowerCase())))
+
 
 </script>
 
@@ -18,12 +25,16 @@ const userStore = useUserStore();
 
   <div class="relative mt-3 h-[calc(100%-4rem)] w-full overflow-y-auto">
     <div class="sticky top-0 bg-white z-10 pb-3">
-      <ChatSearchbar />
+      <!-- <ChatSearchbar /> -->
+      <IconField iconPosition="left">
+        <InputIcon class="pi pi-search"> </InputIcon>
+        <InputText v-model.trim="text" placeholder="Search..." class="w-full border-transparent bg-soft-gray-2 focus:bg-white" />
+      </IconField>
     </div>
 
     <div class="flex flex-col gap-3 mt-2">
 
-      <div v-for="chat in chats" :key="chat.id" class="relative flex-shrink-0">
+      <div v-for="chat in filteredChats" :key="chat.id" class="relative flex-shrink-0">
         <label :for="chat.id" class="flex items-center gap-2 pl-2 py-2 pr-2">
           <DynamicAvatar :user="chat.friend" shape="circle" size="large" class="w-[3.5rem] h-[3.5rem] flex-shrink-0" />
           <div class="flex-grow overflow-hidden">

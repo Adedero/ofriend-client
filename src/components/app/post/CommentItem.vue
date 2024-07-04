@@ -256,7 +256,8 @@ const handleReply = (reply) => {
         class="mt-3 border border-primary text-primary px-1 py-1 text-sm" />
     </div>
 
-    <div v-if="isReplyingToReply" class="mt-3 ml-8">
+    <div v-if="isReplyingToReply" class="mt-3 ml-8 grid">
+      <Button @click="handleCancelReply" label="cancel" icon="pi pi-times" size="small" class="justify-self-end bg-primary h-8" />
       <NewReply :post-id="refComment.post" :parentComment="refComment" @on-reply-created="onReplyCreated"
         :isReplyingToReply :parentReply />
     </div>
