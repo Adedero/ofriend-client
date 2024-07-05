@@ -69,7 +69,7 @@ const blockUser = async () => {
 
   blockLoading.value = true;
   try {
-    const { data, error } = await usePost(`api/block-user/${ props.post.author._id }`);
+    const { data, error } = await usePost(`api/block-user/${ props.post.author._id }`, { router, toast });
     //console.log(data.value);
     if (error.value) useToastError(toast, error.value);
 
