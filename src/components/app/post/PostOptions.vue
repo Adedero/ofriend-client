@@ -47,7 +47,7 @@ const toggleFollowUser = async () => {
   followLoading.value = true;
   await usePost(`api/toggle-user-follow/${props.post.author._id}`,
     { method: 'PUT', router, toast },
-    (followStatus) => isFollowing.value = followStatus.isFollowing;);
+    (followStatus) => isFollowing.value = followStatus.isFollowing);
  
   followLoading.value = false;
 }
