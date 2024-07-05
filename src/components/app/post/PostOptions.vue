@@ -42,14 +42,14 @@ watchEffect(() => {
   isFollowing.value = props.post.viewerFollowsAuthor;
 });
 
+const followLoading = ref(false)
 const toggleFollowUser = async () => {
-  const { error, data : followStatus, status } = await usePost(`api/toggle-user-follow/${props.post.author._id}`, {}, 'PUT');
-  if (error.value || status.value !== 200) {
-    console.log(error.value);
-    toast.add({ severity: 'error', summary: 'Connection failure. Please try again later', life: 500})
-    return;
-  }
-  isFollowing.value = followStatus.value.isFollowing;
+  followLoading.value = true;
+  await usePost(`api/toggle-user-follow/${props.post.author._id}`,
+    { method: 'PUT', router, toast },
+    (followStatus) => isFollowing.value = followStatus.isFollowing;);
+ 
+  followLoading.value = false;
 }
 
 //Copy link
@@ -94,7 +94,7 @@ const blockUser = async () => {
       <Button @click="toggleFollowUser"
         :label="isFollowing ? `Unfollow ${post.author.name}` : `Follow ${post.author.name}`"
         :icon="isFollowing ? 'pi pi-user-minus' : 'pi pi-user-plus'" text severity="secondary" class="text-left"
-        :class="{ 'text-accent': isFollowing }" />
+        :class="{ 'text-accent': isFollowing }" :loading="followLoading" />
 
       <Button @click="toggleSavePost" :label="data.isSaved ? 'Unsave' : 'Save'" :loading="isSaving"
         :icon="data.isSaved ? 'pi pi-bookmark pi-fill' : 'pi pi-bookmark'" text severity="secondary" class="text-left"
