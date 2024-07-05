@@ -4,9 +4,8 @@ import { useRouter } from 'vue-router';
 import { timeAgo } from '@/composables/utils/formats';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { usePost } from '@/composables/utils/use-fetch';
+import { usePost } from '@/composables/server/use-fetch';
 import useFirebaseUpload from '@/composables/utils/firebase-upload';
-import { useToastError } from '@/composables/utils/add-toast';
 
 const props = defineProps({
   post: {
@@ -45,14 +44,12 @@ const deletePost = async () => {
     const urlArray = props.post.media.map(item => item.url);
     await firebase.deleteMultipleFiles(urlArray);
   }
-  const { status, data, error } = await usePost(`api/delete-post/${props.post._id}?repostedPost=${props.post.repostedPost?._id ?? ''}`, {}, 'DELETE');
-  //console.log(data.value);
-  if (error.value) return useToastError(toast, error.value);
-  if (status.value === 401 && data.value.authMessage) return router.push({ name: 'signin' });
-  if (status.value !== 200) return toast.add({ severity: 'warn', summary: data.value.info, detail: data.value.message });
-  
-  toast.add({ severity: 'success', summary: 'Done', detail: 'Your post has been deleted', life: 5000 });
-  emit('onPostDeleted', props.post._id);
+  await usePost(`api/delete-post/${props.post._id}?repostedPost=${props.post.repostedPost?._id ?? ''}`,
+    { method: 'DELETE ', router, toast },
+    () => {
+    toast.add({ severity: 'success', summary: 'Done', detail: 'Your post has been deleted', life: 5000 });
+    emit('onPostDeleted', props.post._id);
+  });
 }
 
 </script>
