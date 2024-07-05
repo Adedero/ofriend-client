@@ -23,15 +23,14 @@ const posts = ref([]);
 const allLoaded = ref(false);
 const loading = ref(false);
 
-let getPosts = () => {
+let getPosts = async () => {
   if (props.searchText === '') return;
 
   if (loading.value || allLoaded.value) return;
 
   loading.value = true;
 
-  useGet(`api/search-posts-or-products/${props.item}/${props.searchText}?skip=0&limit=${limit}`, { router, toast }, (data) => {
-    loading.value = false;
+  await useGet(`api/search-posts-or-products/${props.item}/${props.searchText}?skip=0&limit=${limit}`, { router, toast }, (data) => {
 
     data.forEach(item => {
       const regex = new RegExp(props.searchText, 'i');
@@ -44,6 +43,8 @@ let getPosts = () => {
 
     if (data.length < limit) allLoaded.value = true;
   });
+
+  loading.value = false;
 }
 
 watchDebounced(
@@ -52,10 +53,9 @@ watchDebounced(
   { debounce: 2000, maxWait: 5000 },
 )
 
-const loadMoreResults = () => {
+const loadMoreResults = async () => {
   loading.value = true;
-  useGet(`api/search-posts-or-products/${props.item}/${props.searchText}?skip=${posts.value.length}&limit=${limit}`, { router, toast }, (data) => {
-    loading.value = false;
+  await useGet(`api/search-posts-or-products/${props.item}/${props.searchText}?skip=${posts.value.length}&limit=${limit}`, { router, toast }, (data) => {
 
     data.forEach(item => {
       const regex = new RegExp(props.searchText, 'i');
@@ -66,6 +66,8 @@ const loadMoreResults = () => {
 
     posts.value.push(...data);
   });
+
+  loading.value = false;
 }
 
 const handleScroll = (event) => {
@@ -80,7 +82,6 @@ const goToPost = (post) => {
   router.push(`/app/post/${post._id}`);
   emit('onPostClick')
 }
-
 
 onMounted(async () => await getPosts());
 

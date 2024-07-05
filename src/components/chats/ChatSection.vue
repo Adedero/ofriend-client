@@ -42,7 +42,6 @@ const getMessages = async (id, limit) => {
   loading.value = true;
   await useGet(`api/get-messages/${id}?skip=${messages.value.length}&limit=${limit}`, { router, toast }, (data) => {
 
-    loading.value = false;
     messages.value.unshift(...data.messages);
     receiver.value = data.receiver;
 
@@ -50,6 +49,7 @@ const getMessages = async (id, limit) => {
       allLoaded.value = true;
     }
   });
+  loading.value = false;
 }
 
 watch(chatId, async () => {

@@ -25,7 +25,6 @@ const filteredChats = computed(() => props.chats.filter(chat => chat.friend.name
 
   <div class="relative mt-3 h-[calc(100%-4rem)] w-full overflow-y-auto">
     <div class="sticky top-0 bg-white z-10 pb-3">
-      <!-- <ChatSearchbar /> -->
       <IconField iconPosition="left">
         <InputIcon class="pi pi-search"> </InputIcon>
         <InputText v-model.trim="text" placeholder="Search..." class="w-full border-transparent bg-soft-gray-2 focus:bg-white" />

@@ -1,11 +1,17 @@
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { formatTime } from '@/composables/utils/formats';
-import { usePost } from '@/composables/utils/use-fetch';
+import { usePost } from '@/composables/server/use-fetch';
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
 
 const props = defineProps({
   receiver: { type: Object, required: true }, chatId: { type: String, required: true }
 });
+
+const router = useRouter();
+const toast = useToast();
 
 const isBlocked = ref(props.receiver.isBlocked);
 
@@ -20,38 +26,41 @@ const error = ref({
 //ClearMessages
 const clearMessages = async () => {
   error.value = { isErr: false, msg: '' };
-  res.value = await usePost(`api/clear-messages/${props.chatId}`, {}, 'DELETE');
+  res.value = await usePost(`api/clear-messages/${props.chatId}`, { method: 'DELETE', router, toast }, () => {
+    emit('messagesCleared');
+  });
   if (res.value.error || res.value.status !== 200) {
     error.value.isErr = true;
     error.value.msg = 'Connection failed. Try again later.'
     return
   }
-  emit('messagesCleared')
 }
 
 //Delete Conversation
 const deleteConversation = async () => {
   error.value = { isErr: false, msg: '' };
-  res.value = await usePost(`api/delete-conversation/${props.chatId}`, {}, 'DELETE');
+  res.value = await usePost(`api/delete-conversation/${props.chatId}`, { method: 'DELETE', router, toast }, () => {
+    emit('chatDeleted');
+  });
   if (res.value.error || res.value.status !== 200) {
     error.value.isErr = true;
     error.value.msg = 'Connection failed. Try again later.'
     return
   }
-  emit('chatDeleted')
 }
 
 //block user
 const blockUser = async () => {
   error.value = { isErr: false, msg: '' };
-  res.value = await usePost(`api/block-user/${props.receiver._id}`);
+  res.value = await usePost(`api/block-user/${props.receiver._id}`, { router, toast }, () => {
+    isBlocked.value = true;
+    emit('userBlocked')
+  });
   if (res.value.error || res.value.status !== 200) {
     error.value.isErr = true;
     error.value.msg = 'Connection failed. Try again later.'
     return
   }
-  isBlocked.value = true;
-  emit('userBlocked')
 }
 
 
@@ -95,6 +104,7 @@ const toggle = (event) => {
 
 <template>
   <header class="w-full h-full bg-white p-3 border-b border-primary flex items-center justify-between">
+    <Toast class="max-w-96" />
     <div @click="$router.push(`/app/profile/${receiver._id}`)" class="flex items-center gap-2 cursor-pointer">
       <DynamicAvatar :user="receiver" shape="circle" size="large" class="w-12 h-12" />
       <div>

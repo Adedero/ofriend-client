@@ -26,21 +26,21 @@ const initial = ref('');
 const limit = 20;
 const allLoaded = ref(false);
 
-const getUsers = () => {
+const getUsers = async () => {
   if (!searchText.value) return;
   if (isLoading.value || allLoaded.value) return;
   isLoading.value = true;
 
   if (searchText.value === !initial.value) users.value = [];
 
-  useGet(`api/get-mentions/${searchText.value}?skip=${users.value.length}&limit=${limit}`,
+  await useGet(`api/get-mentions/${searchText.value}?skip=${users.value.length}&limit=${limit}`,
     { router, toast },
     (data) => {
     users.value.push(...data);
     if (data.length < limit) allLoaded.value = true;
-    isLoading.value = false;
     searchText.value = '';
   });
+  isLoading.value = false;
 }
 
 watch(searchText, () => allLoaded.value = false);

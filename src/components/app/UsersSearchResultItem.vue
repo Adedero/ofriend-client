@@ -22,17 +22,18 @@ const users = ref([]);
 const loading = ref(false);
 const allLoaded = ref(false);
 
-let getUsers = () => {
+let getUsers = async () => {
   if (props.searchText === '') return;
   if (loading.value || allLoaded.value) return;
 
   loading.value = true;
 
-  useGet(`api/get-mentions/${props.searchText}?skip=0&limit=${limit}`, { router, toast }, (data) => {
-    loading.value = false;
+  await useGet(`api/get-mentions/${props.searchText}?skip=0&limit=${limit}`, { router, toast }, (data) => {
     users.value = [...data];
     if (data.length < limit) allLoaded.value = true;
   });
+
+  loading.value = false;
 }
 
 watchDebounced(
@@ -41,12 +42,12 @@ watchDebounced(
   { debounce: 2000, maxWait: 5000 },
 )
 
-const loadMoreResults = () => {
+const loadMoreResults = async () => {
   loading.value = true;
-  useGet(`api/get-mentions/${props.searchText}?skip=${users.value.length}&limit=${limit}`, { router, toast }, (data) => {
-    loading.value = false;
+  await useGet(`api/get-mentions/${props.searchText}?skip=${users.value.length}&limit=${limit}`, { router, toast }, (data) => {
     users.value.push(...data);
   });
+  loading.value = false;
 }
 
 const handleScroll = (event) => {
