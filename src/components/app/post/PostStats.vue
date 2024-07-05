@@ -1,11 +1,11 @@
 <script setup>
 import { computed, defineAsyncComponent, ref } from 'vue'; 
+import { useRouter } from 'vue-router';
 import { formatNumber } from '@/composables/utils/formats';
 import LikersListSekeleton from '@/components/skeletons/LikersListSekeleton.vue';
-import { useGet } from '@/composables/utils/use-fetch';
+import { useGet } from '@/composables/server/use-fetch';
 import Toast from 'primevue/toast';
 import{ useToast } from 'primevue/usetoast';
-import { addToast } from '@/composables/utils/add-toast';
 
 const LikersList = defineAsyncComponent({
   loader: () => import('@/components/app/post/LikersList.vue'),
@@ -18,35 +18,28 @@ const props = defineProps({
     required: true
   }
 });
-
+const router = useRouter();
 const toast = useToast();
 const visible = ref(false);
 const likers = ref([]);
 const SKIP = computed(() => likers.value.length);
 const LIMIT = 20;
-const res = ref({});
 const isLoadMoreVisible = ref(true);
 
+const loading = ref(false)
 const showLikers = async () => {
   visible.value = true;
-  try {
-    res.value  = await useGet(`api/get-post-likers/${props.post._id}/${SKIP.value}/${LIMIT}`);
-    if (res.value.error) {
-      toast.add({ severity: 'error', summary: 'Error', detail: res.value.error });
-      return;
-    }
-    if (!res.value.data.success) {
-      addToast(res.value, toast, false);
-      return;
-    }
-    if (!res.value.data.likers.length) {
+  loading.value = true;
+  if (loading.value || !isLoadMoreVisible.value) return;
+  await useGet(`api/get-post-likers/${props.post._id}/${SKIP.value}/${LIMIT}`, { router, toast }, (data) => {
+    likers.value.push(...data.likers); 
+    if (data.likers.length < LIMIT) {
       isLoadMoreVisible.value = false;
+    } else {
+      isLoadMoreVisible.value = true;
     }
-    likers.value.push(...res.value.data.likers); 
-  } catch (error) {
-    console.log(error);
-    toast.add({ severity: 'error', summary: 'Error', detail: error.message });
-  }
+  });
+  loading.value = false;
 }
 </script>
 
@@ -67,6 +60,6 @@ const showLikers = async () => {
   </div>
 
   <Sidebar v-model:visible="visible" header="People who liked this" position="right">
-    <LikersList v-if="likers.length" :likers @on-load-more="showLikers" :isLoadMoreVisible :loading="res.loading" />
+    <LikersList v-if="likers.length" :likers @on-load-more="showLikers" :isLoadMoreVisible :loading />
   </Sidebar>
 </template>

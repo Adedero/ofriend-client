@@ -21,10 +21,10 @@ const loading = ref(false);
 const toggleLike = async () => {
   loading.value = true;
   await usePost(`api/toggle-post-like/${myPost.value._id}`, { router, toast }, (data) => {
-    loading.value = false;
     myPost.value.isLikedByViewer = data.liked;
     emit('onLikeClick', { isLiked: data.liked });
   });
+  loading.value = false;
 }
 watchEffect(() => myPost.value = props.post);
 </script>
