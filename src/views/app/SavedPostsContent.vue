@@ -8,7 +8,9 @@ import { useToast } from 'primevue/usetoast';
 const router = useRouter();
 const toast = useToast();
 
-const { data: posts } = await useGet('api/get-saved-posts/0', { router, toast })
+const limit = 10;
+
+const { data: posts } = await useGet(`api/get-saved-posts?skip=0&limit=${limit}`, { router, toast })
 
 const postsLength = computed(() => posts.value.length);
 
@@ -18,9 +20,9 @@ const allLoaded = ref(false);
 const loadMorePosts = async () => {
   if (loading.value || allLoaded.value) return;
   loading.value = true;
-  await useGet(`api/get-saved-posts/${postsLength.value}`, { router, toast }, (data) => {
-    posts.value.push(...data.savedPosts);
-    if (!data.savedPosts.length) allLoaded.value = true;
+  await useGet(`api/get-saved-posts?skip=${postsLength.value}&limit=${limit}`, { router, toast }, (data) => {
+    posts.value.push(...data);
+    if (data.length < limit) allLoaded.value = true;
     else allLoaded.value = true;
   });
   loading.value = false;
