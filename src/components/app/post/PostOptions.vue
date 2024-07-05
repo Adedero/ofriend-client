@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watchEffect } from 'vue';
-import { useGet, usePost } from '@/composables/utils/use-fetch';
+import { useRouter } from 'vue-router';
+import { useGet, usePost } from '@/composables/server/use-fetch';
 import { useUserStore } from '@/stores/user';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
@@ -12,24 +13,26 @@ const props = defineProps({
 
 const emit = defineEmits(['userBlocked', 'isEditingPost', 'isDeletingPost']);
 
-
-const { data } = await useGet(`api/get-post-save-status/${props.post._id}`);
-
+const router = useRouter();
 const toast = useToast();
 const userStore = useUserStore();
+
+
 const isViewerAuthor = computed(() => userStore.user.id === props.post.author._id);
+
+const { data } = await useGet(`api/get-post-save-status/${props.post._id}`, { router, toast });
 
 
 //Save Post
 /* const saveRes = ref() */
+const isSaving = ref(false);
 const toggleSavePost = async () => {
-  const { error, data : savedStatus } = await usePost(`api/toggle-post-save/${props.post._id}`, {}, 'PUT');
-  if (error.value) {
-    console.log(error.value);
-    toast.add({ severity: 'error', summary: 'Connection failure. Please try again later', life: 500})
-    return;
-  }
-  data.value.isSaved = savedStatus.value.isSaved;
+  isSaving.value = true;
+  await usePost(`api/toggle-post-save/${props.post._id}`,
+    { method: 'PUT', router, toast },
+    (savedStatus) => data.value.isSaved = savedStatus.isSaved,
+  );
+  isSaving.value = false;
 }
 
 //Follow or unfollow user
@@ -93,7 +96,7 @@ const blockUser = async () => {
         :icon="isFollowing ? 'pi pi-user-minus' : 'pi pi-user-plus'" text severity="secondary" class="text-left"
         :class="{ 'text-accent': isFollowing }" />
 
-      <Button @click="toggleSavePost" :label="data.isSaved ? 'Unsave' : 'Save'"
+      <Button @click="toggleSavePost" :label="data.isSaved ? 'Unsave' : 'Save'" :loading="isSaving"
         :icon="data.isSaved ? 'pi pi-bookmark pi-fill' : 'pi pi-bookmark'" text severity="secondary" class="text-left"
         :class="{ 'text-accent': data.isSaved }" />
 
