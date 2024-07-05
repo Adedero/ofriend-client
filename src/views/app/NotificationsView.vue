@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <div>
     <h1 class="font-semibold text-xl">Notifications</h1>

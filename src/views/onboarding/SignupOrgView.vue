@@ -1,15 +1,13 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
-import { usePost } from '@/composables/utils/use-fetch';
+import { usePost } from '@/composables/server/use-fetch';
 import countries from '@/data/countries';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-import { addToast } from '@/composables/utils/add-toast';
 
 const router = useRouter();
 const toast = useToast();
-const response = ref({});
 
 const user = ref({});
 
@@ -35,19 +33,13 @@ const isPasswordEqual = computed(() => {
   return user.value.passwordRepeat === user.value.password;
 });
 
+const loading = ref(false);
 const submit = async () => {
-  response.value.loading = true;
-  try {
-    response.value = await usePost('auth/register/org', user.value);
-    addToast(response.value, toast);
-    if (response.value.status === 200) {
-      setTimeout(() => {
-        router.push({ name: 'signin' });
-      }, 5000);
-    }
-  } catch (err) {
-    console.log(err);
-  }
+  loading.value = true;
+  const { status } = await usePost('auth/register/org', { body: user.value, router, toast });
+  loading.value = false;
+
+  if (status.value === 200) setTimeout(() => router.push({ name: 'signin' }), 3000);
 }
 </script>
 
@@ -105,7 +97,7 @@ const submit = async () => {
         </small>
       </div>
 
-      <Button @click="submit" :loading="response.loading" :disabled="!isSubmissionValid" label="Sign up"
+      <Button @click="submit" :loading :disabled="!isSubmissionValid" label="Sign up"
         icon="pi pi-arrow-right" icon-pos="right" class="btn" />
     </div>
 

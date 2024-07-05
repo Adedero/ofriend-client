@@ -16,11 +16,11 @@ const { data: posts } = await useGet(`api/content-reel/0/${limit}?products=true`
 async function loadMorePosts() {
   if (isLoading.value || allLoaded.value) return;
   isLoading.value = true;
-  const { loading } = await useGet(`api/content-reel/${posts.value.length}/${limit}?products=true`, { router, toast }, (data) => {
+  await useGet(`api/content-reel/${posts.value.length}/${limit}?products=true`, { router, toast }, (data) => {
     posts.value.push(...data);
     if (data.length < limit) allLoaded.value = true;
   });
-  isLoading.value = loading.value;
+  isLoading.value = false;
 }
 
 const handleScroll = (event) => {

@@ -56,8 +56,8 @@ const toggle = (event) => {
         <video v-else :src="post.media[0].url"></video>
       </div>
 
-      <div v-else class="w-24 aspect-square rounded-xl flex-shrink-0 bg-slate-300 overflow-hidden">
-        <DynamicAvatar :user="post.author" class="rounded-xl w-24 h-24 text-4xl"
+      <div v-else class="w-20 md:w-24 aspect-square rounded-xl flex-shrink-0 bg-slate-300 overflow-hidden">
+        <DynamicAvatar :user="post.author" class="rounded-xl w-20 h-20 md:w-24 md:h-24 text-4xl"
           image-class="w-full h-full object-cover" />
       </div>
       <div>

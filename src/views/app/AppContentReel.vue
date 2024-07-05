@@ -17,11 +17,11 @@ const { data: posts } = await useGet(`api/content-reel/0/${limit}?products=false
 async function loadMorePosts() {
   if (isLoading.value || allLoaded.value) return;
   isLoading.value = true;
-  const { loading } = await useGet(`api/content-reel/${posts.value.length}/${limit}?products=false`, { router, toast }, (data) => {
+  await useGet(`api/content-reel/${posts.value.length}/${limit}?products=false`, { router, toast }, (data) => {
     posts.value.push(...data);
     if (data.length < limit) allLoaded.value = true;
   });
-  isLoading.value = loading.value;
+  isLoading.value = false;
 }
 
 //Loads more posts on scroll
@@ -35,7 +35,6 @@ const handleScroll = (event) => {
 
 //Removes a post from the home page when a user deletes it.
 const deletePost = (postId) => posts.value = posts.value.filter(post => post._id !== postId);
-
 
 
 const handleCommentCreated = (post) => {

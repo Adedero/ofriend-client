@@ -11,7 +11,7 @@ export const useGet = async (url, config = {
   successSummary: 'Successful',
   successDetail: 'Your request was completed successfully.',
   sendToken: true,
-  timeout: 8000,
+  timeout: null,
 }, done) => {
   const loading = ref(false);
   const error = ref(null);
@@ -36,7 +36,7 @@ export const useGet = async (url, config = {
 
     timer = setTimeout(() => {
       abortController.abort();
-    }, config.timeout || 1000 * 8);
+    }, config.timeout || 1000 * 60);
 
     try {
       response.value = await fetch(`${import.meta.env.VITE_API}${api}`, {
@@ -188,7 +188,7 @@ export const usePost = async (url, config = {
   toastOnSuccess: false,
   successSummary: 'Successful',
   successDetail: 'Your request was completed successfully.',
-  timeout: 8000
+  timeout: null
 }, done) => {
   const loading = ref(false);
   const error = ref(null);
@@ -211,7 +211,7 @@ export const usePost = async (url, config = {
 
     timer = setTimeout(() => {
       abortController.abort();
-    }, config.timeout || 1000 * 8);
+    }, config.timeout || 1000 * 30);
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API}${api}`, {

@@ -1,8 +1,7 @@
 <script setup>
 import { onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { usePost } from '@/composables/utils/use-fetch';
-import { addToast } from '@/composables/utils/add-toast';
+import { usePost } from '@/composables/server/use-fetch';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 
@@ -11,57 +10,37 @@ const toast = useToast();
 
 //Sends OTP to email
 const email = ref('');
-const emailResponse = ref({});
+const isSending = ref(false);
+
 const sendMail = async (nextCallback) => {
   if (!email.value) {
     return toast.add({ severity: 'warn', info: 'Invalid request', detail: 'Please enter a valid email address' });
   }
-  emailResponse.value.loading = true;
-  try {
-    emailResponse.value = await usePost(`auth/send-password-recovery-email/${email.value}`);
-    if (!emailResponse.value) {
-      return
-    }
-    if (emailResponse.value.data.success) {
-      nextCallback();
-      return;
-    }
-    addToast(emailResponse.value, toast, false);
-    return
-  } catch (error) {
-    console.log(error)
-  }
-  console.log(email.value);
-  nextCallback();
+  isSending.value = true;
+  const { data } = await usePost(`auth/send-password-recovery-email/${email.value}`, { router, toast });
+  isSending.value = false;
+  if (data.success) return nextCallback();
 }
 
 const OTP = ref('');
 const password = ref('');
-const passwordResponse = ref({});
 const isSuccessful = ref(false);
 const timer = ref(null);
 
+const isLoading = ref(false);
+
 const changePassword = async () => {
-  passwordResponse.value.loading = true;
-  try {
-    passwordResponse.value = await usePost(
-      'auth/change-password',
-      { email: email.value, otp: OTP.value, password: password.value },
-      'PUT'
-    )
-    if (!passwordResponse.value) return 
-    if (passwordResponse.value.data.success) {
-      isSuccessful.value = true;
-      timer.value = setTimeout(() => {
-        router.push({ name: 'signin' });
-      }, 5000);
-      return
-    }
-    addToast(passwordResponse.value, toast);
-    return
-  } catch (error) {
-    toast.add({ severity: 'error', info: 'Error', detail: error.message });
-    console.log(error)
+  isLoading.value = true;
+  const { data } = await usePost('auth/change-password',
+    { body: { email: email.value, otp: OTP.value, password: password.value }, router, toast }
+  );
+
+  isLoading.value = false;
+
+  if (data.success) {
+    timer.value = setTimeout(() => {
+      router.push({ name: 'signin' });
+    }, 3000);
   }
 }
 
@@ -102,7 +81,7 @@ onUnmounted(() => clearTimeout(timer.value));
             <InputText v-model="email" class="w-full" placeholder="Email" />
             <div class="flex justify-end">
               <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="sendMail(nextCallback)"
-                :disabled="!email" :loading="emailResponse.loading" />
+                :disabled="!email" :loading="isSending" />
             </div>
           </div>
         </template>
@@ -132,7 +111,7 @@ onUnmounted(() => clearTimeout(timer.value));
             <div class="flex justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallBack" />
               <Button label="Submit" icon="pi pi-check-circle" iconPos="right" @click="changePassword"
-                :disabled="!password || password.length < 6" :loading="passwordResponse.loading" />
+                :disabled="!password || password.length < 6" :loading="isLoading" />
             </div>
           </div>
         </template>

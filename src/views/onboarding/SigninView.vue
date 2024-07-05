@@ -20,7 +20,7 @@ const isSubmissionValid = computed(() => user.value.email && user.value.password
 
 const signin = async () => {
   isLoading.value = true;
-  const { loading } = await usePost('auth/sign-in', { body: user.value, router, toast, sendToken: false }, (data) => {
+  await usePost('auth/sign-in', { body: user.value, router, toast, sendToken: false }, (data) => {
     userStore.setToken(data.token);
     userStore.setUser(data.user);
     const { isVerified } = data.user;
@@ -30,19 +30,19 @@ const signin = async () => {
     }
     isUnverified.value = true;
   });
-  isLoading.value = loading.value;
+  isLoading.value = false;
 }
 
 //If user is unverified, send an authentication email
 const isMailing = ref(false);
 
-const sendMail = () => {
+const sendMail = async () => {
   isMailing.value = true;
-  usePost(`auth/send-mail/${user.value.email}`, { router, toast }, (data) => {
-    isMailing.value = false;
+  await usePost(`auth/send-mail/${user.value.email}`, { router, toast }, (data) => {
+    
     if (data.success) router.push({ name: 'otp' }); 
   });
-  
+  isMailing.value = false;
 }
 /* const signin = async () => {
   res.value.loading = true;

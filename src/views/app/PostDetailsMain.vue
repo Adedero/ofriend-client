@@ -48,13 +48,12 @@ const isLoading = ref(false);
 const allLoaded = ref(false);
 const hasMoreComments = ref(false);
 
-const loadComments = () => {
+const loadComments = async () => {
   if (isLoading.value || allLoaded.value) return;
 
   isLoading.value = true;
 
-  useGet(`api/get-comments/${route.params.postId}?skip=${SKIP.value}&limit=${LIMIT}`, { router, toast }, (payload) => {
-    isLoading.value = false;
+  await useGet(`api/get-comments/${route.params.postId}?skip=${SKIP.value}&limit=${LIMIT}`, { router, toast }, (payload) => {
     newComments.value = [];
     comments.value.push(...payload.comments);
     if (payload.comments.length < LIMIT) {
@@ -65,6 +64,8 @@ const loadComments = () => {
       allLoaded.value = false;
     }
   });
+
+  isLoading.value = false;
 }
 
 //updates the likes on the post

@@ -5,11 +5,9 @@ import { usePost } from '@/composables/server/use-fetch';
 import countries from '@/data/countries';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
-//import { addToast } from '@/composables/utils/add-toast';
 
 const router = useRouter();
 const toast = useToast();
-//const response = ref({});
 
 const user = ref({});
 
@@ -35,27 +33,13 @@ const isPasswordEqual = computed(() => {
   return user.value.passwordRepeat === user.value.password;
 });
 
-/* const submit = async () => {
-  response.value.loading = true;
-  try {
-    response.value = await usePost('auth/register/personal', user.value);
-    addToast(response.value, toast)
-    if (response.value.status === 200) {
-      setTimeout(() => {
-        router.push({ name: 'signin' });
-      }, 5000);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-} */
+
 const isLoading = ref(false);
 const submit = async () => {
   isLoading.value = true;
-  const { loading } = await usePost('auth/register/personal', { body: user.value, router, toast, toastOnSuccess: true }, () => {
-    setTimeout(() => router.push({ name: 'signin' }), 5000)
-  });
-  isLoading.value = loading.value;
+  const { status } = await usePost('auth/register/personal', { body: user.value, router, toast, toastOnSuccess: true });
+  isLoading.value = false;
+  if (status.value === 200) setTimeout(() => router.push({ name: 'signin' }), 3000)
 }
 </script>
 
