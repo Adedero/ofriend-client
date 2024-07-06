@@ -19,7 +19,9 @@ export const showLinks = (text) => {
 }
 
 export const generateHTML = (text) => {
-  const urlRegex = /((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([/?].*)?)/gi;
+  //const urlRegex = /((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+([/?].*)?)/gi;
+
+  const urlRegex = /((https?:\/\/|ftp:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[^\s]*)?)/gi;
   
   const mentionRegex = /(@[a-zA-Z0-9_]+)/g;
 
