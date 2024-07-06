@@ -29,8 +29,8 @@ const isLoadMoreVisible = ref(true);
 const loading = ref(false)
 const showLikers = async () => {
   visible.value = true;
-  loading.value = true;
   if (loading.value || !isLoadMoreVisible.value) return;
+  loading.value = true;
   await useGet(`api/get-post-likers/${props.post._id}/${SKIP.value}/${LIMIT}`, { router, toast }, (data) => {
     likers.value.push(...data.likers); 
     if (data.likers.length < LIMIT) {

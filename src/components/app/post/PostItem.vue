@@ -45,7 +45,7 @@ const deletePost = async () => {
     await firebase.deleteMultipleFiles(urlArray);
   }
   await usePost(`api/delete-post/${props.post._id}?repostedPost=${props.post.repostedPost?._id ?? ''}`,
-    { method: 'DELETE ', router, toast },
+    { method: 'DELETE', router, toast },
     () => {
     toast.add({ severity: 'success', summary: 'Done', detail: 'Your post has been deleted', life: 5000 });
     emit('onPostDeleted', props.post._id);
