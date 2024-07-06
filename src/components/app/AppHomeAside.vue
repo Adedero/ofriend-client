@@ -9,7 +9,7 @@ const router = useRouter();
 const toast = useToast();
 const userStore = useUserStore();
 
-const { data } = await useGet('api/followers-and-following', { router, toast });
+const { data } = await useGet('api/followers-and-following', { router, toast }, (data) => console.log(data));
 </script>
 
 <template>
@@ -22,7 +22,7 @@ const { data } = await useGet('api/followers-and-following', { router, toast });
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-if="data.followers && data.followers.length">
           <div v-for="follower in data.followers" :key="follower._id"
-            @click="$router.push(`/app/profile/${follower._id}`)"
+            @click="$router.push(`/app/profile/${follower.follower._id}`)"
             class="cursor-context-menu grid grid-cols-7 xl:grid-cols-10 items-center">
 
             <DynamicAvatar :user="follower.follower" shape="circle" class="w-10 h-10 col-span-7 lg:col-span-2" />
@@ -59,7 +59,7 @@ const { data } = await useGet('api/followers-and-following', { router, toast });
       <div class="mt-5 grid gap-3 lg:w-full">
         <div v-if="data.following && data.following.length">
           <div v-for="follower in data.following" :key="follower._id"
-            @click="$router.push(`/app/profile/${follower._id}`)" class="grid grid-cols-7 xl:grid-cols-10 items-center">
+            @click="$router.push(`/app/profile/${follower.user._id}`)" class="grid grid-cols-7 xl:grid-cols-10 items-center">
 
             <DynamicAvatar :user="follower.user" shape="circle" size="large"
               class="h-10 w-10 col-span-7 lg:col-span-2" />

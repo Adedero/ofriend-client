@@ -23,6 +23,8 @@ export const generateHTML = (text) => {
   
   const mentionRegex = /(@[a-zA-Z0-9_]+)/g;
 
+  const breakRegex = /\n/g;
+
   const rawHTML = `<div>${
     text
       .replace(urlRegex, (match) => {
@@ -30,6 +32,7 @@ export const generateHTML = (text) => {
         return `<a href="${href}" target="_blank" class="matched-link text-blue-500 hover:underline">${match}</a>`;
       })
       .replace(mentionRegex, '<a href="$1" class="mention-link p-1 bg-blue-50/30 hover:bg-blue-50 text-primary-lighter font-semibold">$1</a>')
+      .replace(breakRegex, '<br>')
   }</div>`;
 
   const sanitized = DOMPurify.sanitize(rawHTML, {
