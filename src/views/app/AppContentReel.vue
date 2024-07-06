@@ -54,8 +54,8 @@ const removePostsByBlockedUser = (userId) => {
 
     <NewPostItem />
 
-    <div id="posts-container" class="reel mt-5 grid gap-10">
-      <div v-for="post in posts" :key="post._id">
+    <div id="posts-container" class="reel max-w-full mt-5 grid gap-10">
+      <div v-for="post in posts" :key="post._id" class="min-w-0">
         <PostItem :post @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--"
           @on-post-shared="post.reposts++" @on-post-deleted="deletePost"
           @on-comment-created="handleCommentCreated(post)" @userBlocked="removePostsByBlockedUser" />

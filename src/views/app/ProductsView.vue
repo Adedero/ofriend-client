@@ -48,7 +48,7 @@ const handleCommentCreated = (post) => {
     <h1 class="font-semibold text-xl">Products and Services</h1>
 
     <div id="posts-container" class="reel mt-5 grid gap-10">
-      <div v-for="post in posts" :key="post._id">
+      <div v-for="post in posts" :key="post._id" class="min-w-0">
 
         <PostItem :post @on-like-click="(data) => data.isLiked ? post.likes++ : post.likes--"
           @on-post-shared="post.reposts++" @on-post-deleted="deletePost"
