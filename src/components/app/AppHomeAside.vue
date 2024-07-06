@@ -9,7 +9,7 @@ const router = useRouter();
 const toast = useToast();
 const userStore = useUserStore();
 
-const { data } = await useGet('api/followers-and-following', { router, toast }, (data) => console.log(data));
+const { data } = await useGet('api/followers-and-following', { router, toast });
 </script>
 
 <template>

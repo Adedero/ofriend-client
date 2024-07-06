@@ -2,6 +2,7 @@
 import { ref, watchEffect } from 'vue';
 
 const showInput = ref(false);
+const input = ref(null);
 const visible = ref(false);
 const text = ref('');
 
@@ -13,28 +14,40 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (!visible.value) showInput.value = false;
-})
+});
+
+
 
 </script>
 
 <template>
   <div class="relative">
-    <button v-show="!showInput" @click="showInput = true" type="button"
+    <button v-show="!showInput"  @click="showInput = true" type="button"
       class="p-3 rounded-full bg-soft-gray-2 grid place-content-center md:hidden">
       <span class="pi pi-search" style="font-size: 1.1rem"></span>
     </button>
 
-    <div v-show="showInput" class="fixed bg-accent p-2 left-0 top-0 w-dvw md:hidden">
+    <div v-show="showInput" class="fixed bg-accent/50 p-2 left-0 top-0 w-dvw md:hidden">
       <div class="w-full flex gap-2 relative">
-        <IconField iconPosition="left" class="w-full">
+
+        <div class="relative w-full">
+          <label for="search" class="cursor-context-menu absolute left-[0.8rem] top-[0.65rem] text-slate-400">
+            <span class="pi pi-search"></span>
+          </label>
+          <input ref="input" v-model.trim="text" type="search" id="search" placeholder="Search"
+            class="outline-none w-full border border-transparent focus:border-primary rounded-md py-2 pl-10 pr-3 transition-all text-slate-700">
+        </div>
+
+       <!--  <IconField iconPosition="left" class="w-full hidden">
           <InputIcon class="pi pi-search"> </InputIcon>
           <InputText v-model.trim="text" placeholder="Search" type="search"
-            class="w-full border-transparent bg-soft-gray-2 dark:bg-primary-lighter focus:bg-white" />
-        </IconField>
+            class="w-full border-transparent dark:bg-primary-lighter focus:bg-white" />
+        </IconField> -->
 
-        <Button v-show="showInput && !text" @click="showInput = false" icon="pi pi-times" size="small" class="btn absolute h-8 w-8 top-[0.3rem] right-[0.3rem]" />
+        <Button v-show="showInput && !text" @click="showInput = false" icon="pi pi-times" size="small"
+          class="btn absolute h-8 w-8 top-[0.3rem] right-[0.3rem]" />
       </div>
-      
+
     </div>
 
 

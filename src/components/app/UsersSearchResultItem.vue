@@ -78,7 +78,7 @@ onUnmounted(() => getUsers = () => null);
       <p class="font-semibold">{{ user.name }}</p>
     </div>
 
-    <div v-show="!users.length">
+    <div v-show="!users.length && !loading">
       <p>No results</p>
     </div>
 

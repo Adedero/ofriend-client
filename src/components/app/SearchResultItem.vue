@@ -96,7 +96,7 @@ onUnmounted(() => getPosts = () => null);
       <PostItem :post />
     </div>
 
-    <div v-show="!posts.length">
+    <div v-show="!posts.length && !loading">
       <p>No results</p>
     </div>
 
