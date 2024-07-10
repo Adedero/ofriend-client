@@ -125,6 +125,7 @@ const onMessageSend = (message) => emit('onUserMessageSend', message);
 
 const addOptimisticMessage = (data) => {
   messages.value.push(data);
+  isReplying.value = false;
   scrollToBottom(true);
 }
 

@@ -66,7 +66,7 @@ const scrollToMessage = (id) => {
               class="h-full w-full object-cover">
             <video v-if="message.file.type.includes('video')" :src="message.file.url"
               class="h-full w-full object-cover"></video>
-            <div v-if="message.file.type.includes('video') || message.file.type.includes('application')"
+            <div v-if="message.file.type.includes('audio') || message.file.type.includes('application')"
               class="w-full h-full rounded grid place-content-center bg-primary text-white">
               {{ message.file.extension ? message.file.extension.toUpperCase() : '?' }}
             </div>
