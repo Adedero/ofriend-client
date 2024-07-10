@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineAsyncComponent, provide, ref, watch } from 'vue';
+import { computed, defineAsyncComponent, provide, ref, watch, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useGet } from '@/composables/server/use-fetch';
@@ -14,7 +14,9 @@ const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
-const { loading, data } = await useGet(`api/get-post/${route.params.postId}`, { router, toast });
+const { loading, data, error } = await useGet(`api/get-post/${route.params.postId}`, { router, toast });
+
+watchEffect(() => console.log(error.value));
 
 const providedPost = computed(() => data.value ? data.value.post : null);
 
@@ -94,8 +96,13 @@ const removeComment = (id) => {
 
 <template>
   <Toast class="max-w-96" />
-  <PostDetailsSkeleton v-if="loading" />
-  <div v-else>
+  <div v-if="error" class="grid place-content-center min-h-80">
+    <Message :closable="false" severity="error">
+      <p>{{ error }}</p>
+    </Message>
+  </div>
+  <PostDetailsSkeleton v-else-if="loading" />
+  <div v-else-if="data">
     <div>
       <PostItem :post="data.post" @on-like-click="updateLikes" @on-post-shared="data.post.reposts++"
         @on-comment-created="onCommentCreated" />

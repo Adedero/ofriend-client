@@ -54,9 +54,9 @@ export const useGet = async (url, config = {
         return;
       }
 
-      data.value = payload;
+      
       status.value = response.value.status;
-      error.value = null;
+      
 
       if (status.value === 401 && payload.authMessage) {
         config.router.push({ name: 'signin' });
@@ -80,6 +80,9 @@ export const useGet = async (url, config = {
           detail: payload.message ? payload.message : 'The request could not be completed. Please, try again later.',
           life: config.toastLife || 5000
         });
+
+        error.value = payload.message;
+        data.value = null;
         return;
       }
 
@@ -91,6 +94,9 @@ export const useGet = async (url, config = {
           life: config.toastLife || 5000
         });
       }
+
+      data.value = payload;
+      error.value = null;
 
       if (typeof done === 'function') {
         done(data.value);
@@ -232,9 +238,9 @@ export const usePost = async (url, config = {
       }
       //console.log(payload);
 
-      data.value = payload;
+      
       status.value = res.status;
-      error.value = null;
+      
 
       if (res.status === 401 && payload.authMessage) {
         config.router.push({ name: 'signin' });
@@ -258,6 +264,9 @@ export const usePost = async (url, config = {
           detail: payload.message ? payload.message : 'The request could not be completed. Please, try again later.',
           life: config.toastLife || 5000
         });
+
+        error.value = payload.message;
+        data.value = null;
         return;
       }
 
@@ -269,6 +278,9 @@ export const usePost = async (url, config = {
           life: config.toastLife || 5000
         })
       }
+
+      data.value = payload;
+      error.value = null;
 
       if (typeof done === 'function') {
         done(data.value);
