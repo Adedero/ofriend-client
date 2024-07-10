@@ -134,7 +134,7 @@ const saveEdit = () => {
             <span v-if="message.readBy.includes(receiver._id)" class="pi pi-check -translate-x-2"
               style="font-weight: 600; font-size: 0.75rem"></span>
 
-            <span @click="toggle" class="pi pi-ellipsis-v cursor-pointer p-1 rounded hover:bg-accent/10"></span>
+            <span v-if="message.isSent" @click="toggle" class="pi pi-ellipsis-v cursor-pointer p-1 rounded hover:bg-accent/10"></span>
             <Menu ref="menu" :model="items" :popup="true" />
           </div>
 

@@ -104,7 +104,7 @@ const sendMessage = async () => {
 
   if (error.value) {
     message.value.hasError = true;
-    message.value.resend = _fetch;
+    message.value.resend = _fetch('api/send-message');
   }
 
 }
