@@ -61,16 +61,6 @@ const scrollToMessage = (id) => {
         </div>
 
         <div v-if="message.hasFile" class="flex gap-1">
-          <div class="h-8 w-8 rounded overflow-hidden">
-            <img v-if="message.file.type.includes('image')" :src="message.file.url" alt="file"
-              class="h-full w-full object-cover">
-            <video v-if="message.file.type.includes('video')" :src="message.file.url"
-              class="h-full w-full object-cover"></video>
-            <div v-if="message.file.type.includes('audio') || message.file.type.includes('application')"
-              class="w-full h-full rounded grid place-content-center bg-primary text-white">
-              {{ message.file.extension ? message.file.extension.toUpperCase() : '?' }}
-            </div>
-          </div>
           <div class="rounded overflow-hidden">
             <img v-if="message.file.type.includes('image')" :src="message.file.url" alt="file"
               class="h-8 w-8 object-cover">
