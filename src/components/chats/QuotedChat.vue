@@ -71,6 +71,23 @@ const scrollToMessage = (id) => {
               {{ message.file.extension ? message.file.extension.toUpperCase() : '?' }}
             </div>
           </div>
+          <div class="rounded overflow-hidden">
+            <img v-if="message.file.type.includes('image')" :src="message.file.url" alt="file"
+              class="h-8 w-8 object-cover">
+
+            <video v-if="message.file.type.includes('video')" :src="message.file.url"
+              class="h-8 w-8 object-cover"></video>
+
+            <div v-if="message.file.type.includes('audio')"
+              class="h-8 w-8 rounded grid place-content-center bg-primary text-white">
+              <span class="pi pi-headphones" style="font-size: 1.2rem"></span>
+            </div>
+
+            <div v-if="message.file.type.includes('application')"
+              class="h-8 w-fit p-1 text-xs rounded grid place-content-center bg-primary text-white">
+              {{ message.file.extension ? message.file.extension.toUpperCase() : '?' }}
+            </div>
+          </div>
         </div>
       </div>
     </div>

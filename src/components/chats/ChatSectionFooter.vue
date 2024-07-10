@@ -129,20 +129,20 @@ const sendMessage = async () => {
         </div>
 
         <div v-if="quotedMessage.hasFile" class="flex gap-1">
-          <div class="h-8 w-8 rounded overflow-hidden">
+          <div class="rounded overflow-hidden">
             <img v-if="quotedMessage.file.type.includes('image')" :src="quotedMessage.file.url" alt="file"
-              class="h-full w-full object-cover">
+              class="h-8 w-8 object-cover">
 
             <video v-if="quotedMessage.file.type.includes('video')" :src="quotedMessage.file.url"
-              class="h-full w-full object-cover"></video>
+              class="h-8 w-8 object-cover"></video>
 
             <div v-if="quotedMessage.file.type.includes('audio')"
-              class="w-full h-full rounded grid place-content-center bg-primary text-white">
+              class="h-8 w-8 rounded grid place-content-center bg-primary text-white">
               <span class="pi pi-headphones" style="font-size: 1.2rem"></span>
             </div>
 
-            <div v-if="quotedMessage.file.type.includes('audio') || quotedMessage.file.type.includes('application')"
-              class="w-full h-full rounded grid place-content-center bg-primary text-white">
+            <div v-if="quotedMessage.file.type.includes('application')"
+              class="h-8 w-fit p-1 text-xs rounded grid place-content-center bg-primary text-white">
               {{ quotedMessage.file.extension ? quotedMessage.file.extension.toUpperCase() : '?' }}
             </div>
           </div>
