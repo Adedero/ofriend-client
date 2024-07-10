@@ -29,7 +29,7 @@ const items = ref( props.message.hasText ? [
   {
     label: 'Copy',
     icon: 'pi pi-copy',
-    command: async () => await navigator.clipboard.writeText(props.message.textContent)
+    command: async () => await navigator.clipboard.writeText(revertHTML(props.message.textContent))
   },
   {
     label: 'Edit',
@@ -67,7 +67,7 @@ const items2 = ref([
   {
     label: 'Copy',
     icon: 'pi pi-copy',
-    command: async () => await navigator.clipboard.writeText(props.message.textContent)
+    command: async () => await navigator.clipboard.writeText(revertHTML(props.message.textContent))
   }
 ]);
 
