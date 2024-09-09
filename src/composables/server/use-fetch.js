@@ -148,24 +148,25 @@ export const useGet = async (url, config = {
 const cacheMap = reactive(new Map());
 
 export const useCachedGet = async (url, config = {}, done) => {
-  const info = await useGet(url, { skip: true, ...config });
+  const { loading, data, _fetch} = await useGet(url, { skip: true, ...config });
 
   const key = url.split('/')[1];
 
-  const update = () => cacheMap.set(key, info.data.value);
+  const update = () => cacheMap.set(key, data.value);
   const clear = () => cacheMap.set(key, undefined);
 
   const cachedFetch = async () => {
     try {
-      await info._fetch(url);
+      await _fetch(url);
 
       if (typeof done === 'function') {
-        done(info.data.value);
+        done(data.value);
       }
 
       update();
     } catch (err) {
-      clear();
+      console.log(err);
+      //clear();
     }
   };
 
@@ -174,10 +175,10 @@ export const useCachedGet = async (url, config = {}, done) => {
   if (cachedData.value == null) {
     cachedFetch();
   } else {
-    info.loading.value = false;
+    loading.value = false;
   }
 
-  return { ...info, _fetch: cachedFetch, cachedData, clear };
+  return {_fetch: cachedFetch, cachedData, clear };
 };
 
 

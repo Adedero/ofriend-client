@@ -110,7 +110,7 @@ a.app-nav {
 }
 
 a.app-nav.router-link-exact-active {
-  @apply bg-accent/10 font-semibold text-primary dark:text-accent relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent;
+  @apply bg-accent/10 font-semibold text-primary relative lg:before:absolute lg:before:content-[''] lg:before:w-2 lg:before:h-full lg:before:left-0 lg:before:bg-accent;
 }
 
 .truncate-3 {

@@ -41,7 +41,7 @@ watchEffect(() => {
        <!--  <IconField iconPosition="left" class="w-full hidden">
           <InputIcon class="pi pi-search"> </InputIcon>
           <InputText v-model.trim="text" placeholder="Search" type="search"
-            class="w-full border-transparent dark:bg-primary-lighter focus:bg-white" />
+            class="w-full border-transparent focus:bg-white" />
         </IconField> -->
 
         <Button v-show="showInput && !text" @click="showInput = false" icon="pi pi-times" size="small"
@@ -56,7 +56,7 @@ watchEffect(() => {
       <IconField iconPosition="left">
         <InputIcon class="pi pi-search"> </InputIcon>
         <InputText v-model.trim="text" placeholder="Search" type="search"
-          class="border-transparent bg-soft-gray-2 dark:bg-primary-lighter focus:bg-transparent" />
+          class="border-transparent bg-soft-gray-2 focus:bg-transparent" />
       </IconField>
     </div>
 

@@ -1,5 +1,5 @@
 .btn {
-  @apply bg-primary border-primary dark:bg-accent dark:text-primary px-4 py-2 rounded text-white hover:bg-primary-lighter/90 dark:hover:bg-accent-lighter;
+  @apply bg-primary border-primary px-4 py-2 rounded text-white hover:bg-primary-lighter/90;
 }
 
 .btn-outlined {

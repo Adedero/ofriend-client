@@ -6,7 +6,7 @@ const isDark = useDark()
   <input type="checkbox" v-model="isDark" id="dark-toggler" class="hidden" />
   <label
     for="dark-toggler"
-    class="p-2 bg-soft-gray-2 dark:bg-primary-lighter rounded-full grid place-content-center cursor-pointer"
+    class="p-2 bg-soft-gray-2 rounded-full grid place-content-center cursor-pointer"
   >
     <span :class="isDark ? 'pi pi-moon' : 'pi pi-sun'"></span>
   </label>

@@ -1,13 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { useDark } from '@vueuse/core';
+//import { useDark } from '@vueuse/core';
 import { useUserStore } from '@/stores/user';
 import signout from '@/composables/server/signout';
 
 const router = useRouter();
 const userStore = useUserStore();
-const isDark = useDark();
+//const isDark = useDark();
 const menu = ref();
 
 const items = ref([
@@ -33,12 +33,12 @@ const items = ref([
         label: 'Notifications',
         icon: 'pi pi-bell',
         command: () => router.push('/app/notifications')
-      },
+      }/* ,
       {
         label: () => (isDark.value ? 'Dark Mode' : 'Light Mode'),
         icon: isDark.value ? 'pi pi-moon' : 'pi pi-sun',
         command: () => (isDark.value = !isDark.value)
-      },
+      } */,
       {
         label: 'Sign out',
         icon: 'pi pi-sign-out',
